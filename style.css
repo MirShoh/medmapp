@@ -2700,6 +2700,10 @@ body {
         padding-left: 2.5rem; /* Ikonka uchun joy */
     }
 
+    .form-group .phone-input-wrapper {
+        width: 85%; 
+    }
+
     .chat-button {
         /* Tugmani sezilarli va bosishga qulay qilish */
         width: 100%; /* To'liq kenglik */
