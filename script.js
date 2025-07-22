@@ -359,3 +359,4 @@ document.addEventListener('DOMContentLoaded', function() {
         counterObserver.observe(statsSection);
     }
 });
+

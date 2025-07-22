@@ -17,6 +17,30 @@
     --header-height-scrolled: 3rem; /* Scroll qilingandagi balandlik */
 }
 
+/* ========================================================= */
+        /* ===         NAVIGATSIYA UCHUN QO'SHIMCHA USLUBLAR       === */
+        /* ========================================================= */
+
+        /* Faol menyu bandi uchun umumiy uslub */
+        .header-nav a.active {
+            color: var(--color-primary-blue);
+            font-weight: 700; /* Matnni qalinroq qilish */
+        }
+
+        /* Faqat katta ekranlar uchun tag chiziq (desktop) */
+        @media (min-width: 1024px) {
+            /* Hover va faol holat uchun tag chiziqni birgalikda belgilash */
+            .header-nav a:hover::after,
+            .header-nav a.active::after {
+                width: 100%;
+            }
+            
+            /* Hover holatidagi rangni faol holat bilan bir xil qilish */
+            .header-nav a:hover {
+                color: var(--color-primary-blue);
+            }
+        }
+
 /* Umumiy uslublar va reset */
 body {
     margin: 0;
