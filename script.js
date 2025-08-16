@@ -18,46 +18,6 @@
                 // Siz bu yerga Django backend-ingizga so'rov yuborish kodini qo'shishingiz mumkin.
             }
 
-            // Chat funksiyasi (modal bilan)
-            function handleChatNow() {
-                const currentPhoneNumber = phoneNumberInput.value;
-                console.log('Sog\'liqni saqlash bo\'yicha mutaxassis bilan chat boshlanmoqda, telefon raqami:', currentPhoneNumber);
-                console.log('Chat funksionalligi simulyatsiya qilingan. Haqiqiy ilovada bu chatni ochadi.');
-
-                // Foydalanuvchiga xabar ko'rsatish uchun oddiy modal
-                const modal = document.createElement('div');
-                modal.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                    z-index: 1000;
-                    text-align: center;
-                    max-width: 300px;
-                    font-family: 'Inter', sans-serif;
-                    color: #334155;
-                `;
-                modal.innerHTML = `
-                    <h3>Chat funksiyasi</h3>
-                    <p>Chat funksionalligi simulyatsiya qilingan. Haqiqiy ilovada bu chatni ochadi.</p>
-                    <button style="
-                        background-color: var(--color-primary-green);
-                        color: white;
-                        padding: 8px 15px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        margin-top: 15px;
-                        font-weight: 600;
-                    " onclick="this.parentNode.remove()">Yopish</button>
-                `;
-                document.body.appendChild(modal);
-            }
-
             // Uchrashuv so'rash funksiyasi
             function handleRequestAppointment(doctorName) {
                 console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
