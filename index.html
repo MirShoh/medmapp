@@ -232,6 +232,64 @@
 
                     <!-- Forma kartasi -->
                     <form id="consultation-form" class="form-card">
+<<<<<<< HEAD
+                    <div class="form-group">
+                        <label for="resident-of">Qayerda istiqomat qilasiz?</label>
+                        <div class="select-wrapper">
+                            <select id="resident-of" name="resident_of" required>
+                                <option value="" disabled selected>Viloyatni tanlang</option>
+                                <option value="Toshkent shahri">Toshkent shahri</option>
+                                <option value="Andijon viloyati">Andijon viloyati</option>
+                                <option value="Buxoro viloyati">Buxoro viloyati</option>
+                                <option value="Farg‘ona viloyati">Farg‘ona viloyati</option>
+                                <option value="Jizzax viloyati">Jizzax viloyati</option>
+                                <option value="Namangan viloyati">Namangan viloyati</option>
+                                <option value="Qashqadaryo viloyati">Qashqadaryo viloyati</option>
+                                <option value="Navoiy viloyati">Navoiy viloyati</option>
+                                <option value="Qoraqalpog‘iston">Qoraqalpog‘iston</option>
+                                <option value="Samarqand viloyati">Samarqand viloyati</option>
+                                <option value="Sirdaryo viloyati">Sirdaryo viloyati</option>
+                                <option value="Surxondaryo viloyati">Surxondaryo viloyati</option>
+                                <option value="Toshkent viloyati">Toshkent viloyati</option>
+                                <option value="Xorazm viloyati">Xorazm viloyati</option>
+                            </select>
+                            <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="treatment">Davolash usuli</label>
+                        <div class="select-wrapper">
+                            <select id="treatment" name="treatment" required>
+                                <option value="" disabled selected>Davolash usulini tanlang</option>
+                                <option value="Onkologiya">Onkologiya (Saraton kasalliklarini davolash)</option>
+                                <option value="Kardiologiya va Kardiojarrohlik">Kardiologiya va Kardiojarrohlik (Yurak kasalliklari)</option>
+                                <option value="Ortopediya">Ortopediya (Suyak va bo'g'im kasalliklari)</option>
+                                <option value="Transplantologiya">Transplantologiya (Organlarni ko'chirib o'tkazish)</option>
+                                <option value="Neyroxirurgiya">Neyroxirurgiya (Miya va umurtqa pog'onasi jarrohligi)</option>
+                                <option value="Reproduktologiya">Reproduktologiya (EKU/IVF - Sun'iy urug'lantirish)</option>
+                                <option value="Kosmetik va Plastik jarrohlik">Kosmetik va Plastik jarrohlik</option>
+                                <option value="Boshqa">Boshqa</option>
+                            </select>
+                            <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone-number">Telefon raqam</label>
+                        <div class="phone-input-wrapper">
+                            <input type="text" id="phone-number" name="phone_number" required maxlength="19" placeholder="+998 (90) 123-45-67">
+                            <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.18 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="chat-button" class="chat-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                        <span id="button-text">Bepul konsultatsiya</span>
+                        <div id="loader-container"></div>
+                    </button>
+                </form>
+=======
                         <div class="form-group">
                             <label for="resident-of">Qayerda istiqomat qilasiz?</label>
                             <div class="select-wrapper">
@@ -287,6 +345,7 @@
                             <div id="loader-container"></div>
                         </button>
                     </form>
+>>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
                 </div>
             </section>
 
@@ -1297,6 +1356,81 @@
         });
 
         form.addEventListener('submit', async function(event) {
+<<<<<<< HEAD
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+            showModal('error', 'Xatolik!', 'Iltimos, barcha maydonlarni to\'ldiring.');
+            form.reportValidity();
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.classList.add('loading');
+
+        const formData = new FormData(form);
+        const formattedPhone = formData.get('phone_number'); // Formatlangan raqamni olish: masalan, "+998 (90) 123-45-67"
+        
+        // --- 1-O'ZGARISH: Raqamni tekshirish va toza formatga o'tkazish ---
+        const cleanedPhoneForValidation = formattedPhone.replace(/\D/g, ''); // Tekshirish uchun faqat raqamlar qoldirildi: "998901234567"
+        
+        if (cleanedPhoneForValidation.length !== 12) {
+            showModal('error', 'Xato Raqam!', 'Iltimos, telefon raqamingizni to\'liq kiriting. Namuna: +998 (90) 123-45-67');
+            resetButton();
+            return;
+        }
+        
+        // Telegram va Google Sheets uchun toza format (+ belgisi bilan)
+        const phoneForBackend = '+' + cleanedPhoneForValidation; // Natija: "+998901234567"
+
+        // --- 2-O'ZGARISH: Telegram xabarida toza formatdagi raqamni ishlatish ---
+        const messageToTelegram = `
+    <b>Yangi murojaat!</b>
+    -------------------------
+    <b>📍 Viloyat:</b> ${formData.get('resident_of')}
+    <b>💊 Davolash usuli:</b> ${formData.get('treatment')}
+    <b>📞 Telefon:</b> <code>${phoneForBackend}</code>
+    <b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
+        `;
+
+        // --- 3-O'ZGARISH: Google Sheetsga yuborishdan oldin formData'ni yangilash ---
+        formData.set('phone_number', phoneForBackend);
+
+
+        try {
+            const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: messageToTelegram,
+                    parse_mode: 'HTML',
+                }),
+            });
+
+            if (telegramResponse.ok) {
+                showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
+                form.reset();
+                
+                // Google Sheets'ga YUBORILAYOTGAN formData endi toza raqamni o'z ichiga oladi
+                fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result !== 'success') console.error('Google Sheets Error:', data.message);
+                        else console.log('Google Sheets ga muvaffaqiyatli yozildi.');
+                    })
+                    .catch(error => console.error('Google Sheets Fetch Error:', error));
+            } else {
+                showModal('error', 'Xatolik!', 'Telegramga xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
+            }
+        } catch (error) {
+            console.error('Fetch Error:', error);
+            showModal('error', 'Tarmoq Xatoligi!', 'Server bilan bog\'lanishda xatolik. Internet aloqasini tekshiring.');
+        } finally {
+            resetButton();
+        }
+    });
+=======
             event.preventDefault();
 
             if (!form.checkValidity()) {
@@ -1360,6 +1494,7 @@
                 resetButton();
             }
         });
+>>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
 
         function showModal(type, title, message) {
             modalTitle.textContent = title;
@@ -1405,6 +1540,45 @@
             navMenu.classList.toggle('active');
         });
     });
+<<<<<<< HEAD
+
+    // Mavjud skriptlaringizdan keyin qo'shing
+    const phoneInput = document.getElementById('phone-number');
+    const prefix = '+998';
+
+    phoneInput.addEventListener('input', (e) => {
+        const input = e.target;
+        let value = input.value;
+
+        // Prefiks o'chirilmasligini ta'minlash
+        if (!value.startsWith(prefix)) {
+            input.value = prefix;
+            return;
+        }
+
+        // Prefiksdan keyingi raqamlarni ajratib olish
+        const userDigits = value.substring(prefix.length).replace(/\D/g, '');
+        
+        // Raqamlarni formatlash
+        let formattedNumber = '';
+        if (userDigits.length > 0) {
+            formattedNumber += '(' + userDigits.substring(0, 2);
+        }
+        if (userDigits.length > 2) {
+            formattedNumber += ') ' + userDigits.substring(2, 5);
+        }
+        if (userDigits.length > 5) {
+            formattedNumber += '-' + userDigits.substring(5, 7);
+        }
+        if (userDigits.length > 7) {
+            formattedNumber += '-' + userDigits.substring(7, 9);
+        }
+
+        // Formatlangan raqamni inputga joylash
+        input.value = prefix + formattedNumber;
+    });
+=======
+>>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
     </script>
 
     </body>

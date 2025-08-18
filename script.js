@@ -1,23 +1,59 @@
 // DOM elementlariga murojaat qilish
-            const residentSelect = document.getElementById('resident-of');
-            const treatmentSelect = document.getElementById('treatment');
-            const phoneNumberInput = document.getElementById('phone-number');
-            const mainSearchInput = document.getElementById('main-search-input');
-            const chatButton = document.getElementById('chat-button');
-            const requestAppointmentButtons = document.querySelectorAll('.request-appointment-button');
+const residentSelect = document.getElementById('resident-of');
+const treatmentSelect = document.getElementById('treatment');
+const phoneNumberInput = document.getElementById('phone-number');
+const mainSearchInput = document.getElementById('main-search-input');
+const chatButton = document.getElementById('chat-button');
+const requestAppointmentButtons = document.querySelectorAll('.request-appointment-button');
 
-            // Boshlang'ich qiymatlarni o'rnatish
-            residentSelect.value = 'uzbekistan';
-            treatmentSelect.value = 'angiography';
-            phoneNumberInput.value = '+998';
+// Boshlang'ich qiymatlarni o'rnatish
+// phoneNumberInput.value = '+998';
 
-            // Qidiruv funksiyasi
-            function handleSearch(query) {
-                console.log('Qidirilmoqda:', query);
-                // Haqiqiy ilovada bu qidiruv natijalarini olish uchun API chaqiruvini ishga tushiradi
-                // Siz bu yerga Django backend-ingizga so'rov yuborish kodini qo'shishingiz mumkin.
-            }
+// Qidiruv funksiyasi
+function handleSearch(query) {
+    console.log('Qidirilmoqda:', query);
+    // Haqiqiy ilovada bu qidiruv natijalarini olish uchun API chaqiruvini ishga tushiradi
+    // Siz bu yerga Django backend-ingizga so'rov yuborish kodini qo'shishingiz mumkin.
+}
 
+<<<<<<< HEAD
+// Uchrashuv so'rash funksiyasi
+function handleRequestAppointment(doctorName) {
+    console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
+    // Haqiqiy ilovada bu uchrashuv so'rovini backend-ga yuboradi.
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 1000;
+        text-align: center;
+        max-width: 300px;
+        font-family: 'Inter', sans-serif;
+        color: #334155;
+    `;
+    modal.innerHTML = `
+        <h3>Uchrashuv so'rovi</h3>
+        <p>${doctorName} bilan uchrashuv so'rovingiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
+        <button style="
+            background-color: var(--color-primary-blue);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+        " onclick="this.parentNode.remove()">Yopish</button>
+    `;
+    document.body.appendChild(modal);
+}
+=======
             // Uchrashuv so'rash funksiyasi
             function handleRequestAppointment(doctorName) {
                 console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
@@ -54,149 +90,150 @@
                 `;
                 document.body.appendChild(modal);
             }
+>>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
 
 
-            // Hodisa tinglovchilari
-            mainSearchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    handleSearch(e.target.value);
-                }
+// Hodisa tinglovchilari
+mainSearchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        handleSearch(e.target.value);
+    }
+});
+
+residentSelect.addEventListener('change', (e) => {
+    console.log('Istiqomat joyi o\'zgardi:', e.target.value);
+});
+
+treatmentSelect.addEventListener('change', (e) => {
+    console.log('Davolash usuli o\'zgardi:', e.target.value);
+});
+
+phoneNumberInput.addEventListener('input', (e) => {
+    // Telefon raqami kiritilganda qiymatni kuzatish
+    // Bu yerda siz raqamni formatlash yoki validatsiya qilishni qo'shishingiz mumkin
+});
+
+chatButton.addEventListener('click', handleChatNow);
+
+requestAppointmentButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const doctorName = button.dataset.doctorName;
+        handleRequestAppointment(doctorName);
+    });
+});
+
+// Header-ni mobil va desktop holatlarda to'g'ri ko'rsatish
+function adjustHeaderVisibility() {
+    const headerMobileActions = document.querySelector('.header-mobile-actions');
+    const headerDesktopActions = document.querySelector('.header-desktop-actions');
+    const headerNav = document.querySelector('.header-nav');
+    const headerTopRow = document.querySelector('.header-top-row');
+
+    if (window.innerWidth < 768) { // Mobil
+        headerMobileActions.style.display = 'flex';
+        headerDesktopActions.style.display = 'none';
+        headerNav.style.order = '3'; // Navigatsiyani pastga tushirish
+        headerNav.style.width = '100%';
+        headerNav.style.marginTop = '10px';
+        headerTopRow.style.marginBottom = '16px';
+    } else { // Desktop
+        headerMobileActions.style.display = 'none';
+        headerDesktopActions.style.display = 'flex';
+        headerNav.style.order = 'unset';
+        headerNav.style.width = 'auto';
+        headerNav.style.marginTop = '0';
+        headerTopRow.style.marginBottom = '0';
+    }
+}
+
+// Sahifa yuklanganda va o'lcham o'zgarganda funksiyani chaqirish
+window.addEventListener('load', adjustHeaderVisibility);
+window.addEventListener('resize', adjustHeaderVisibility);
+
+// Carousel navigatsiya funksionalligi
+const hospitalCarousel = document.getElementById('hospitalCarousel');
+const prevHospitalButton = document.getElementById('prevHospital');
+const nextHospitalButton = document.getElementById('nextHospital');
+
+if (hospitalCarousel && prevHospitalButton && nextHospitalButton) {
+    prevHospitalButton.addEventListener('click', () => {
+        hospitalCarousel.scrollBy({
+            left: -hospitalCarousel.offsetWidth / 2, // Yarim ekran bo'yicha orqaga aylantirish
+            behavior: 'smooth'
+        });
+    });
+
+    nextHospitalButton.addEventListener('click', () => {
+        hospitalCarousel.scrollBy({
+            left: hospitalCarousel.offsetWidth / 2, // Yarim ekran bo'yicha oldinga aylantirish
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Eng Mashhur Davolash Yo'nalishlari navigatsiya funksionalligi
+const destinationCardsGrid = document.querySelector('.destination-cards-grid');
+const prevDestinationButton = document.getElementById('prevDestination');
+const nextDestinationButton = document.getElementById('nextDestination');
+
+if (destinationCardsGrid && prevDestinationButton && nextDestinationButton) {
+    // Bu bo'lim grid bo'lgani uchun, agar kartalar ko'p bo'lsa, gorizontal skrollni ta'minlashimiz kerak.
+    // Hozirgi dizaynda 3 ta karta bor va ular gridda joylashgan.
+    // Agar kelajakda kartalar soni ko'paysa va skroll kerak bo'lsa, ushbu kod ishlaydi.
+    // Hozircha, agar 3 ta kartadan ortiq bo'lmasa, bu tugmalar sezilarli ta'sir ko'rsatmaydi.
+
+    // Gridni gorizontal aylantirish uchun flex konteynerga aylantirish (faqat mobil uchun)
+    // yoki shunchaki skroll funksiyasini qo'shish
+    function setupDestinationScroll() {
+        if (window.innerWidth < 1024) { // Faqat mobil va tablet ekranlarida skrollni yoqish
+            destinationCardsGrid.style.display = 'flex';
+            destinationCardsGrid.style.overflowX = 'auto';
+            destinationCardsGrid.style.scrollSnapType = 'x mandatory';
+            destinationCardsGrid.style.padding = '0 1rem 1rem 1rem';
+            destinationCardsGrid.style.gap = '1.5rem';
+
+            // Har bir kartani scroll-snap-align bilan belgilash
+            const destinationCards = destinationCardsGrid.querySelectorAll('.destination-card-full');
+            destinationCards.forEach(card => {
+                card.style.scrollSnapAlign = 'start';
+                card.style.flexShrink = '0';
+                card.style.width = 'calc(100% - 2rem)'; // Paddingni hisobga olgan holda
             });
 
-            residentSelect.addEventListener('change', (e) => {
-                console.log('Istiqomat joyi o\'zgardi:', e.target.value);
-            });
-
-            treatmentSelect.addEventListener('change', (e) => {
-                console.log('Davolash usuli o\'zgardi:', e.target.value);
-            });
-
-            phoneNumberInput.addEventListener('input', (e) => {
-                // Telefon raqami kiritilganda qiymatni kuzatish
-                // Bu yerda siz raqamni formatlash yoki validatsiya qilishni qo'shishingiz mumkin
-            });
-
-            chatButton.addEventListener('click', handleChatNow);
-
-            requestAppointmentButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const doctorName = button.dataset.doctorName;
-                    handleRequestAppointment(doctorName);
+            prevDestinationButton.addEventListener('click', () => {
+                destinationCardsGrid.scrollBy({
+                    left: -destinationCardsGrid.offsetWidth,
+                    behavior: 'smooth'
                 });
             });
 
-            // Header-ni mobil va desktop holatlarda to'g'ri ko'rsatish
-            function adjustHeaderVisibility() {
-                const headerMobileActions = document.querySelector('.header-mobile-actions');
-                const headerDesktopActions = document.querySelector('.header-desktop-actions');
-                const headerNav = document.querySelector('.header-nav');
-                const headerTopRow = document.querySelector('.header-top-row');
-
-                if (window.innerWidth < 768) { // Mobil
-                    headerMobileActions.style.display = 'flex';
-                    headerDesktopActions.style.display = 'none';
-                    headerNav.style.order = '3'; // Navigatsiyani pastga tushirish
-                    headerNav.style.width = '100%';
-                    headerNav.style.marginTop = '10px';
-                    headerTopRow.style.marginBottom = '16px';
-                } else { // Desktop
-                    headerMobileActions.style.display = 'none';
-                    headerDesktopActions.style.display = 'flex';
-                    headerNav.style.order = 'unset';
-                    headerNav.style.width = 'auto';
-                    headerNav.style.marginTop = '0';
-                    headerTopRow.style.marginBottom = '0';
-                }
-            }
-
-            // Sahifa yuklanganda va o'lcham o'zgarganda funksiyani chaqirish
-            window.addEventListener('load', adjustHeaderVisibility);
-            window.addEventListener('resize', adjustHeaderVisibility);
-
-            // Carousel navigatsiya funksionalligi
-            const hospitalCarousel = document.getElementById('hospitalCarousel');
-            const prevHospitalButton = document.getElementById('prevHospital');
-            const nextHospitalButton = document.getElementById('nextHospital');
-
-            if (hospitalCarousel && prevHospitalButton && nextHospitalButton) {
-                prevHospitalButton.addEventListener('click', () => {
-                    hospitalCarousel.scrollBy({
-                        left: -hospitalCarousel.offsetWidth / 2, // Yarim ekran bo'yicha orqaga aylantirish
-                        behavior: 'smooth'
-                    });
+            nextDestinationButton.addEventListener('click', () => {
+                destinationCardsGrid.scrollBy({
+                    left: destinationCardsGrid.offsetWidth,
+                    behavior: 'smooth'
                 });
+            });
+        } else {
+            // Desktop uchun grid holatiga qaytarish
+            destinationCardsGrid.style.display = 'grid';
+            destinationCardsGrid.style.overflowX = 'hidden';
+            destinationCardsGrid.style.scrollSnapType = 'none';
+            destinationCardsGrid.style.padding = '0';
+            destinationCardsGrid.style.gap = '2rem';
 
-                nextHospitalButton.addEventListener('click', () => {
-                    hospitalCarousel.scrollBy({
-                        left: hospitalCarousel.offsetWidth / 2, // Yarim ekran bo'yicha oldinga aylantirish
-                        behavior: 'smooth'
-                    });
-                });
-            }
+            const destinationCards = destinationCardsGrid.querySelectorAll('.destination-card-full');
+            destinationCards.forEach(card => {
+                card.style.scrollSnapAlign = 'none';
+                card.style.flexShrink = 'unset';
+                card.style.width = 'auto';
+            });
+        }
+    }
 
-            // Eng Mashhur Davolash Yo'nalishlari navigatsiya funksionalligi
-            const destinationCardsGrid = document.querySelector('.destination-cards-grid');
-            const prevDestinationButton = document.getElementById('prevDestination');
-            const nextDestinationButton = document.getElementById('nextDestination');
-
-            if (destinationCardsGrid && prevDestinationButton && nextDestinationButton) {
-                // Bu bo'lim grid bo'lgani uchun, agar kartalar ko'p bo'lsa, gorizontal skrollni ta'minlashimiz kerak.
-                // Hozirgi dizaynda 3 ta karta bor va ular gridda joylashgan.
-                // Agar kelajakda kartalar soni ko'paysa va skroll kerak bo'lsa, ushbu kod ishlaydi.
-                // Hozircha, agar 3 ta kartadan ortiq bo'lmasa, bu tugmalar sezilarli ta'sir ko'rsatmaydi.
-
-                // Gridni gorizontal aylantirish uchun flex konteynerga aylantirish (faqat mobil uchun)
-                // yoki shunchaki skroll funksiyasini qo'shish
-                function setupDestinationScroll() {
-                    if (window.innerWidth < 1024) { // Faqat mobil va tablet ekranlarida skrollni yoqish
-                        destinationCardsGrid.style.display = 'flex';
-                        destinationCardsGrid.style.overflowX = 'auto';
-                        destinationCardsGrid.style.scrollSnapType = 'x mandatory';
-                        destinationCardsGrid.style.padding = '0 1rem 1rem 1rem';
-                        destinationCardsGrid.style.gap = '1.5rem';
-
-                        // Har bir kartani scroll-snap-align bilan belgilash
-                        const destinationCards = destinationCardsGrid.querySelectorAll('.destination-card-full');
-                        destinationCards.forEach(card => {
-                            card.style.scrollSnapAlign = 'start';
-                            card.style.flexShrink = '0';
-                            card.style.width = 'calc(100% - 2rem)'; // Paddingni hisobga olgan holda
-                        });
-
-                        prevDestinationButton.addEventListener('click', () => {
-                            destinationCardsGrid.scrollBy({
-                                left: -destinationCardsGrid.offsetWidth,
-                                behavior: 'smooth'
-                            });
-                        });
-
-                        nextDestinationButton.addEventListener('click', () => {
-                            destinationCardsGrid.scrollBy({
-                                left: destinationCardsGrid.offsetWidth,
-                                behavior: 'smooth'
-                            });
-                        });
-                    } else {
-                        // Desktop uchun grid holatiga qaytarish
-                        destinationCardsGrid.style.display = 'grid';
-                        destinationCardsGrid.style.overflowX = 'hidden';
-                        destinationCardsGrid.style.scrollSnapType = 'none';
-                        destinationCardsGrid.style.padding = '0';
-                        destinationCardsGrid.style.gap = '2rem';
-
-                        const destinationCards = destinationCardsGrid.querySelectorAll('.destination-card-full');
-                        destinationCards.forEach(card => {
-                            card.style.scrollSnapAlign = 'none';
-                            card.style.flexShrink = 'unset';
-                            card.style.width = 'auto';
-                        });
-                    }
-                }
-
-                // Sahifa yuklanganda va o'lcham o'zgarganda funksiyani chaqirish
-                window.addEventListener('load', setupDestinationScroll);
-                window.addEventListener('resize', setupDestinationScroll);
-            }
+    // Sahifa yuklanganda va o'lcham o'zgarganda funksiyani chaqirish
+    window.addEventListener('load', setupDestinationScroll);
+    window.addEventListener('resize', setupDestinationScroll);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 const header = document.querySelector('.header');
