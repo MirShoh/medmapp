@@ -50,7 +50,7 @@ option {
 
 .modal-overlay {
     position: fixed;
-    inset: 0;
+    inset: 0; /* top, right, bottom, left: 0; bilan bir xil */
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 10000;
     display: flex;
@@ -74,11 +74,12 @@ option {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     text-align: center;
     
-    /* ASOSIY O'ZGARISH: Moslashuvchan o'lchamlar */
+    /* ASOSIY QISM: Moslashuvchan o'lchamlar */
     max-width: 420px; /* Maksimal kenglik (kattaroq ekranlar uchun) */
     width: 100%;      /* Kichik ekranlarda to'liq kenglikni egallaydi */
     box-sizing: border-box; /* Padding va border hisobga olinishi uchun */
 
+    /* Paydo bo'lish animatsiyasi */
     transform: scale(0.95);
     transition: transform 0.3s ease;
 }
@@ -159,6 +160,7 @@ option {
 /* === MODAL OYNA MOBIL MOSLASHUVI (YANGI) === */
 /* ========================================= */
 
+
 @media (max-width: 500px) {
     .modal-content {
         padding: 2rem 1.5rem; /* Ichki bo'shliqni kamaytirish */
@@ -175,7 +177,7 @@ option {
     }
 
     #modal-title {
-        font-size: 1.25rem; /* Sarlavha shriftini kichraytirish */
+        font-size: 1.3rem; /* Sarlavha shriftini kichraytirish */
     }
 
     #modal-message {
@@ -978,6 +980,7 @@ body {
 .popular-hospitals-section {
     padding: 4rem 1rem;
     background-color: var(--color-card-bg);
+    overflow: hidden;
 }
 
 /* Sarlavha va "Hammasini ko'rish" havolasi uchun konteyner */
