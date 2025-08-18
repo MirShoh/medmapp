@@ -16,7 +16,6 @@ function handleSearch(query) {
     // Siz bu yerga Django backend-ingizga so'rov yuborish kodini qo'shishingiz mumkin.
 }
 
-<<<<<<< HEAD
 // Uchrashuv so'rash funksiyasi
 function handleRequestAppointment(doctorName) {
     console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
@@ -53,44 +52,6 @@ function handleRequestAppointment(doctorName) {
     `;
     document.body.appendChild(modal);
 }
-=======
-            // Uchrashuv so'rash funksiyasi
-            function handleRequestAppointment(doctorName) {
-                console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
-                // Haqiqiy ilovada bu uchrashuv so'rovini backend-ga yuboradi.
-                const modal = document.createElement('div');
-                modal.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                    z-index: 1000;
-                    text-align: center;
-                    max-width: 300px;
-                    font-family: 'Inter', sans-serif;
-                    color: #334155;
-                `;
-                modal.innerHTML = `
-                    <h3>Uchrashuv so'rovi</h3>
-                    <p>${doctorName} bilan uchrashuv so'rovingiz qabul qilindi. Tez orada siz bilan bog'lanamiz.</p>
-                    <button style="
-                        background-color: var(--color-primary-blue);
-                        color: white;
-                        padding: 8px 15px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        margin-top: 15px;
-                        font-weight: 600;
-                    " onclick="this.parentNode.remove()">Yopish</button>
-                `;
-                document.body.appendChild(modal);
-            }
->>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
 
 
 // Hodisa tinglovchilari

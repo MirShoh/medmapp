@@ -9,7 +9,7 @@
     <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
     <meta name="description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
 
-    <meta property="og:title" content="MedMapp platformasi rasmiy veb-sayti">
+    <meta property="og:title" content="MedMapp plarformasi rasmiy veb-sayti">
     <meta property="og:description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://medmapp.uz/">
@@ -21,138 +21,6 @@
     <link rel="icon" type="image/x-icon" href="images/favicon.png">
 
     <link rel="stylesheet" href="style.css">
-
-        <!-- Yuborish holati va forma uchun qo'shimcha uslublar -->
-        <style>
-            /* Yuklanish indikatori (loader) */
-            .loader {
-                border: 4px solid #f3f3f3;
-                border-top: 4px solid var(--color-primary-blue);
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                animation: spin 1s linear infinite;
-                display: inline-block;
-                margin-left: 10px;
-            }
-    
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-    
-            /* Select (tanlov) maydoni uchun placeholder uslubi */
-            select:required:invalid {
-                color: #6c757d; /* Kulrang matn */
-            }
-            option[value=""][disabled] {
-                display: none;
-            }
-            option {
-                color: #212529; /* To'q kulrang matn */
-            }
-    
-            /* YANGI: Modal uchun uslublar */
-            .modal-overlay {
-                position: fixed;
-                inset: 0;
-                background-color: rgba(0, 0, 0, 0.6);
-                z-index: 10000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, visibility 0.3s ease;
-            }
-    
-            .modal-overlay.show {
-                opacity: 1;
-                visibility: visible;
-            }
-    
-            .modal-content {
-                background-color: #ffffff;
-                padding: 2.5rem;
-                border-radius: 1rem;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                text-align: center;
-                max-width: 90%;
-                width: 400px;
-                transform: scale(0.95);
-                transition: transform 0.3s ease;
-            }
-    
-            .modal-overlay.show .modal-content {
-                transform: scale(1);
-            }
-    
-            #modal-icon-container {
-                margin-bottom: 1.5rem;
-            }
-    
-            .success-icon {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                background-color: #e8f5e9; /* Och yashil */
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            .error-icon {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                background-color: #fdecea; /* Och qizil */
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-    
-            .success-icon svg {
-                width: 40px;
-                height: 40px;
-                color: #4caf50; /* Yashil */
-            }
-            
-            .error-icon svg {
-                width: 40px;
-                height: 40px;
-                color: #dc3545; /* Qizil */
-            }
-    
-            #modal-title {
-                font-size: 1.75rem;
-                font-weight: 700;
-                color: var(--color-dark-text);
-                margin: 0 0 0.75rem 0;
-            }
-    
-            #modal-message {
-                font-size: 1rem;
-                color: var(--color-medium-text);
-                line-height: 1.6;
-                margin: 0 0 2rem 0;
-            }
-    
-            .modal-button {
-                background-color: var(--color-primary-blue);
-                color: white;
-                font-weight: 600;
-                padding: 0.75rem 2rem;
-                border-radius: 0.5rem;
-                border: none;
-                cursor: pointer;
-                transition: background-color 0.2s ease;
-                width: 100%;
-            }
-    
-            .modal-button:hover {
-                background-color: #0056b3;
-            }
-        </style>
 
      <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFJ5QFG709"></script>
@@ -232,7 +100,6 @@
 
                     <!-- Forma kartasi -->
                     <form id="consultation-form" class="form-card">
-<<<<<<< HEAD
                     <div class="form-group">
                         <label for="resident-of">Qayerda istiqomat qilasiz?</label>
                         <div class="select-wrapper">
@@ -289,63 +156,6 @@
                         <div id="loader-container"></div>
                     </button>
                 </form>
-=======
-                        <div class="form-group">
-                            <label for="resident-of">Qayerda istiqomat qilasiz?</label>
-                            <div class="select-wrapper">
-                                <select id="resident-of" name="resident_of">
-                                    <option value="" disabled selected>Viloyatni tanlang</option>
-                                    <option value="Toshkent shahri">Toshkent shahri</option>
-                                    <option value="Andijon viloyati">Andijon viloyati</option>
-                                    <option value="Buxoro viloyati">Buxoro viloyati</option>
-                                    <option value="Farg‘ona viloyati">Farg‘ona viloyati</option>
-                                    <option value="Jizzax viloyati">Jizzax viloyati</option>
-                                    <option value="Namangan viloyati">Namangan viloyati</option>
-                                    <option value="Qashqadaryo viloyati">Qashqadaryo viloyati</option>
-                                    <option value="Navoiy viloyati">Navoiy viloyati</option>
-                                    <option value="Qoraqalpog‘iston">Qoraqalpog‘iston</option>
-                                    <option value="Samarqand viloyati">Samarqand viloyati</option>
-                                    <option value="Sirdaryo viloyati">Sirdaryo viloyati</option>
-                                    <option value="Surxondaryo viloyati">Surxondaryo viloyati</option>
-                                    <option value="Toshkent viloyati">Toshkent viloyati</option>
-                                    <option value="Xorazm viloyati">Xorazm viloyati</option>
-                                </select>
-                                <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="treatment">Davolash usuli</label>
-                            <div class="select-wrapper">
-                                <select id="treatment" name="treatment">
-                                    <option value="" disabled selected>Davolash usulini tanlang</option>
-                                    <option value="Yurak jarrohligi">Yurak jarrohligi</option>
-                                    <option value="Nevrologik kasallik">Nevrologik kasallik</option>
-                                    <option value="Buyrak ko'chirish">Buyrak ko'chirish</option>
-                                    <option value="Jigar ko'chirish">Jigar ko'chirish</option>
-                                    <option value="Angioplastika (PTCA)">Angioplastika (PTCA)</option>
-                                    <option value="Ortopediya">Ortopediya</option>
-                                    <option value="Onkologiya">Onkologiya</option>
-                                </select>
-                                <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone-number">Telefon raqam</label>
-                            <div class="phone-input-wrapper">
-                                <input type="tel" id="phone-number" name="phone_number" value="+998" required>
-                                <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.18 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            </div>
-                        </div>
-
-                        <button type="submit" id="chat-button" class="chat-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-                            <span id="button-text">Bepul konsultatsiya</span>
-                            <div id="loader-container"></div>
-                        </button>
-                    </form>
->>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
                 </div>
             </section>
 
@@ -1356,7 +1166,6 @@
         });
 
         form.addEventListener('submit', async function(event) {
-<<<<<<< HEAD
         event.preventDefault();
 
         if (!form.checkValidity()) {
@@ -1430,71 +1239,6 @@
             resetButton();
         }
     });
-=======
-            event.preventDefault();
-
-            if (!form.checkValidity()) {
-                showModal('error', 'Xatolik!', 'Iltimos, barcha maydonlarni to\'ldiring.');
-                form.reportValidity();
-                return;
-            }
-
-            submitButton.disabled = true;
-            buttonText.style.display = 'none';
-            loaderContainer.innerHTML = '<div class="loader"></div>';
-
-            const formData = new FormData(form);
-            const phone = formData.get('phone_number');
-
-            if (phone.length < 13 || !phone.startsWith('+998')) {
-                showModal('error', 'Xato Raqam!', 'Iltimos, telefon raqamingizni to\'g\'ri formatda kiriting (+998xxxxxxxxx).');
-                resetButton();
-                return;
-            }
-
-            const messageToTelegram = `
-<b>Yangi murojaat!</b>
--------------------------
-<b>📍 Viloyat:</b> ${formData.get('resident_of')}
-<b>💊 Davolash usuli:</b> ${formData.get('treatment')}
-<b>📞 Telefon:</b> <code>${phone}</code>
-<b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
-            `;
-
-            try {
-                const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: messageToTelegram,
-                        parse_mode: 'HTML',
-                    }),
-                });
-
-                if (telegramResponse.ok) {
-                    showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
-                    form.reset();
-                    document.getElementById('phone-number').value = '+998';
-                    
-                    fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.result !== 'success') console.error('Google Sheets Error:', data.message);
-                            else console.log('Google Sheets ga muvaffaqiyatli yozildi.');
-                        })
-                        .catch(error => console.error('Google Sheets Fetch Error:', error));
-                } else {
-                    showModal('error', 'Xatolik!', 'Telegramga xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
-                }
-            } catch (error) {
-                console.error('Fetch Error:', error);
-                showModal('error', 'Tarmoq Xatoligi!', 'Server bilan bog\'lanishda xatolik. Internet aloqasini tekshiring.');
-            } finally {
-                resetButton();
-            }
-        });
->>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
 
         function showModal(type, title, message) {
             modalTitle.textContent = title;
@@ -1540,7 +1284,6 @@
             navMenu.classList.toggle('active');
         });
     });
-<<<<<<< HEAD
 
     // Mavjud skriptlaringizdan keyin qo'shing
     const phoneInput = document.getElementById('phone-number');
@@ -1577,8 +1320,6 @@
         // Formatlangan raqamni inputga joylash
         input.value = prefix + formattedNumber;
     });
-=======
->>>>>>> c0449902d7672dd410ed050ba912853c455f20f8
     </script>
 
     </body>
