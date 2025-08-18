@@ -1194,13 +1194,13 @@
 
         // --- 2-O'ZGARISH: Telegram xabarida toza formatdagi raqamni ishlatish ---
         const messageToTelegram = `
-    <b>Yangi murojaat!</b>
-    -------------------------
-    <b>📍 Viloyat:</b> ${formData.get('resident_of')}
-    <b>💊 Davolash usuli:</b> ${formData.get('treatment')}
-    <b>📞 Telefon:</b> <code>${phoneForBackend}</code>
-    <b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
-        `;
+<b>Yangi murojaat!</b>
+-------------------------
+<b>📍 Viloyat:</b> ${formData.get('resident_of')}
+<b>💊 Davolash usuli:</b> ${formData.get('treatment')}
+<b>📞 Telefon:</b> <code>${phoneForBackend}</code>
+<b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
+    `;
 
         // --- 3-O'ZGARISH: Google Sheetsga yuborishdan oldin formData'ni yangilash ---
         formData.set('phone_number', phoneForBackend);
