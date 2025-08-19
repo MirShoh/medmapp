@@ -155,7 +155,7 @@
                         <span id="button-text">Bepul konsultatsiya</span>
                         <div id="loader-container"></div>
                     </button>
-                </form>
+                    </form>
                 </div>
             </section>
 
@@ -520,8 +520,8 @@
                             <div class="stat-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-pulse"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.7-1 2.1 4.4 3.2-7.4H22"/></svg>
                             </div>
-                            <h3 class="stat-number" data-target="1000">0</h3>
-                            <p class="stat-label">Mamnun Bemorlar</p>
+                            <h3 class="stat-number" data-target="100">100</h3>
+                            <p class="stat-label">Mamnun memorlar</p>
                         </div>
 
                         <!-- 2-statistika: Klinikalar -->
@@ -529,8 +529,8 @@
                             <div class="stat-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg>
                             </div>
-                            <h3 class="stat-number" data-target="25">0</h3>
-                            <p class="stat-label">Xalqaro Klinikalar</p>
+                            <h3 class="stat-number" data-target="20">20</h3>
+                            <p class="stat-label">Xalqaro klinikalar</p>
                         </div>
 
                         <!-- 3-statistika: Shifokorlar -->
@@ -538,8 +538,8 @@
                             <div class="stat-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-stethoscope"><path d="M4.8 2.3A.3.3 0 1 0 5.4 2a.3.3 0 0 0-.6.3Z"/><path d="M8 2a1 1 0 0 0-1 1v5.5a4.5 4.5 0 0 0 4.5 4.5h0A4.5 4.5 0 0 0 16 8.5V3a1 1 0 0 0-1-1Z"/><path d="M19.2 2.3a.3.3 0 1 0-.6.3.3.3 0 0 0 .6-.3Z"/><path d="M11 13v9"/><path d="M11 22h2"/></svg>
                             </div>
-                            <h3 class="stat-number" data-target="100">0</h3>
-                            <p class="stat-label">Jahon Darajasidagi Shifokorlar</p>
+                            <h3 class="stat-number" data-target="150">150</h3>
+                            <p class="stat-label">Jahon darajasidagi shifokorlar</p>
                         </div>
                     </div>
                 </div>
@@ -1131,196 +1131,5 @@
     </div>
 
 </footer>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('consultation-form');
-        const submitButton = document.getElementById('chat-button');
-        const buttonText = document.getElementById('button-text');
-        const loaderContainer = document.getElementById('loader-container');
-        
-        // Modal elementlari
-        const statusModal = document.getElementById('status-modal');
-        const modalIconContainer = document.getElementById('modal-icon-container');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMessage = document.getElementById('modal-message');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-
-        // --- BU YERGA O'Z MA'LUMOTLARINGIZNI KIRITING ---
-        const TELEGRAM_BOT_TOKEN = '8325839163:AAHfoOzo-jJwd39s2uE5jPqxNoAsAODyGdM'; // BotFather'dan olingan token
-        const TELEGRAM_CHAT_ID = '-1002713865997'; // Xabar yuboriladigan chat ID
-        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxGJgbCYeycHbUTSNDIXyB0cAWO5XPxAYmlisoeUPbSPJg0owZ8VO6bzH20vS3NGQ-g/exec'; // Google Apps Script'dan olingan URL
-
-        // ----------------------------------------------------
-        
-        // Modalni yopish funksiyasi
-        const closeModal = () => {
-            statusModal.classList.remove('show');
-        };
-
-        modalCloseBtn.addEventListener('click', closeModal);
-        statusModal.addEventListener('click', (e) => {
-            if (e.target === statusModal) {
-                closeModal();
-            }
-        });
-
-        form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        if (!form.checkValidity()) {
-            showModal('error', 'Xatolik!', 'Iltimos, barcha maydonlarni to\'ldiring.');
-            form.reportValidity();
-            return;
-        }
-
-        submitButton.disabled = true;
-        submitButton.classList.add('loading');
-
-        const formData = new FormData(form);
-        const formattedPhone = formData.get('phone_number'); // Formatlangan raqamni olish: masalan, "+998 (90) 123-45-67"
-        
-        // --- 1-O'ZGARISH: Raqamni tekshirish va toza formatga o'tkazish ---
-        const cleanedPhoneForValidation = formattedPhone.replace(/\D/g, ''); // Tekshirish uchun faqat raqamlar qoldirildi: "998901234567"
-        
-        if (cleanedPhoneForValidation.length !== 12) {
-            showModal('error', 'Xato Raqam!', 'Iltimos, telefon raqamingizni to\'liq kiriting. Namuna: +998 (90) 123-45-67');
-            resetButton();
-            return;
-        }
-        
-        // Telegram va Google Sheets uchun toza format (+ belgisi bilan)
-        const phoneForBackend = '+' + cleanedPhoneForValidation; // Natija: "+998901234567"
-
-        // --- 2-O'ZGARISH: Telegram xabarida toza formatdagi raqamni ishlatish ---
-        const messageToTelegram = `
-<b>Yangi murojaat!</b>
--------------------------
-<b>📍 Viloyat:</b> ${formData.get('resident_of')}
-<b>💊 Davolash usuli:</b> ${formData.get('treatment')}
-<b>📞 Telefon:</b> <code>${phoneForBackend}</code>
-<b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
-    `;
-
-        // --- 3-O'ZGARISH: Google Sheetsga yuborishdan oldin formData'ni yangilash ---
-        formData.set('phone_number', phoneForBackend);
-
-
-        try {
-            const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: messageToTelegram,
-                    parse_mode: 'HTML',
-                }),
-            });
-
-            if (telegramResponse.ok) {
-                showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
-                form.reset();
-                
-                // Google Sheets'ga YUBORILAYOTGAN formData endi toza raqamni o'z ichiga oladi
-                fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.result !== 'success') console.error('Google Sheets Error:', data.message);
-                        else console.log('Google Sheets ga muvaffaqiyatli yozildi.');
-                    })
-                    .catch(error => console.error('Google Sheets Fetch Error:', error));
-            } else {
-                showModal('error', 'Xatolik!', 'Telegramga xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
-            }
-        } catch (error) {
-            console.error('Fetch Error:', error);
-            showModal('error', 'Tarmoq Xatoligi!', 'Server bilan bog\'lanishda xatolik. Internet aloqasini tekshiring.');
-        } finally {
-            resetButton();
-        }
-    });
-
-        function showModal(type, title, message) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-
-            if (type === 'success') {
-                modalIconContainer.innerHTML = `
-                    <div class="success-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                `;
-            } else {
-                modalIconContainer.innerHTML = `
-                    <div class="error-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </div>
-                `;
-            }
-            
-            statusModal.classList.add('show');
-        }
-        
-        function resetButton() {
-            submitButton.disabled = false;
-            loaderContainer.innerHTML = '';
-            buttonText.style.display = 'inline';
-        }
-
-        // Qolgan skriptlaringiz (header, karusel va hokazo) bu yerda bo'lishi mumkin
-        const header = document.querySelector('.header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-        
-        const hamburger = document.querySelector('.hamburger-menu');
-        const navMenu = document.querySelector('.header-nav');
-
-        hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-    });
-
-    // Mavjud skriptlaringizdan keyin qo'shing
-    const phoneInput = document.getElementById('phone-number');
-    const prefix = '+998';
-
-    phoneInput.addEventListener('input', (e) => {
-        const input = e.target;
-        let value = input.value;
-
-        // Prefiks o'chirilmasligini ta'minlash
-        if (!value.startsWith(prefix)) {
-            input.value = prefix;
-            return;
-        }
-
-        // Prefiksdan keyingi raqamlarni ajratib olish
-        const userDigits = value.substring(prefix.length).replace(/\D/g, '');
-        
-        // Raqamlarni formatlash
-        let formattedNumber = '';
-        if (userDigits.length > 0) {
-            formattedNumber += '(' + userDigits.substring(0, 2);
-        }
-        if (userDigits.length > 2) {
-            formattedNumber += ') ' + userDigits.substring(2, 5);
-        }
-        if (userDigits.length > 5) {
-            formattedNumber += '-' + userDigits.substring(5, 7);
-        }
-        if (userDigits.length > 7) {
-            formattedNumber += '-' + userDigits.substring(7, 9);
-        }
-
-        // Formatlangan raqamni inputga joylash
-        input.value = prefix + formattedNumber;
-    });
-    </script>
-
     </body>
     </html>

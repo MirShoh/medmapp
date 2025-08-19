@@ -440,31 +440,63 @@
                 <div class="container">
                     <h2 class="section-title-center">Uchrashuv so'rash</h2>
                     <p class="section-subtitle-center">Shaklni to'ldiring, bizning mutaxassislarimiz siz bilan tez orada bog'lanishadi.</p>
-                    <form class="appointment-form">
-                        <div class="form-group-alt">
-                            <label for="full-name">To'liq ism</label>
-                            <input type="text" id="full-name" name="full_name" required>
+                    <form id="consultation-form" class="form-card">
+                    <div class="form-group">
+                        <label for="resident-of">Qayerda istiqomat qilasiz?</label>
+                        <div class="select-wrapper">
+                            <select id="resident-of" name="resident_of" required>
+                                <option value="" disabled selected>Viloyatni tanlang</option>
+                                <option value="Toshkent shahri">Toshkent shahri</option>
+                                <option value="Andijon viloyati">Andijon viloyati</option>
+                                <option value="Buxoro viloyati">Buxoro viloyati</option>
+                                <option value="Farg‘ona viloyati">Farg‘ona viloyati</option>
+                                <option value="Jizzax viloyati">Jizzax viloyati</option>
+                                <option value="Namangan viloyati">Namangan viloyati</option>
+                                <option value="Qashqadaryo viloyati">Qashqadaryo viloyati</option>
+                                <option value="Navoiy viloyati">Navoiy viloyati</option>
+                                <option value="Qoraqalpog‘iston">Qoraqalpog‘iston</option>
+                                <option value="Samarqand viloyati">Samarqand viloyati</option>
+                                <option value="Sirdaryo viloyati">Sirdaryo viloyati</option>
+                                <option value="Surxondaryo viloyati">Surxondaryo viloyati</option>
+                                <option value="Toshkent viloyati">Toshkent viloyati</option>
+                                <option value="Xorazm viloyati">Xorazm viloyati</option>
+                            </select>
+                            <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
-                        <div class="form-group-alt">
-                            <label for="email">Elektron pochta</label>
-                            <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="treatment">Davolash usuli</label>
+                        <div class="select-wrapper">
+                            <select id="treatment" name="treatment" required>
+                                <option value="" disabled selected>Davolash usulini tanlang</option>
+                                <option value="Onkologiya">Onkologiya (Saraton kasalliklarini davolash)</option>
+                                <option value="Kardiologiya va Kardiojarrohlik">Kardiologiya va Kardiojarrohlik (Yurak kasalliklari)</option>
+                                <option value="Ortopediya">Ortopediya (Suyak va bo'g'im kasalliklari)</option>
+                                <option value="Transplantologiya">Transplantologiya (Organlarni ko'chirib o'tkazish)</option>
+                                <option value="Neyroxirurgiya">Neyroxirurgiya (Miya va umurtqa pog'onasi jarrohligi)</option>
+                                <option value="Reproduktologiya">Reproduktologiya (EKU/IVF - Sun'iy urug'lantirish)</option>
+                                <option value="Kosmetik va Plastik jarrohlik">Kosmetik va Plastik jarrohlik</option>
+                                <option value="Boshqa">Boshqa</option>
+                            </select>
+                            <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </div>
-                        <div class="form-group-alt">
-                            <label for="phone">Telefon raqam</label>
-                            <input type="tel" id="phone" name="phone" value="+998" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone-number">Telefon raqam</label>
+                        <div class="phone-input-wrapper">
+                            <input type="text" id="phone-number" name="phone_number" required maxlength="19" placeholder="+998 (90) 123-45-67">
+                            <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.18 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </div>
-                        <div class="form-group-alt">
-                            <label for="requirements">Davolash talablari</label>
-                            <textarea id="requirements" name="requirements" rows="4"></textarea>
-                        </div>
-                        <div class="form-group-full">
-                            <button type="submit" class="btn btn-primary btn-full">So'rov yuborish</button>
-                            <p class="form-privacy-note">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                Ma'lumotlaringiz himoyalangan
-                            </p>
-                        </div>
-                    </form>
+                    </div>
+
+                    <button type="submit" id="chat-button" class="chat-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+                        <span id="button-text">Bepul konsultatsiya</span>
+                        <div id="loader-container"></div>
+                    </button>
+                </form>
                 </div>
             </section>
         </div>
@@ -523,6 +555,18 @@
                 </div>
             </div>
         </div>
+        <!-- YANGI: Muvaffaqiyat/Xatolik uchun Modal Oyna -->
+    <div id="status-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-icon-container">
+                <!-- Ikona JavaScript orqali qo'yiladi -->
+            </div>
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <button id="modal-close-btn" class="modal-button">Yopish</button>
+        </div>
+    </div>
+    
     </footer>
     
     <!-- Lightbox uchun konteyner -->

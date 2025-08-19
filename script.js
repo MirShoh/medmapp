@@ -16,6 +16,196 @@ function handleSearch(query) {
     // Siz bu yerga Django backend-ingizga so'rov yuborish kodini qo'shishingiz mumkin.
 }
 
+// Forma
+
+document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('consultation-form');
+        const submitButton = document.getElementById('chat-button');
+        const buttonText = document.getElementById('button-text');
+        const loaderContainer = document.getElementById('loader-container');
+        
+        // Modal elementlari
+        const statusModal = document.getElementById('status-modal');
+        const modalIconContainer = document.getElementById('modal-icon-container');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // --- BU YERGA O'Z MA'LUMOTLARINGIZNI KIRITING ---
+        const TELEGRAM_BOT_TOKEN = '8325839163:AAHfoOzo-jJwd39s2uE5jPqxNoAsAODyGdM'; // BotFather'dan olingan token
+        const TELEGRAM_CHAT_ID = '-1002713865997'; // Xabar yuboriladigan chat ID
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxGJgbCYeycHbUTSNDIXyB0cAWO5XPxAYmlisoeUPbSPJg0owZ8VO6bzH20vS3NGQ-g/exec'; // Google Apps Script'dan olingan URL
+
+        // ----------------------------------------------------
+        
+        // Modalni yopish funksiyasi
+        const closeModal = () => {
+            statusModal.classList.remove('show');
+        };
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        statusModal.addEventListener('click', (e) => {
+            if (e.target === statusModal) {
+                closeModal();
+            }
+        });
+
+        form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+            showModal('error', 'Xatolik!', 'Iltimos, barcha maydonlarni to\'ldiring.');
+            form.reportValidity();
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.classList.add('loading');
+
+        const formData = new FormData(form);
+        const formattedPhone = formData.get('phone_number'); // Formatlangan raqamni olish: masalan, "+998 (90) 123-45-67"
+        
+        // --- 1-O'ZGARISH: Raqamni tekshirish va toza formatga o'tkazish ---
+        const cleanedPhoneForValidation = formattedPhone.replace(/\D/g, ''); // Tekshirish uchun faqat raqamlar qoldirildi: "998901234567"
+        
+        if (cleanedPhoneForValidation.length !== 12) {
+            showModal('error', 'Xato Raqam!', 'Iltimos, telefon raqamingizni to\'liq kiriting. Namuna: +998 (90) 123-45-67');
+            resetButton();
+            return;
+        }
+        
+        // Telegram va Google Sheets uchun toza format (+ belgisi bilan)
+        const phoneForBackend = '+' + cleanedPhoneForValidation; // Natija: "+998901234567"
+
+        // --- 2-O'ZGARISH: Telegram xabarida toza formatdagi raqamni ishlatish ---
+        const messageToTelegram = `
+<b>Yangi murojaat!</b>
+-------------------------
+<b>📍 Viloyat:</b> ${formData.get('resident_of')}
+<b>💊 Davolash usuli:</b> ${formData.get('treatment')}
+<b>📞 Telefon:</b> <code>${phoneForBackend}</code>
+<b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
+    `;
+
+        // --- 3-O'ZGARISH: Google Sheetsga yuborishdan oldin formData'ni yangilash ---
+        formData.set('phone_number', phoneForBackend);
+
+
+        try {
+            const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: messageToTelegram,
+                    parse_mode: 'HTML',
+                }),
+            });
+
+            if (telegramResponse.ok) {
+                showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
+                form.reset();
+                
+                // Google Sheets'ga YUBORILAYOTGAN formData endi toza raqamni o'z ichiga oladi
+                fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result !== 'success') console.error('Google Sheets Error:', data.message);
+                        else console.log('Google Sheets ga muvaffaqiyatli yozildi.');
+                    })
+                    .catch(error => console.error('Google Sheets Fetch Error:', error));
+            } else {
+                showModal('error', 'Xatolik!', 'Telegramga xabar yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.');
+            }
+        } catch (error) {
+            console.error('Fetch Error:', error);
+            showModal('error', 'Tarmoq Xatoligi!', 'Server bilan bog\'lanishda xatolik. Internet aloqasini tekshiring.');
+        } finally {
+            resetButton();
+        }
+    });
+
+        function showModal(type, title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            if (type === 'success') {
+                modalIconContainer.innerHTML = `
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                `;
+            } else {
+                modalIconContainer.innerHTML = `
+                    <div class="error-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+                `;
+            }
+            
+            statusModal.classList.add('show');
+        }
+        
+        function resetButton() {
+            submitButton.disabled = false;
+            loaderContainer.innerHTML = '';
+            buttonText.style.display = 'inline';
+        }
+
+        // Qolgan skriptlaringiz (header, karusel va hokazo) bu yerda bo'lishi mumkin
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        const hamburger = document.querySelector('.hamburger-menu');
+        const navMenu = document.querySelector('.header-nav');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+    });
+
+    // Mavjud skriptlaringizdan keyin qo'shing
+    const phoneInput = document.getElementById('phone-number');
+    const prefix = '+998';
+
+    phoneInput.addEventListener('input', (e) => {
+        const input = e.target;
+        let value = input.value;
+
+        // Prefiks o'chirilmasligini ta'minlash
+        if (!value.startsWith(prefix)) {
+            input.value = prefix;
+            return;
+        }
+
+        // Prefiksdan keyingi raqamlarni ajratib olish
+        const userDigits = value.substring(prefix.length).replace(/\D/g, '');
+        
+        // Raqamlarni formatlash
+        let formattedNumber = '';
+        if (userDigits.length > 0) {
+            formattedNumber += '(' + userDigits.substring(0, 2);
+        }
+        if (userDigits.length > 2) {
+            formattedNumber += ') ' + userDigits.substring(2, 5);
+        }
+        if (userDigits.length > 5) {
+            formattedNumber += '-' + userDigits.substring(5, 7);
+        }
+        if (userDigits.length > 7) {
+            formattedNumber += '-' + userDigits.substring(7, 9);
+        }
+
+        // Formatlangan raqamni inputga joylash
+        input.value = prefix + formattedNumber;
+    });
+
 // Uchrashuv so'rash funksiyasi
 function handleRequestAppointment(doctorName) {
     console.log(`${doctorName} bilan uchrashuv so'ralmoqda.`);
@@ -284,37 +474,55 @@ document.addEventListener('DOMContentLoaded', function() {
 /* ======================================================== */
 /* === STATISTIKA BO'LIMI UCHUN RAQAMLAR ANIMATSIYASI === */
 /* ======================================================== */
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Animatsiya qilinadigan bo'limni topamiz
     const statsSection = document.querySelector('.stats-section');
     
+    // Agar shunday bo'lim mavjud bo'lsa...
     if (statsSection) {
+        
+        // IntersectionObserver - element ekranda ko'ringanini kuzatadi
         const counterObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
+                
+                // Agar element ekranda ko'rinsa...
                 if (entry.isIntersecting) {
                     const numberElements = statsSection.querySelectorAll('.stat-number');
+                    
                     numberElements.forEach(el => {
-                        const target = +el.getAttribute('data-target');
-                        el.innerText = '0'; // Boshlang'ich qiymat
+                        const target = +el.getAttribute('data-target'); // Maqsadli raqamni olamiz
+                        el.innerText = '0'; // Boshlang'ich qiymatni 0 ga tenglaymiz
 
+                        // Raqamni bosqichma-bosqich oshirib boruvchi funksiya
                         const updateCount = () => {
-                            const current = +el.innerText;
-                            const increment = target / 100; // Animatsiya tezligi
+                            const current = +el.innerText.replace(/\D/g, ''); // Hozirgi raqam
+                            const increment = target / 100; // Animatsiya tezligi (100 qadamda yetib boradi)
 
                             if (current < target) {
-                                el.innerText = `${Math.ceil(current + increment)}`;
-                                setTimeout(updateCount, 20); // Har 20ms da yangilash
+                                // Raqamni oshirib, formatlab (mingliklarga ajratib) yozamiz
+                                el.innerText = Math.ceil(current + increment).toLocaleString('uz-UZ');
+                                // Keyingi o'zgarish uchun funksiyani yana chaqiramiz
+                                setTimeout(updateCount, 20); // Har 20 millisekundda yangilanadi
                             } else {
-                                el.innerText = target.toLocaleString() + (el.dataset.target > 500 ? '+' : '');
+                                // Animatsiya tugagach, aniq qiymatni va kerak bo'lsa '+' belgisini qo'yamiz
+                                el.innerText = target.toLocaleString('uz-UZ') + (target > 500 ? '+' : '');
                             }
                         };
+                        
+                        // Animatsiyani boshlaymiz
                         updateCount();
                     });
-                    observer.unobserve(statsSection); // Animatsiya bir marta ishlashi uchun
+                    
+                    // Animatsiya faqat bir marta ishlashi uchun kuzatuvchini o'chiramiz
+                    observer.unobserve(statsSection);
                 }
             });
-        }, { threshold: 0.4 }); // Bo'limning 40%i ko'ringanda ishlaydi
+        }, { 
+            threshold: 0.4 // Bo'limning 40%i ko'ringanda ishga tushadi
+        });
 
+        // Statistika bo'limini kuzatishni boshlaymiz
         counterObserver.observe(statsSection);
     }
 });
-
