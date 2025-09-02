@@ -155,6 +155,97 @@ option {
     background-color: #0056b3;
 }
 
+.policy-main {
+            padding-top: 4rem; /* 96px */
+            padding-bottom: 4rem; /* 64px */
+        }
+
+        .policy-container {
+            max-width: 90rem; 
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem; /* 16px */
+            padding-right: 1rem; /* 16px */
+        }
+
+        .policy-card {
+            background-color: #ffffff;
+            padding: 2rem 2.5rem; /* 32px 40px */
+            border-radius: 1.5rem; /* 24px */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .policy-header {
+            text-align: center;
+            margin-bottom: 2.5rem; /* 40px */
+        }
+
+        .policy-title {
+            font-size: 2.25rem; /* 36px */
+            font-weight: 800; /* extra-bold */
+            color: #111827; /* text-gray-900 */
+            letter-spacing: -0.025em; /* tracking-tight */
+        }
+
+        .policy-subtitle {
+            margin-top: 0.75rem; /* 12px */
+            font-size: 1.125rem; /* 18px */
+            color: #6b7280; /* text-gray-500 */
+        }
+        
+        /* Matn kontenti uchun uslublar */
+        .policy-content h2 {
+            font-size: 1.5rem; /* 24px */
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+
+        .policy-content p, .policy-content ul {
+            line-height: 1.75;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .policy-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem; /* 24px */
+        }
+
+        .policy-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .policy-content li::marker {
+            color: #6b7280;
+        }
+
+        .policy-content a {
+            color: #4338ca; /* Indigo rang */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .policy-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Moslashuvchanlik (Responsiveness) */
+        @media (min-width: 768px) {
+            .policy-main {
+                padding-top: 8rem; /* 128px */
+                padding-bottom: 6rem; /* 96px */
+            }
+            .policy-title {
+                font-size: 2rem; /* 48px */
+            }
+            .policy-card {
+                padding: 2.5rem; /* 56px */
+            }
+        }
 
 /* ========================================= */
 /* === MODAL OYNA MOBIL MOSLASHUVI (YANGI) === */
