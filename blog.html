@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedMapp Blogi - Tibbiy Turizm Haqida So'nggi Yangiliklar</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="medmapp blog, hindistonda davolanish, tibbiy yangiliklar, sog'liqni saqlash, transplantatsiya, kardiologiya, onkologiya">
+    <meta name="description" content="MedMapp blogida Hindistonda davolanish, sog'liqni saqlash sohasidagi so'nggi yangiliklar va bemorlar uchun foydali maslahatlar bilan tanishing.">
+
+    <meta property="og:title" content="MedMapp Blogi - Tibbiyot va Salomatlik Dunyosi">
+    <meta property="og:description" content="Hindistonda davolanish bo'yicha ekspertlar maslahatlari, klinikalar sharhlari va bemorlar tajribalari.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://medmapp.uz/blog-uz.html">
+    <meta property="og:image" content="https://medmapp.uz/images/blog/blog_og_image.jpg">
+    <meta property="og:site_name" content="medmapp.uz">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/logo/MedMapp_logo_icon_circle.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Sahifa uchun maxsus uslublar -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .blog-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1200x400/3498db/ffffff?text=MedMapp+Blogi') no-repeat center center;
+            background-size: cover;
+            padding: 80px 20px;
+            text-align: center;
+            color: white;
+            border-radius: 0 0 20px 20px;
+        }
+        .blog-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .blog-header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .blog-layout {
+            max-width: 1320px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr); /* Katta ekranlar uchun 3 ustun */
+            }
+        }
+        
+        .post-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            border: 1px solid #eef2f7;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .post-card-image-wrapper {
+            position: relative; /* Sana uchun kontekst */
+            overflow: hidden;
+        }
+        .post-card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .post-card:hover .post-card-image {
+            transform: scale(1.05);
+        }
+        .post-date-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(23, 43, 77, 0.6);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .post-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .post-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+        .cat-turizm { background-color: #eaf3ff; color: #3498db; }
+        .cat-transplant { background-color: #eafaf1; color: #2ecc71; }
+        .cat-kardio { background-color: #fdeded; color: #e74c3c; }
+        .cat-qollanma { background-color: #fef5e7; color: #f39c12; }
+
+        .post-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .post-excerpt {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #999;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 15px;
+        }
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .post-meta svg {
+            width: 14px;
+            height: 14px;
+            stroke: #999;
+        }
+        .read-more-link {
+            color: #3498db;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .read-more-link:hover {
+            color: #2980b9;
+        }
+    </style>
+
+     <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFJ5QFG709"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-WFJ5QFG709');
+    </script>
+
+</head>
+<body>
+
+    <header class="header scrolled">
+        <div class="header-logo"> 
+            <a href="index.html">
+                <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
+            </a>
+        </div>
+        <nav class="header-nav">
+            <ul>
+                <li><a href="index.html">Bosh sahifa</a></li>
+                <li><a href="departments.html">Bo‘limlar</a></li>
+                <li><a href="clinics.html">Shifoxonalar</a></li>
+                <li><a href="pricing.html">Narxlar</a></li>
+                <li><a href="treatments.html">Davolash usuli</a></li>
+                <li><a href="doctors.html">Shifokorlar</a></li>
+                <li><a href="testimonials.html">Bemorlarimiz</a></li>
+                <li><a href="blog-uz.html" class="active">Blog</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <div class="language-selector">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <span>UZ</span>
+                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+        </div>
+        <button class="hamburger-menu" aria-label="Menyuni ochish">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+    </header>
+
+    <!-- Asosiy kontent -->
+    <main>
+        <section class="blog-header">
+            <h1>MedMapp Blogi</h1>
+            <p>Hindistonda davolanish, sog'lom turmush tarzi va tibbiyot olamidagi eng so'nggi yangiliklar.</p>
+        </section>
+
+        <div class="blog-layout">
+            <section class="blog-main">
+                <div class="blog-grid">
+                    <!-- Blog Post 1 -->
+                    <article class="post-card">
+                        <div class="post-card-image-wrapper">
+                            <img src="https://placehold.co/600x400/3498db/ffffff?text=Zamonaviy+Klinika" alt="Hindistondagi zamonaviy klinika" class="post-card-image">
+                            <span class="post-date-badge">2-sentabr, 2025</span>
+                        </div>
+                        <div class="post-card-content">
+                            <span class="post-category cat-turizm">Tibbiy Turizm</span>
+                            <h2 class="post-title">Hindistonda Davolanishning 5 Afzalliklari</h2>
+                            <p class="post-excerpt">Nima uchun bemorlar davolanish uchun Hindistonni tanlashadi? Yuqori malaka, zamonaviy texnologiyalar va hamyonbop narxlar.</p>
+                            <div class="post-meta">
+                                <div class="post-author">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <span>Dr. N. Aliyev</span>
+                                </div>
+                                <a href="#" class="read-more-link">Batafsil &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 2 -->
+                    <article class="post-card">
+                         <div class="post-card-image-wrapper">
+                            <img src="https://placehold.co/600x400/2ecc71/ffffff?text=Jarrohlar+Jamoasi" alt="Jarrohlar jamoasi operatsiya paytida" class="post-card-image">
+                            <span class="post-date-badge">28-avgust, 2025</span>
+                        </div>
+                        <div class="post-card-content">
+                            <span class="post-category cat-transplant">Transplantatsiya</span>
+                            <h2 class="post-title">Jigar Ko'chirish Operatsiyasiga Tayyorgarlik</h2>
+                            <p class="post-excerpt">Jigar transplantatsiyasi murakkab jarayon. Unga ruhiy va jismoniy tayyorgarlik bo'yicha mutaxassislar tavsiyalari.</p>
+                            <div class="post-meta">
+                                <div class="post-author">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <span>MedMapp Jamoasi</span>
+                                </div>
+                                <a href="#" class="read-more-link">Batafsil &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 3 -->
+                    <article class="post-card">
+                         <div class="post-card-image-wrapper">
+                            <img src="https://placehold.co/600x400/e74c3c/ffffff?text=Yurak+Salomatligi" alt="Yurak salomatligini ifodalovchi rasm" class="post-card-image">
+                            <span class="post-date-badge">25-avgust, 2025</span>
+                        </div>
+                        <div class="post-card-content">
+                            <span class="post-category cat-kardio">Kardiologiya</span>
+                            <h2 class="post-title">Hindistonning Top-3 Kardiologiya Markazlari</h2>
+                            <p class="post-excerpt">Hindistonning yurak-qon tomir kasalliklarini davolashdagi yetakchi klinikalari sharhi va eng so'nggi davolash usullari.</p>
+                            <div class="post-meta">
+                                <div class="post-author">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <span>Salomatlik Eksperti</span>
+                                </div>
+                                <a href="#" class="read-more-link">Batafsil &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Blog Post 4 (Qo'shimcha post, 3 ustunli maket uchun) -->
+                     <article class="post-card">
+                         <div class="post-card-image-wrapper">
+                            <img src="https://placehold.co/600x400/f39c12/ffffff?text=Viza+Hujjatlari" alt="Viza va pasport hujjatlari" class="post-card-image">
+                            <span class="post-date-badge">20-avgust, 2025</span>
+                        </div>
+                        <div class="post-card-content">
+                            <span class="post-category cat-qollanma">Qo'llanma</span>
+                            <h2 class="post-title">Hindistonga Tibbiy Viza Olish Qo'llanmasi</h2>
+                            <p class="post-excerpt">Tibbiy viza uchun qanday hujjatlar kerak? Jarayon va muhim jihatlar haqida to'liq ma'lumot shu maqolada.</p>
+                            <div class="post-meta">
+                                <div class="post-author">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    <span>MedMapp Jamoasi</span>
+                                </div>
+                                <a href="#" class="read-more-link">Batafsil &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-main-grid">
+                <div class="footer-column">
+                    <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi" class="footer-logo">
+                    <p class="footer-about-text">
+                        MedMapp - bu sizning Hindistondagi ishonchli tibbiy hamrohingiz. Biz eng yaxshi klinikalarda sifatli va hamyonbop davolanishni tashkil etamiz.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="#" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+                        <a href="https://t.me/medmapp_uz" target="_blank" aria-label="Telegram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></a>
+                        <a href="#" aria-label="Youtube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10C2.5 6 4.5 4 7 4h10c2.5 0 4.5 2 4.5 3.5a24.12 24.12 0 0 1 0 10c0 1.5-2 3.5-4.5 3.5H7c-2.5 0-4.5-2-4.5-3.5Z"/><path d="m10 15 5-3-5-3z"/></svg></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="footer-title">Tezkor Havolalar</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Bosh sahifa</a></li>
+                        <li><a href="about-us-uz.html">Biz haqimizda</a></li>
+                        <li><a href="doctors.html">Shifokorlar</a></li>
+                        <li><a href="clinics.html">Kasalxonalar</a></li>
+                        <li><a href="blog-uz.html">Bloglar</a></li>
+                        <li><a href="partner-with-us-uz.html">Hamkor bo'ling</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="footer-title">Asosiy Yo'nalishlar</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Kardiologiya</a></li>
+                        <li><a href="#">Onkologiya</a></li>
+                        <li><a href="#">Neyroxirurgiya</a></li>
+                        <li><a href="#">Ortopediya</a></li>
+                        <li><a href="#">Transplantatsiya</a></li>
+                        <li><a href="#">Kosmetik jarrohlik</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4 class="footer-title">Biz bilan bog'laning</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Sirdaryo viloyati, O'zbekiston</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.18 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>+998(93) 969-93-01</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            <span>info@medmapp.uz</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>
+                <div class="footer-legal-links">
+                    <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
+                    <a href="user-agreement-uz.html">Foydalanish shartlari</a>
+                    <a href="public-offer-uz.html">Ommaviy Oferta</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+
+</body>
+</html>
+

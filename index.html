@@ -22,6 +22,64 @@
 
     <link rel="stylesheet" href="style.css">
 
+    <style>
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .login-btn {
+            color: #34495e;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .login-btn:hover {
+            background-color: #f0f3f5;
+            color: #2c3e50;
+        }
+
+        .signup-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            border: none;
+        }
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.3);
+        }
+        .signup-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+        .signup-btn:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Kichik ekranlar uchun moslashuv */
+        @media (max-width: 1024px) {
+            .auth-buttons {
+                display: none; /* Menyuga yashirish */
+            }
+        }
+    </style>
+
      <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFJ5QFG709"></script>
     <script>
@@ -63,6 +121,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             <span>UZ</span>
             <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <!-- YANGI: Kirish va Ro'yxatdan o'tish tugmalari guruhi -->
+        <div class="auth-buttons">
+            <a href="#" class="login-btn">Kirish</a>
+            <a href="#" class="signup-btn">
+                <span>Ro'yxatdan o'tish</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
         </div>
     </div>
 
@@ -500,8 +566,10 @@
                     </div>
                 </div>
                 <div class="quotes-actions">
-                    <button class="quote-button-get">Ro'yxatdan o'tish</button>
-                    <button class="quote-button-chat">Aloqa</button>
+                    <a href="#" class="signup-btn">
+                <span>Ro'yxatdan o'tish</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
                 </div>
             </section>
 
@@ -621,7 +689,12 @@
             </div>
         </div>
         <div style="text-align: center; margin-top: 3rem;">
-            <button class="get-started-button">Ro'yxatdan o'tish</button>
+            <div class="auth-buttons">
+            <a href="#" class="signup-btn">
+                <span>Ro'yxatdan o'tish</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
         </div>
     </div>
 </section>
@@ -1048,7 +1121,7 @@
 
         <script src="script.js"></script>
 
-        <footer class="site-footer">
+    <footer class="site-footer">
     <div class="container">
         
         <div class="footer-main-grid">
@@ -1111,9 +1184,10 @@
         <div class="footer-bottom">
             <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>
             <div class="footer-legal-links">
-                <a href="user-agreement-uz.html">Foydalanuvchi kelishuvi</a>
-                <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
-            </div>
+                    <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
+                    <a href="user-agreement-uz.html">Foydalanish shartlari</a>
+                    <a href="public-offer-uz.html">Ommaviy Oferta</a>
+                </div>
         </div>
     </div>
 
