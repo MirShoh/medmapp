@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedMapp - Hindistondagi eng mashhur shifoxonalarda davolaning!</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
+    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
     <meta name="description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
 
     <meta property="og:title" content="MedMapp platformasi rasmiy veb-sayti">
@@ -16,33 +15,439 @@
     <meta property="og:image" content="https://medmapp.uz/images/logo/MedMapp_logo_main_shaffof.png" />
     <meta property="og:site_name" content="medmapp.uz">
     
-    <!-- Google Fonts: Inter fontini yuklash -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo/MedMapp_logo_icon_circle.png">
-
     <link rel="stylesheet" href="style.css">
 
-     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFJ5QFG709"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    <style>
 
-        gtag('config', 'G-WFJ5QFG709');
-    </script>
 
+        /* Umumiy uslublar va reset */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-light-bg);
+            color: var(--color-dark-text);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: var(--header-height); /* Header uchun joy ajratish */
+        }
+
+        /* Menyuni ochganda orqa fonni qimirlatmaslik uchun */
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        /* Menyuni ochganda asosiy kontentni xira qiluvchi uslub */
+        body.nav-open > main, body.nav-open > footer {
+            filter: blur(4px);
+            transition: filter 0.4s ease;
+        }
+
+        /* Preloader (Yuklanish effekti) */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.75s ease, visibility 0.75s ease;
+        }
+        #preloader img {
+            width: 80px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+        #preloader.preloader-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* ========================================= */
+        /* =========== HEADER (SHAPKA) ============= */
+        /* ========================================= */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            padding: 0 1.5rem;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .header-logo img {
+            height: 3.5rem; /* O'zgarmas o'lcham */
+            display: block;
+        }
+        
+        /* ================================================= */
+        /* === MOBIL MENYU UCHUN YANGI ZAMONAVIY USLUBLAR === */
+        /* ================================================= */
+
+        /* O'ngdan chiqadigan menyu paneli */
+        .header-nav {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Boshida ekran tashqarisida */
+            width: 300px; /* Panel kengligi */
+            max-width: 85%;
+            height: 100vh;
+            background-color: #ffffff;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            z-index: 1002; /* Hammadan yuqorida */
+            display: flex;
+            flex-direction: column;
+            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .header-nav.active {
+            right: 0; /* JS orqali 'active' class qo'shilganda ko'rinadi */
+        }
+        
+        /* Mobil menyu sarlavhasi */
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            flex-shrink: 0;
+        }
+        .mobile-nav-logo {
+            height: 2.5rem;
+            margin-right: 1rem;
+        }
+        .mobile-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-dark-text);
+            margin: 0;
+        }
+
+        /* Asosiy menyu havolalari */
+        .header-nav ul {
+            list-style: none;
+            padding: 1.5rem;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .header-nav ul li {
+            margin-bottom: 0.5rem;
+        }
+        .header-nav ul a {
+            text-decoration: none;
+            color: var(--color-dark-text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            display: block;
+            border-radius: 0.5rem;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+        .header-nav ul a:hover, .header-nav ul a.active {
+            color: var(--color-primary-blue);
+            background-color: var(--color-light-blue);
+        }
+        
+        /* Mobil menyu pastki qismi (tugmalar) */
+        .mobile-nav-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            flex-shrink: 0;
+        }
+        
+        /* Kirish va ro'yxatdan o'tish tugmalari */
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .login-btn, .signup-btn {
+            width: 100%;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .login-btn { 
+            background-color: var(--color-light-bg);
+            color: var(--color-dark-text);
+        }
+        .login-btn:hover {
+             background-color: #e2e8f0;
+        }
+        .signup-btn {
+            background-color: var(--color-primary-blue);
+            color: #fff;
+            border: none;
+        }
+        .signup-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .login-btn svg, .signup-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Til tanlash (mobil menyu ichida) */
+        .language-selector {
+             display: flex;
+            align-items: center;
+            color: var(--color-medium-text);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease-in-out;
+            margin-bottom: 1rem;
+            background-color: var(--color-light-bg);
+            justify-content: center;
+        }
+        .language-selector svg { width: 1rem; height: 1rem; }
+        .language-selector span { margin: 0 0.5rem; }
+        .language-selector .chevron-down { width: 1rem; height: 1rem; }
+
+
+        /* Gamburger Menyusi va Yopish belgisi */
+        .hamburger-menu {
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1003;
+            color: var(--color-dark-text);
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+        .hamburger-menu svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .hamburger-menu .hamburger-icon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        .hamburger-menu .close-icon {
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+        .hamburger-menu.active .hamburger-icon {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+        .hamburger-menu.active .close-icon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+        
+        /* O'ng tarafdagi harakatlar uchun konteyner */
+        .header-right-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Mobil uchun til tanlash tugmasi */
+        .mobile-lang-selector {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 99px;
+            color: var(--color-dark-text);
+            background-color: #fff;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .mobile-lang-selector:hover {
+             background-color: var(--color-light-bg);
+        }
+        .mobile-lang-selector svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Mobil uchun "Kirish" tugmasi */
+        .mobile-login-btn {
+            display: block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 99px; /* Dumaloq shakl */
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--color-dark-text);
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+        .mobile-login-btn:hover {
+            background-color: var(--color-light-bg);
+            border-color: var(--color-primary-blue);
+            color: var(--color-primary-blue);
+        }
+
+        /* Desktop uchun harakatlar (mobilda yashirin) */
+        .header-actions {
+            display: none;
+        }
+
+        /* ========================================= */
+        /* ====== DESKTOP UCHUN MEDIA SO'ROVLARI === */
+        /* ========================================= */
+
+        @media (min-width: 1024px) {
+            body {
+                padding-top: var(--header-height);
+            }
+            .header {
+                 padding: 0 2.5rem;
+                 transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            }
+             .header.scrolled {
+                height: 3.5rem;
+            }
+             .header-logo img {
+                height: 4.8rem; /* O'zgarmas o'lcham */
+                 transition: height 0.3s ease-in-out;
+            }
+             .header.scrolled .header-logo img {
+                 height: 4rem;
+             }
+
+            .hamburger-menu, .mobile-login-btn, .mobile-nav-header, .mobile-nav-footer, .mobile-lang-selector {
+                display: none;
+            }
+            .header-nav {
+                position: static;
+                width: auto;
+                height: auto;
+                background-color: transparent;
+                box-shadow: none;
+                padding: 0;
+                flex-direction: row;
+                margin: 0 auto; 
+            }
+            .header-nav ul {
+                flex-direction: row;
+                gap: 2.5rem;
+                padding: 0;
+                overflow-y: visible;
+            }
+            .header-nav ul a {
+                font-size: 0.95rem;
+                position: relative;
+                padding: 0.5rem 0;
+                border-radius: 0;
+            }
+            .header-nav ul a:hover, .header-nav ul a.active {
+                background-color: transparent;
+            }
+            .header-nav ul a::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background-color: var(--color-primary-blue);
+                transition: width 0.3s ease;
+            }
+            .header-nav ul a:hover::after, .header-nav ul a.active::after {
+                width: 100%;
+            }
+            /* Desktop uchun tugmalar va tilni ko'rsatish */
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            .header-actions .auth-buttons {
+                flex-direction: row;
+                gap: 0.75rem;
+            }
+            .header-actions .language-selector {
+                margin-bottom: 0;
+                background-color: transparent;
+            }
+             .header-actions .language-selector:hover {
+                background-color: var(--color-light-bg);
+            }
+            .header-actions .login-btn, .header-actions .signup-btn {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+        
+        /* Qolgan barcha uslublaringiz (o'zgarishsiz) */
+        /* Hero Section */
+        main {
+            padding-top: 0; /* body'ga padding berilgani uchun bu kerak emas */
+        }
+        .hero-section{position:relative;display:flex;align-items:center;justify-content:center;min-height: calc(100vh - var(--header-height));background-color:#000;color:#fff;overflow:hidden}.hero-video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;z-index:5;transform:translate(-50%,-50%);background-size:cover}.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,50,100,.6),rgba(0,100,150,.8));z-index:10}.hero-content{position:relative;z-index:20;display:flex;flex-direction:column;align-items:center;text-align:center;padding:1rem;max-width:64rem;margin:0 auto}.hero-content h1{font-size:2.5rem;line-height:1.2;margin-bottom:1rem;font-weight:800;text-shadow:0 5px 10px var(--color-shadow-medium)}.hero-content p{font-size:1.125rem;margin-bottom:2rem;text-shadow:0 2px 4px rgba(0,0,0,.3)}.main-search-bar{width:100%;max-width:40rem;margin-bottom:3rem}.main-search-bar .search-input-wrapper{position:relative}.main-search-bar input{width:100%;padding:.875rem 1rem .875rem 3rem;border-radius:9999px;color:var(--color-dark-text);font-size:1.125rem;box-shadow:0 4px 15px var(--color-shadow-medium);border:none;outline:none;transition:all .3s ease-in-out}.main-search-bar input:focus{box-shadow:0 0 0 4px rgba(0,123,255,.3)}.main-search-bar .search-icon-inside{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#94a3b8;width:1.5rem;height:1.5rem}.form-card{width:100%;max-width:64rem;background-color:var(--color-card-bg);padding:2rem;border-radius:1.5rem;box-shadow:0 10px 30px rgba(0,0,0,.15);display:grid;grid-template-columns:1fr;gap:1.5rem;align-items:flex-end}.form-group{display:flex;flex-direction:column}.form-group label{color:var(--color-dark-text);font-size:.875rem;font-weight:600;margin-bottom:.5rem}.form-group input,.form-group select{width:100%;padding:.75rem 1rem;border:1px solid var(--color-border);border-radius:.5rem;color:var(--color-dark-text);background-color:var(--color-light-bg);-webkit-appearance:none;appearance:none;outline:none;transition:all .3s ease-in-out}.form-group input:focus,.form-group select:focus{border-color:var(--color-primary-blue);box-shadow:0 0 0 2px rgba(0,123,255,.2)}.form-group .select-wrapper{position:relative}.form-group .select-wrapper select{padding-right:2.5rem}.form-group .select-wrapper .chevron-down-icon{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);color:var(--color-medium-text);pointer-events:none;width:1.25rem;height:1.25rem}.form-group .phone-input-wrapper{position:relative}.form-group .phone-input-wrapper input{padding-left:3rem}.form-group .phone-input-wrapper .phone-icon{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#94a3b8;width:1.25rem;height:1.25rem}.chat-button{background-color:var(--color-primary-green);color:#fff;font-weight:700;padding:.75rem 1.5rem;border-radius:.5rem;box-shadow:0 4px 10px rgba(32,201,151,.3);display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .3s ease-in-out;cursor:pointer;border:none;transform:scale(1)}.chat-button:hover{background-color:#1aa67b;transform:scale(1.03);box-shadow:0 6px 15px rgba(32,201,151,.4)}.chat-button:focus{outline:none;box-shadow:0 0 0 3px rgba(32,201,151,.5)}.chat-button svg{width:1.25rem;height:1.25rem}
+        /* Modal Oyna */
+        .modal-overlay{position:fixed;inset:0;background-color:rgba(0,0,0,.6);z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;padding:1rem}.modal-overlay.show{opacity:1;visibility:visible}.modal-content{background-color:#fff;padding:2.5rem;border-radius:1rem;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center;max-width:420px;width:100%;box-sizing:border-box;transform:scale(.95);transition:transform .3s ease}.modal-overlay.show .modal-content{transform:scale(1)}#modal-icon-container{margin-bottom:1.5rem}.error-icon,.success-icon{width:80px;height:80px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:all .3s ease}.success-icon{background-color:#e8f5e9}.error-icon{background-color:#fdecea}.error-icon svg,.success-icon svg{width:40px;height:40px;transition:all .3s ease}.success-icon svg{color:#4caf50}.error-icon svg{color:#dc3545}#modal-title{font-size:1.75rem;font-weight:700;color:var(--color-dark-text);margin:0 0 .75rem}#modal-message{font-size:1rem;color:var(--color-medium-text);line-height:1.6;margin:0 0 2rem}.modal-button{background-color:var(--color-primary-blue);color:#fff;font-weight:600;padding:.875rem 2rem;border-radius:.5rem;border:none;cursor:pointer;transition:background-color .2s ease;width:100%;font-size:1rem}.modal-button:hover{background-color:#0056b3}@media (max-width:500px){.modal-content{padding:2rem 1.5rem}.error-icon,.success-icon{width:60px;height:60px}.error-icon svg,.success-icon svg{width:30px;height:30px}#modal-title{font-size:1.3rem}#modal-message{font-size:.9rem;margin-bottom:1.5rem}.modal-button{padding:.75rem 1.5rem;font-size:.9rem}}
+        /* ...boshqa stillar... */
+        @media (min-width:768px){.form-card{padding:2.5rem;grid-template-columns:repeat(4,1fr)}}
+        @media (max-width:767px){.hero-section{min-height: calc(100vh - var(--header-height));}.hero-content h1{font-size:clamp(2rem,8vw,2.5rem)}.form-card{padding:1.5rem;gap:1.25rem}.chat-button{width:100%}}
+        .policy-main{padding:4rem 1rem}.policy-container{max-width:90rem;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}.policy-card{background-color:#fff;padding:2rem 2.5rem;border-radius:1.5rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}.policy-header{text-align:center;margin-bottom:2.5rem}.policy-title{font-size:2.25rem;font-weight:800;color:#111827;letter-spacing:-.025em}.policy-subtitle{margin-top:.75rem;font-size:1.125rem;color:#6b7280}.policy-content h2{font-size:1.5rem;font-weight:600;color:#1f2937;margin-top:2rem;margin-bottom:1rem;border-bottom:1px solid #e5e7eb;padding-bottom:.5rem}.policy-content li,.policy-content p,.policy-content ul{line-height:1.75;color:#4b5563;margin-bottom:1rem}.policy-content ul{list-style-type:disc;padding-left:1.5rem}.policy-content li{margin-bottom:.5rem}.policy-content li::marker{color:#6b7280}.policy-content a{color:#4338ca;text-decoration:none;font-weight:500}.policy-content a:hover{text-decoration:underline}@media (min-width:768px){.policy-main{padding:6rem 1rem}.policy-title{font-size:2rem}.policy-card{padding:2.5rem}}
+        .site-footer{background-color:#111827;color:#9ca3af;padding:4rem 1rem 1.5rem}.footer-divider{border:none;height:1px;background-color:#374151;margin:0 auto 3rem;max-width:72rem}.footer-main-grid{display:grid;grid-template-columns:1fr;gap:2.5rem;max-width:72rem;margin:0 auto}.footer-column .footer-logo{height:5rem;margin-bottom:1.5rem}.footer-about-text{line-height:1.6;margin-bottom:1.5rem}.social-icons{display:flex;gap:1rem}.social-icons a{color:#9ca3af;background-color:#374151;width:2.5rem;height:2.5rem;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;transition:all .3s ease}.social-icons a:hover{color:#fff;background-color:var(--color-primary-blue);transform:translateY(-3px)}.footer-title{font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:1.5rem}.footer-contact,.footer-links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.75rem}.footer-contact span,.footer-links a{color:#9ca3af;text-decoration:none;transition:color .3s ease}.footer-links a:hover{color:#fff;padding-left:5px}.footer-contact li{display:flex;align-items:flex-start;gap:.75rem}.footer-contact svg{flex-shrink:0;width:1.25rem;height:1.25rem;color:var(--color-primary-blue);margin-top:2px}.footer-bottom{max-width:72rem;margin:3rem auto 0;padding-top:1.5rem;border-top:1px solid #374151;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem}.copyright{font-size:.875rem;margin:0}.footer-legal-links{display:flex;gap:1.5rem}.footer-legal-links a{font-size:.875rem;color:#9ca3af;text-decoration:none}.footer-legal-links a:hover{color:#fff;text-decoration:underline}@media (min-width:640px){.footer-main-grid{grid-template-columns:repeat(2,1fr)}}@media (min-width:1024px){.footer-main-grid{grid-template-columns:2fr 1fr 1fr 1.5fr}.footer-bottom{flex-direction:row;justify-content:space-between}}
+
+    </style>
 </head>
 <body>
 
+<div id="preloader">
+    <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp yuklanmoqda...">
+</div>
+
+<!-- ============================================= -->
+<!-- ========== HEADER (BOSH QISM) =============== -->
+<!-- ============================================= -->
 <header class="header">
-    <div class="header-logo"> 
-            <a href="index.html">
-                <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
-            </a>
+    <a href="index.html" class="header-logo">
+        <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
+    </a>
+
+    <!-- Navigatsiya paneli (mobil va desktop uchun) -->
+    <nav class="header-nav" id="header-nav">
+        <!-- Mobil menyu uchun sarlavha (faqat mobilda ko'rinadi) -->
+        <div class="mobile-nav-header">
+            <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp" class="mobile-nav-logo">
+            <h3 class="mobile-nav-title">Menyu</h3>
         </div>
 
-    <nav class="header-nav">
+        <!-- Asosiy menyu linklari -->
         <ul>
             <li><a href="index.html" class="active">Bosh sahifa</a></li>
             <li><a href="departments.html">Bo‘limlar</a></li>
@@ -53,30 +458,60 @@
             <li><a href="testimonials.html">Fikrlar</a></li>
             <li><a href="blog.html">Blog</a></li>
         </ul>
-    </nav>
 
-    <div class="header-actions">
-        <div class="language-selector">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-            <span>UZ</span>
-            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <!-- YANGI: Kirish va Ro'yxatdan o'tish tugmalari guruhi -->
-        <div class="auth-buttons">
+        <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
+        <div class="mobile-nav-footer">
+            <div class="language-selector">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <span>UZ</span>
+                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="auth-buttons">
                 <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                     <span>Kirish</span>
                 </a>
                 <a href="#" class="signup-btn">
                     <span>Ro'yxatdan o'tish</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <button class="hamburger-menu" aria-label="Menyuni ochish">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
+    <!-- O'ng tarafdagi harakatlar uchun umumiy konteyner -->
+    <div class="header-right-container">
+        <!-- Desktop uchun harakatlar -->
+        <div class="header-actions">
+            <div class="language-selector">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                <span>UZ</span>
+                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+            <div class="auth-buttons">
+                <a href="#" class="login-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                    <span>Kirish</span>
+                </a>
+                <a href="#" class="signup-btn">
+                    <span>Ro'yxatdan o'tish</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobil uchun til tanlash tugmasi -->
+        <a href="#" class="mobile-lang-selector" aria-label="Tilni tanlash">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        </a>
+        
+        <!-- Mobil uchun "Kirish" tugmasi -->
+        <a href="#" class="mobile-login-btn">Kirish</a>
+
+        <!-- Gamburger tugmasi -->
+        <button class="hamburger-menu" id="hamburger-menu" aria-label="Menyuni ochish/yopish" aria-controls="header-nav" aria-expanded="false">
+            <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
 </header>
 
         <main>
@@ -1061,8 +1496,6 @@
 
         </main>
 
-        <script src="script.js"></script>
-
     <footer class="site-footer">
     <div class="container">
         
@@ -1146,5 +1579,141 @@
     </div>
 
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Preloader
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        preloader.classList.add('preloader-hidden');
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 800);
+    }
+    
+    // Header scroll effekti
+    const header = document.querySelector('.header');
+    let lastScrollTop = 0;
+    
+    // Faqat mobil qurilmalar uchun scroll effektini ishga tushirish
+    if (window.innerWidth < 1024) {
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
+                // Pastga scroll
+                header.style.top = `-${header.offsetHeight}px`;
+            } else {
+                // Tepaga scroll
+                header.style.top = '0';
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+        }, false);
+    }
+
+
+    /* ================================================= */
+    /* ======== YANGI MOBIL MENYU FUNKSIONALLIGI ======= */
+    /* ================================================= */
+    const hamburgerBtn = document.getElementById('hamburger-menu');
+    const navPanel = document.getElementById('header-nav');
+    const navLinks = navPanel.querySelectorAll('a');
+
+    const openMenu = () => {
+        hamburgerBtn.classList.add('active');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        navPanel.classList.add('active');
+        document.body.classList.add('nav-open');
+    };
+
+    const closeMenu = () => {
+        hamburgerBtn.classList.remove('active');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        navPanel.classList.remove('active');
+        document.body.classList.remove('nav-open');
+    };
+
+    hamburgerBtn.addEventListener('click', () => {
+        if (navPanel.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    
+    // Menyudagi biror link bosilsa, menyu yopiladi
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Escape tugmasi bosilganda menyuni yopish
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navPanel.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+
+
+    // --- Telefon raqam uchun maska ---
+    const phoneInput = document.getElementById('phone-number');
+    const prefix = '+998';
+    if(phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            const input = e.target;
+            let value = input.value;
+            if (!value.startsWith(prefix)) {
+                input.value = prefix;
+                return;
+            }
+            const userDigits = value.substring(prefix.length).replace(/\D/g, '');
+            let formattedNumber = '';
+            if (userDigits.length > 0) formattedNumber += ' (' + userDigits.substring(0, 2);
+            if (userDigits.length > 2) formattedNumber += ') ' + userDigits.substring(2, 5);
+            if (userDigits.length > 5) formattedNumber += '-' + userDigits.substring(5, 7);
+            if (userDigits.length > 7) formattedNumber += '-' + userDigits.substring(7, 9);
+            input.value = prefix + formattedNumber;
+        });
+    }
+
+
+    // --- Modal oyna logikasi ---
+    const form = document.getElementById('consultation-form');
+    const statusModal = document.getElementById('status-modal');
+    const modalIconContainer = document.getElementById('modal-icon-container');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
+            form.reset();
+        });
+    }
+
+    const showModal = (type, title, message) => {
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        if (type === 'success') {
+            modalIconContainer.innerHTML = `<div class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>`;
+        } else {
+            modalIconContainer.innerHTML = `<div class="error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>`;
+        }
+        statusModal.classList.add('show');
+    };
+
+    const closeModalWindow = () => {
+        statusModal.classList.remove('show');
+    };
+
+    modalCloseBtn.addEventListener('click', closeModalWindow);
+    statusModal.addEventListener('click', (e) => {
+        if (e.target === statusModal) {
+            closeModalWindow();
+        }
+    });
+});
+</script>
     </body>
     </html>

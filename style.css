@@ -34,6 +34,48 @@
     100% { transform: rotate(360deg); }
 }
 
+/* ----- YANGI: Preloader (Yuklanish effekti) stillari ----- */
+#preloader {
+    position: fixed; /* Ekranga yopishib turadi */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* Oq fon */
+    display: flex; /* Logotipni markazlashtirish uchun */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Boshqa barcha elementlardan ustun turishi uchun */
+    transition: opacity 0.75s ease, visibility 0.75s ease; /* Silliq yo'qolishi uchun */
+}
+
+#preloader img {
+    width: 80px; /* Logon o'lchami, xohishingizga ko'ra o'zgartiring */
+    animation: pulse 1.5s infinite ease-in-out; /* Pulsatsiya animatsiyasi */
+}
+
+/* Pulsatsiya animatsiyasi uchun Keyframes */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Preloader yo'qolishi uchun yordamchi klass */
+#preloader.preloader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* Select (tanlov) maydoni uchun placeholder uslubi */
 select:required:invalid {
     color: #6c757d; /* Kulrang matn */

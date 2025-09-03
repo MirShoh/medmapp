@@ -9,6 +9,19 @@ const requestAppointmentButtons = document.querySelectorAll('.request-appointmen
 // Boshlang'ich qiymatlarni o'rnatish
 // phoneNumberInput.value = '+998';
 
+document.addEventListener('DOMContentLoaded', () => {
+        // Preloader logikasi (tezroq ishlashi uchun o'zgartirildi)
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            // Bu hodisa sahifadagi barcha rasmlar va videolar yuklanishini kutmaydi.
+            // Faqat HTML tayyor bo'lganda preloader'ni yashiradi.
+            preloader.classList.add('preloader-hidden');
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 800); // CSSdagi transition vaqti bilan mos kelishi uchun
+        }
+        });
+
 // Qidiruv funksiyasi
 function handleSearch(query) {
     console.log('Qidirilmoqda:', query);
