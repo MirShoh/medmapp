@@ -393,7 +393,7 @@ body {
 }
 
 .header-logo img {
-    height: 4.5rem; /* Boshlang'ich logo o'lchami */
+    height: 4rem; /* Boshlang'ich logo o'lchami */
     transition: height 0.3s ease-in-out;
 }
 
@@ -569,7 +569,7 @@ body {
 
 @media (min-width: 1024px) {
     .header {
-        padding: 0 2.5rem;
+        padding: 10px 2.5rem;
     }
 
     /* Gamburger menyuni yashirish */
