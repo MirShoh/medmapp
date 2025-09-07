@@ -21,20 +21,6 @@
 
     <style>
 
-
-        /* Umumiy uslublar va reset */
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--color-light-bg);
-            color: var(--color-dark-text);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            line-height: 1.6;
-            overflow-x: hidden;
-            padding-top: var(--header-height); /* Header uchun joy ajratish */
-        }
-
         /* Menyuni ochganda orqa fonni qimirlatmaslik uchun */
         body.nav-open {
             overflow: hidden;
@@ -436,13 +422,12 @@
         <!-- Asosiy menyu linklari -->
         <ul>
             <li><a href="index.html" class="active">Bosh sahifa</a></li>
-            <li><a href="departments.html">Bo‘limlar</a></li>
             <li><a href="clinics.html">Shifoxonalar</a></li>
-            <li><a href="pricing.html">Narxlar</a></li>
-            <li><a href="treatments.html">Davolash usuli</a></li>
             <li><a href="doctors.html">Shifokorlar</a></li>
+            <li><a href="pricing.html">Narxlar</a></li>
             <li><a href="testimonials.html">Fikrlar</a></li>
             <li><a href="blog.html">Blog</a></li>
+            <li><a href="blog.html">Hamkor bo'lish</a></li>
         </ul>
 
         <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
@@ -516,15 +501,6 @@
                 <div class="hero-content">
                     <h1>Ishonchli, xavfsiz va shaffof<br></h1>
                     <p>MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda davolaning!</p>
-
-                    <!-- Asosiy qidiruv paneli -->
-                    <div class="main-search-bar">
-                        <div class="search-input-wrapper">
-                            <input type="text" id="main-search-input" placeholder="Shifokorlarni, davolash usullarini, kasalxonalarni qidiring...">
-                            <!-- Search Icon -->
-                            <svg class="search-icon-inside" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        </div>
-                    </div>
 
                     <!-- Forma kartasi -->
                     <form id="consultation-form" class="form-card">
@@ -1565,6 +1541,8 @@
     </div>
 
 </footer>
+<script src="script.js"></script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -1701,5 +1679,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
     </body>
     </html>
