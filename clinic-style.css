@@ -1385,9 +1385,8 @@ body.scrolled .filters-section {
 /* ### YANGI HERO BO'LIMI ### */
 .hero-testimonials {
     position: relative;
-    padding: 6rem 1rem;
-    margin-top: 4rem; /* Header balandligi uchun */
-    background-image: url('https://placehold.co/1920x600/0d324d/FFFFFF?text=Sog%27ayish+Yo%27li');
+    padding: 2.8rem 1rem;
+    background-image: url('images/Dehli.jpg');
     background-size: cover;
     background-position: center;
     color: #fff;
