@@ -18,8 +18,9 @@ body.nav-open {
 
 /* Menyuni ochganda asosiy kontentni xira qiluvchi uslub */
 body.nav-open > main, body.nav-open > footer {
-    filter: blur(4px);
-    transition: filter 0.4s ease;
+    filter: blur(5px);
+    transform: scale(0.98); /* Kichik masshtab effekti */
+    transition: filter 0.4s ease, transform 0.4s ease;
 }
 
 /* Preloader (Yuklanish effekti) */
@@ -70,47 +71,64 @@ body.nav-open > main, body.nav-open > footer {
     transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 .header-logo img {
-    height: 3.5rem; /* O'zgarmas o'lcham */
+    height: 4rem; /* O'zgarmas o'lcham */
     display: block;
 }
 
 /* ================================================= */
-/* === MOBIL MENYU UCHUN YANGI ZAMONAVIY USLUBLAR === */
+/* === MOBIL MENYU UCHUN YANGI KREATIV USLUBLAR === */
 /* ================================================= */
 
-/* O'ngdan chiqadigan menyu paneli */
+/* Animatsiya uchun Keyframes */
+@keyframes navLinkFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* O'ngdan chiqadigan "suzib yuruvchi" menyu paneli */
 .header-nav {
     position: fixed;
-    top: 0;
+    top: 1rem; /* Tepadagi bo'sh joy */
     right: -100%; /* Boshida ekran tashqarisida */
-    width: 300px; /* Panel kengligi */
-    max-width: 85%;
-    height: 90vh;
-    background-color: #ffffff;
-    box-shadow: -5px 0 25px rgba(0,0,0,0.1);
-    z-index: 1002; /* Hammadan yuqorida */
+    width: 320px; /* Panel kengligi */
+    max-width: calc(100% - 2rem);
+    height: auto;
+    max-height: calc(100vh - 2rem); /* Ekrandan chiqib ketmasligi uchun */
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border-radius: 1.25rem; /* Dumaloq qirralar */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    z-index: 1002;
     display: flex;
     flex-direction: column;
-    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: right 0.5s cubic-bezier(0.22, 1, 0.36, 1); /* Silliq ochilish effekti */
+    overflow: hidden;
 }
 .header-nav.active {
-    right: 0; /* JS orqali 'active' class qo'shilganda ko'rinadi */
+    right: 1rem; /* JS orqali 'active' class qo'shilganda ko'rinadi */
 }
 
 /* Mobil menyu sarlavhasi */
 .mobile-nav-header {
     display: flex;
     align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
+    padding: 1.25rem 1.5rem;
     flex-shrink: 0;
 }
 .mobile-nav-logo {
-    height: 2.5rem;
-    margin-right: 1rem;
+    height: 2.25rem;
+    margin-right: 0.75rem;
 }
 .mobile-nav-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-dark-text);
     margin: 0;
@@ -119,40 +137,85 @@ body.nav-open > main, body.nav-open > footer {
 /* Asosiy menyu havolalari */
 .header-nav ul {
     list-style: none;
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
     margin: 0;
     flex-grow: 1;
     overflow-y: auto;
 }
 .header-nav ul li {
-    margin-bottom: 0.5rem;
+    opacity: 0; /* Animatsiya uchun boshlang'ich holat */
 }
+/* Animatsiyani aktiv holatda qo'llash */
+.header-nav.active ul li {
+    animation: navLinkFadeIn 0.5s ease forwards;
+}
+
+/* Animatsiya kechikishini har bir bandga alohida berish */
+.header-nav.active ul li:nth-child(1) { animation-delay: 0.1s; }
+.header-nav.active ul li:nth-child(2) { animation-delay: 0.15s; }
+.header-nav.active ul li:nth-child(3) { animation-delay: 0.2s; }
+.header-nav.active ul li:nth-child(4) { animation-delay: 0.25s; }
+.header-nav.active ul li:nth-child(5) { animation-delay: 0.3s; }
+.header-nav.active ul li:nth-child(6) { animation-delay: 0.35s; }
+.header-nav.active ul li:nth-child(7) { animation-delay: 0.4s; }
+
+
 .header-nav ul a {
     text-decoration: none;
-    color: var(--color-dark-text);
-    font-size: 1.1rem;
+    color: #334155; /* Matn rangi */
+    font-size: 1rem;
     font-weight: 600;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1rem;
     display: block;
-    border-radius: 0.5rem;
+    border-radius: 0.6rem;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 .header-nav ul a:hover, .header-nav ul a.active {
     color: var(--color-primary-blue);
-    background-color: var(--color-light-blue);
+    background-color: rgba(0, 123, 255, 0.1);
 }
 
 /* Mobil menyu pastki qismi (tugmalar) */
 .mobile-nav-footer {
-    padding: 1.5rem;
-    border-top: 1px solid var(--color-border);
+    padding: 1.25rem;
+    background-color: rgba(248, 249, 250, 0.8);
     flex-shrink: 0;
 }
+
+/* Til tanlash (mobil menyu ichida) */
+.language-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Elementlarni ikki chetga surish */
+    color: var(--color-dark-text);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    border-radius: 0.6rem;
+    transition: background-color 0.2s ease-in-out;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
+}
+
+.language-selector:hover {
+    background-color: #f1f5f9;
+}
+
+.language-selector .lang-text-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.language-selector svg { width: 1.25rem; height: 1.25rem; color: #64748b; }
+.language-selector .chevron-down { color: var(--color-dark-text); }
+
 
 /* Kirish va ro'yxatdan o'tish tugmalari */
 .auth-buttons {
     display: flex;
-    flex-direction: column;
     gap: 0.75rem;
 }
 .login-btn, .signup-btn {
@@ -161,7 +224,7 @@ body.nav-open > main, body.nav-open > footer {
     font-weight: 600;
     font-size: 1rem;
     padding: 0.8rem;
-    border-radius: 0.5rem;
+    border-radius: 0.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,45 +233,23 @@ body.nav-open > main, body.nav-open > footer {
     box-sizing: border-box;
 }
 .login-btn { 
-    background-color: var(--color-light-bg);
+    background-color: #ffffff;
+    border: 1px solid var(--color-border);
     color: var(--color-dark-text);
 }
 .login-btn:hover {
-        background-color: #e2e8f0;
+    background-color: #f1f5f9;
 }
 .signup-btn {
     background-color: var(--color-primary-blue);
     color: #fff;
-    border: none;
+    border: 1px solid var(--color-primary-blue);
 }
 .signup-btn:hover {
     background-color: #0056b3;
-    transform: translateY(-2px);
+    border-color: #0056b3;
+    transform: scale(1.03);
 }
-.login-btn svg, .signup-btn svg {
-    width: 18px;
-    height: 18px;
-}
-
-/* Til tanlash (mobil menyu ichida) */
-.language-selector {
-        display: flex;
-    align-items: center;
-    color: var(--color-medium-text);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease-in-out;
-    margin-bottom: 1rem;
-    background-color: var(--color-light-bg);
-    justify-content: center;
-}
-.language-selector svg { width: 1rem; height: 1rem; }
-.language-selector span { margin: 0 0.5rem; }
-.language-selector .chevron-down { width: 1rem; height: 1rem; }
-
 
 /* Gamburger Menyusi va Yopish belgisi */
 .hamburger-menu {
@@ -253,45 +294,11 @@ body.nav-open > main, body.nav-open > footer {
     gap: 0.5rem;
 }
 
-/* Mobil uchun til tanlash tugmasi */
-.mobile-lang-selector {
-    display: block;
-    padding: 0.5rem;
-    border-radius: 99px;
-    color: var(--color-dark-text);
-    background-color: #fff;
-    border: 1px solid var(--color-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-.mobile-lang-selector:hover {
-        background-color: var(--color-light-bg);
-}
-.mobile-lang-selector svg {
-    width: 20px;
-    height: 20px;
+/* Mobil uchun til va kirish tugmalarini yashiramiz (ular endi menyu ichida) */
+.mobile-lang-selector, .mobile-login-btn {
+    display: none;
 }
 
-/* Mobil uchun "Kirish" tugmasi */
-.mobile-login-btn {
-    display: block;
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 99px; /* Dumaloq shakl */
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--color-dark-text);
-    transition: all 0.2s ease;
-    background-color: #fff;
-}
-.mobile-login-btn:hover {
-    background-color: var(--color-light-bg);
-    border-color: var(--color-primary-blue);
-    color: var(--color-primary-blue);
-}
 
 /* Desktop uchun harakatlar (mobilda yashirin) */
 .header-actions {
@@ -307,29 +314,41 @@ body.nav-open > main, body.nav-open > footer {
         padding-top: var(--header-height);
     }
     .header {
-            padding: 10px 2.5rem;
-            transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        padding: 10px 2.5rem;
+        transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
-        .header.scrolled {
+    
+    .header.scrolled {
+        height: var(--header-height-scrolled);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+        background-color: rgba(255, 255, 255, 0.95);
+    }
+    
+    .header-logo img {
+        height: 4rem;
+        transition: height 0.3s ease-in-out;
+    }
+
+    .header.scrolled .header-logo img {
         height: 3.5rem;
     }
-        .header-logo img {
-        height: 4.8rem; /* O'zgarmas o'lcham */
-            transition: height 0.3s ease-in-out;
-    }
-        .header.scrolled .header-logo img {
-            height: 4rem;
-        }
+    
 
     .hamburger-menu, .mobile-login-btn, .mobile-nav-header, .mobile-nav-footer, .mobile-lang-selector {
         display: none;
     }
     .header-nav {
         position: static;
+        top: auto;
+        right: auto;
         width: auto;
         height: auto;
+        max-height: none;
         background-color: transparent;
+        backdrop-filter: none;
         box-shadow: none;
+        border-radius: 0;
+        border: none;
         padding: 0;
         flex-direction: row;
         margin: 0 auto; 
@@ -375,8 +394,10 @@ body.nav-open > main, body.nav-open > footer {
     .header-actions .language-selector {
         margin-bottom: 0;
         background-color: transparent;
+        border: none;
+        padding: 0.5rem 0.75rem;
     }
-        .header-actions .language-selector:hover {
+    .header-actions .language-selector:hover {
         background-color: var(--color-light-bg);
     }
     .header-actions .login-btn, .header-actions .signup-btn {
@@ -384,3 +405,4 @@ body.nav-open > main, body.nav-open > footer {
         padding: 0.6rem 1rem;
     }
 }
+

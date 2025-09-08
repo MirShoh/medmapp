@@ -412,7 +412,7 @@ body {
     
     display: flex;
     flex-direction: column;
-    padding: 4rem 2rem 2rem;
+    padding: 2rem;
     
     transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Silliq ochilish effekti */
 }
@@ -460,18 +460,6 @@ body {
 .header-icon:hover {
     color: var(--color-primary-blue);
     transform: scale(1.1);
-}
-
-.language-selector {
-    display: flex;
-    align-items: center;
-    color: var(--color-medium-text);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease-in-out;
 }
 
 .language-selector:hover {
