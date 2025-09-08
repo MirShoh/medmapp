@@ -513,4 +513,56 @@ document.addEventListener('DOMContentLoaded', function() {
         // Statistika bo'limini kuzatishni boshlaymiz
         counterObserver.observe(statsSection);
     }
+
+
+    // =========================================================
+    // === YANGI: TIL TANLASH MENYUSI UCHUN LOGIKA ===
+    // =========================================================
+    
+    // Har bir til tanlash komponenti uchun alohida sozlash funksiyasi
+    const setupLanguageSelector = (buttonId, dropdownId, textId) => {
+        const langButton = document.getElementById(buttonId);
+        const langDropdown = document.getElementById(dropdownId);
+        const selectedLangText = document.getElementById(textId);
+
+        if (!langButton || !langDropdown || !selectedLangText) return;
+
+        // Ochish/yopish logikasi
+        langButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ota elementga bosish tarqalishini to'xtatish
+            const isShown = langDropdown.classList.toggle('show');
+            langButton.classList.toggle('active', isShown);
+        });
+
+        // Tilni tanlash logikasi
+        langDropdown.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                const selectedLang = e.target.dataset.lang.toUpperCase();
+                selectedLangText.textContent = selectedLang;
+                
+                // Barcha linklardan 'selected' classini olib tashlash
+                langDropdown.querySelectorAll('a').forEach(a => a.classList.remove('selected'));
+                // Bosilgan linkga 'selected' classini qo'shish
+                e.target.classList.add('selected');
+
+                langDropdown.classList.remove('show');
+                langButton.classList.remove('active');
+            }
+        });
+    };
+
+    // Desktop va mobil uchun til tanlagichlarni sozlash
+    setupLanguageSelector('desktop-lang-btn', 'desktop-lang-dropdown', 'desktop-selected-lang-text');
+    setupLanguageSelector('mobile-lang-btn', 'mobile-lang-dropdown', 'mobile-selected-lang-text');
+
+    // Hujjatning istalgan joyiga bosganda ochiq menyularni yopish
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.language-dropdown.show').forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
+        document.querySelectorAll('.language-selector-btn.active').forEach(button => {
+            button.classList.remove('active');
+        });
+    });
 });

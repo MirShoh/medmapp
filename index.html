@@ -55,17 +55,26 @@
 
         <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
         <div class="mobile-nav-footer">
-            <div class="language-selector">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                <span>UZ</span>
-                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <div class="language-selector-wrapper">
+                <button class="language-selector-btn" id="mobile-lang-btn">
+                    <div class="lang-text-group">
+                        <img id="mobile-selected-lang-flag" src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
+                        <span id="mobile-selected-lang-text">UZ</span>
+                    </div>
+                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <ul class="language-dropdown" id="mobile-lang-dropdown">
+                    <li><a href="#" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                    <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
+                    <li><a href="#" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
+                </ul>
             </div>
             <div class="auth-buttons">
                 <a href="#" class="login-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                     <span>Kirish</span>
                 </a>
-                <a href="#" class="signup-btn">
+                <a href="#" class="signup-btn" style="color: white!important;">
                     <span>Registratsiya</span>
                 </a>
             </div>
@@ -73,32 +82,35 @@
     </nav>
 
     <!-- O'ng tarafdagi harakatlar uchun umumiy konteyner -->
-    <div class="header-right-container">
+     <div class="header-right-container">
         <!-- Desktop uchun harakatlar -->
         <div class="header-actions">
-            <div class="language-selector">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                <span>UZ</span>
-                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <!-- TIL TANLASH (YANGILANGAN) -->
+            <div class="language-selector-wrapper">
+                <button class="language-selector-btn" id="desktop-lang-btn">
+                    <div class="lang-text-group">
+                        <img id="desktop-selected-lang-flag" src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
+                        <span id="desktop-selected-lang-text">UZ</span>
+                    </div>
+                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <ul class="language-dropdown" id="desktop-lang-dropdown">
+                    <li><a href="#" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                    <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
+                    <li><a href="#" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
+                </ul>
             </div>
+            <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
             <div class="auth-buttons">
                 <a href="#" class="login-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                     <span>Kirish</span>
                 </a>
-                <a href="#" class="signup-btn">
+                <a href="#" class="signup-btn" style="color: white!important;">
                     <span>Registratsiya</span>
                 </a>
             </div>
         </div>
-
-        <!-- Mobil uchun til tanlash tugmasi -->
-        <a href="#" class="mobile-lang-selector" aria-label="Tilni tanlash">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-        </a>
-        
-        <!-- Mobil uchun "Kirish" tugmasi -->
-        <a href="#" class="mobile-login-btn">Kirish</a>
 
         <!-- Gamburger tugmasi -->
         <button class="hamburger-menu" id="hamburger-menu" aria-label="Menyuni ochish/yopish" aria-controls="header-nav" aria-expanded="false">
@@ -304,7 +316,7 @@
 
                 <div class="quotes-actions">
                     <a href="#" class="signup-btn" style="width: 200px!important;">
-                <span>Ro'yxatdan o'tish</span>
+                <span>Registratsiya</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
                 </div>
@@ -537,7 +549,7 @@
                 </div>
                 <div class="quotes-actions">
                     <a href="#" class="signup-btn" style="width: 200px!important;">
-                <span>Ro'yxatdan o'tish</span>
+                <span>Registratsiya</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
                 </div>
@@ -659,7 +671,7 @@
         </div>
         <div class="quotes-actions">
                     <a href="#" class="signup-btn" style="width: 200px!important;">
-                <span>Ro'yxatdan o'tish</span>
+                <span>Registratsiya</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
                 </div>
@@ -870,7 +882,7 @@
                 <div class="services-footer">
                 <div class="quotes-actions">
                     <a href="#" class="signup-btn" style="width: 200px!important;">
-                <span>Ro'yxatdan o'tish</span>
+                <span>Registratsiya</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
                 </div>
@@ -1068,7 +1080,7 @@
 
         </main>
 
-    <footer class="site-footer">
+<footer class="site-footer">
     <div class="container">
         
         <div class="footer-main-grid">
@@ -1131,7 +1143,7 @@
         <div class="footer-bottom">
             <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>
             <div class="footer-legal-links">
-                    <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
+                    <a href="privacy-policy-uz.html">Maxfiylik siyosati</a> 
                     <a href="user-agreement-uz.html">Foydalanish shartlari</a>
                     <a href="public-offer-uz.html">Ommaviy oferta</a>
                 </div>
