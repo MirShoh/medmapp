@@ -136,6 +136,8 @@ body.nav-open > main, body.nav-open > footer {
 
 /* Asosiy menyu havolalari */
 .header-nav ul {
+    display: flex; 
+    flex-direction: column; /* Mobil uchun vertikal joylashuv */
     list-style: none;
     padding: 0 1rem 1rem 1rem;
     margin: 0;
@@ -143,8 +145,8 @@ body.nav-open > main, body.nav-open > footer {
     overflow-y: auto;
 }
 .header-nav ul li {
-    opacity: 0; /* Animatsiya uchun boshlang'ich holat */
-}
+        opacity: 1; /* Mobil animatsiya uchun qo'yilgan 'opacity: 0' ni bekor qiladi */
+    }
 /* Animatsiyani aktiv holatda qo'llash */
 .header-nav.active ul li {
     animation: navLinkFadeIn 0.5s ease forwards;
@@ -309,7 +311,7 @@ body.nav-open > main, body.nav-open > footer {
 /* ====== DESKTOP UCHUN MEDIA SO'ROVLARI === */
 /* ========================================= */
 
-@media (min-width: 1024px) {
+@media (min-width: 992px) {
     body {
         padding-top: var(--header-height);
     }
@@ -358,6 +360,7 @@ body.nav-open > main, body.nav-open > footer {
         gap: 2.5rem;
         padding: 0;
         overflow-y: visible;
+        flex-grow: 0; /* O'sishni bekor qilish */
     }
     .header-nav ul a {
         font-size: 0.95rem;
