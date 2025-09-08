@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
+            showModal('success', 'Успешный!', 'Ваша заявка получена! Наши операторы свяжутся с вами в ближайшее время.');
             form.reset();
         });
 
