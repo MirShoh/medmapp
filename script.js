@@ -534,22 +534,6 @@ document.addEventListener('DOMContentLoaded', function() {
             langButton.classList.toggle('active', isShown);
         });
 
-        // Tilni tanlash logikasi
-        langDropdown.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') {
-                e.preventDefault();
-                const selectedLang = e.target.dataset.lang.toUpperCase();
-                selectedLangText.textContent = selectedLang;
-                
-                // Barcha linklardan 'selected' classini olib tashlash
-                langDropdown.querySelectorAll('a').forEach(a => a.classList.remove('selected'));
-                // Bosilgan linkga 'selected' classini qo'shish
-                e.target.classList.add('selected');
-
-                langDropdown.classList.remove('show');
-                langButton.classList.remove('active');
-            }
-        });
     };
 
     // Desktop va mobil uchun til tanlagichlarni sozlash
