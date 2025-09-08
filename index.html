@@ -18,384 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo/MedMapp_logo_icon_circle.png">
     <link rel="stylesheet" href="style.css">
-
-    <style>
-
-        /* Menyuni ochganda orqa fonni qimirlatmaslik uchun */
-        body.nav-open {
-            overflow: hidden;
-        }
-
-        /* Menyuni ochganda asosiy kontentni xira qiluvchi uslub */
-        body.nav-open > main, body.nav-open > footer {
-            filter: blur(4px);
-            transition: filter 0.4s ease;
-        }
-
-        /* Preloader (Yuklanish effekti) */
-        #preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: opacity 0.75s ease, visibility 0.75s ease;
-        }
-        #preloader img {
-            width: 80px;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-        }
-        #preloader.preloader-hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* ========================================= */
-        /* =========== HEADER (SHAPKA) ============= */
-        /* ========================================= */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
-            padding: 0 1.5rem;
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: top 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        .header-logo img {
-            height: 3.5rem; /* O'zgarmas o'lcham */
-            display: block;
-        }
-        
-        /* ================================================= */
-        /* === MOBIL MENYU UCHUN YANGI ZAMONAVIY USLUBLAR === */
-        /* ================================================= */
-
-        /* O'ngdan chiqadigan menyu paneli */
-        .header-nav {
-            position: fixed;
-            top: 0;
-            right: -100%; /* Boshida ekran tashqarisida */
-            width: 300px; /* Panel kengligi */
-            max-width: 85%;
-            height: 100vh;
-            background-color: #ffffff;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
-            z-index: 1002; /* Hammadan yuqorida */
-            display: flex;
-            flex-direction: column;
-            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .header-nav.active {
-            right: 0; /* JS orqali 'active' class qo'shilganda ko'rinadi */
-        }
-        
-        /* Mobil menyu sarlavhasi */
-        .mobile-nav-header {
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--color-border);
-            flex-shrink: 0;
-        }
-        .mobile-nav-logo {
-            height: 2.5rem;
-            margin-right: 1rem;
-        }
-        .mobile-nav-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--color-dark-text);
-            margin: 0;
-        }
-
-        /* Asosiy menyu havolalari */
-        .header-nav ul {
-            list-style: none;
-            padding: 1.5rem;
-            margin: 0;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        .header-nav ul li {
-            margin-bottom: 0.5rem;
-        }
-        .header-nav ul a {
-            text-decoration: none;
-            color: var(--color-dark-text);
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 0.75rem 1rem;
-            display: block;
-            border-radius: 0.5rem;
-            transition: color 0.2s ease, background-color 0.2s ease;
-        }
-        .header-nav ul a:hover, .header-nav ul a.active {
-            color: var(--color-primary-blue);
-            background-color: var(--color-light-blue);
-        }
-        
-        /* Mobil menyu pastki qismi (tugmalar) */
-        .mobile-nav-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--color-border);
-            flex-shrink: 0;
-        }
-        
-        /* Kirish va ro'yxatdan o'tish tugmalari */
-        .auth-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .login-btn, .signup-btn {
-            width: 100%;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 0.8rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        .login-btn { 
-            background-color: var(--color-light-bg);
-            color: var(--color-dark-text);
-        }
-        .login-btn:hover {
-             background-color: #e2e8f0;
-        }
-        .signup-btn {
-            background-color: var(--color-primary-blue);
-            color: #fff;
-            border: none;
-        }
-        .signup-btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-        .login-btn svg, .signup-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-        
-        /* Til tanlash (mobil menyu ichida) */
-        .language-selector {
-             display: flex;
-            align-items: center;
-            color: var(--color-medium-text);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s ease-in-out;
-            margin-bottom: 1rem;
-            background-color: var(--color-light-bg);
-            justify-content: center;
-        }
-        .language-selector svg { width: 1rem; height: 1rem; }
-        .language-selector span { margin: 0 0.5rem; }
-        .language-selector .chevron-down { width: 1rem; height: 1rem; }
-
-
-        /* Gamburger Menyusi va Yopish belgisi */
-        .hamburger-menu {
-            display: block;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            z-index: 1003;
-            color: var(--color-dark-text);
-            position: relative;
-            width: 24px;
-            height: 24px;
-        }
-        .hamburger-menu svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .hamburger-menu .hamburger-icon {
-            opacity: 1;
-            transform: rotate(0deg);
-        }
-        .hamburger-menu .close-icon {
-            opacity: 0;
-            transform: rotate(-90deg);
-        }
-        .hamburger-menu.active .hamburger-icon {
-            opacity: 0;
-            transform: rotate(90deg);
-        }
-        .hamburger-menu.active .close-icon {
-            opacity: 1;
-            transform: rotate(0deg);
-        }
-        
-        /* O'ng tarafdagi harakatlar uchun konteyner */
-        .header-right-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Mobil uchun til tanlash tugmasi */
-        .mobile-lang-selector {
-            display: block;
-            padding: 0.5rem;
-            border-radius: 99px;
-            color: var(--color-dark-text);
-            background-color: #fff;
-            border: 1px solid var(--color-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .mobile-lang-selector:hover {
-             background-color: var(--color-light-bg);
-        }
-        .mobile-lang-selector svg {
-            width: 20px;
-            height: 20px;
-        }
-        
-        /* Mobil uchun "Kirish" tugmasi */
-        .mobile-login-btn {
-            display: block;
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--color-border);
-            border-radius: 99px; /* Dumaloq shakl */
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--color-dark-text);
-            transition: all 0.2s ease;
-            background-color: #fff;
-        }
-        .mobile-login-btn:hover {
-            background-color: var(--color-light-bg);
-            border-color: var(--color-primary-blue);
-            color: var(--color-primary-blue);
-        }
-
-        /* Desktop uchun harakatlar (mobilda yashirin) */
-        .header-actions {
-            display: none;
-        }
-
-        /* ========================================= */
-        /* ====== DESKTOP UCHUN MEDIA SO'ROVLARI === */
-        /* ========================================= */
-
-        @media (min-width: 1024px) {
-            body {
-                padding-top: var(--header-height);
-            }
-            .header {
-                 padding: 10px 2.5rem;
-                 transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            }
-             .header.scrolled {
-                height: 3.5rem;
-            }
-             .header-logo img {
-                height: 4.8rem; /* O'zgarmas o'lcham */
-                 transition: height 0.3s ease-in-out;
-            }
-             .header.scrolled .header-logo img {
-                 height: 4rem;
-             }
-
-            .hamburger-menu, .mobile-login-btn, .mobile-nav-header, .mobile-nav-footer, .mobile-lang-selector {
-                display: none;
-            }
-            .header-nav {
-                position: static;
-                width: auto;
-                height: auto;
-                background-color: transparent;
-                box-shadow: none;
-                padding: 0;
-                flex-direction: row;
-                margin: 0 auto; 
-            }
-            .header-nav ul {
-                flex-direction: row;
-                gap: 2.5rem;
-                padding: 0;
-                overflow-y: visible;
-            }
-            .header-nav ul a {
-                font-size: 0.95rem;
-                position: relative;
-                padding: 0.5rem 0;
-                border-radius: 0;
-            }
-            .header-nav ul a:hover, .header-nav ul a.active {
-                background-color: transparent;
-            }
-            .header-nav ul a::after {
-                content: '';
-                position: absolute;
-                bottom: -5px;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background-color: var(--color-primary-blue);
-                transition: width 0.3s ease;
-            }
-            .header-nav ul a:hover::after, .header-nav ul a.active::after {
-                width: 100%;
-            }
-            /* Desktop uchun tugmalar va tilni ko'rsatish */
-            .header-actions {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-            .header-actions .auth-buttons {
-                flex-direction: row;
-                gap: 0.75rem;
-            }
-            .header-actions .language-selector {
-                margin-bottom: 0;
-                background-color: transparent;
-            }
-             .header-actions .language-selector:hover {
-                background-color: var(--color-light-bg);
-            }
-            .header-actions .login-btn, .header-actions .signup-btn {
-                font-size: 0.9rem;
-                padding: 0.6rem 1rem;
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="style_new.css">
 </head>
 <body>
 
@@ -422,12 +45,12 @@
         <!-- Asosiy menyu linklari -->
         <ul>
             <li><a href="index.html" class="active">Bosh sahifa</a></li>
+            <li><a href="departments.html">Bo'limlar</a></li>
             <li><a href="clinics.html">Shifoxonalar</a></li>
-            <li><a href="doctors.html">Shifokorlar</a></li>
             <li><a href="pricing.html">Narxlar</a></li>
+            <li><a href="doctors.html">Shifokorlar</a></li>
             <li><a href="testimonials.html">Fikrlar</a></li>
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="blog.html">Hamkor bo'lish</a></li>
         </ul>
 
         <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
@@ -502,6 +125,7 @@
                     <h1>Ishonchli, xavfsiz va shaffof<br></h1>
                     <p>MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda davolaning!</p>
 
+                    
                     <!-- Forma kartasi -->
                     <form id="consultation-form" class="form-card">
                     <div class="form-group">
@@ -676,6 +300,13 @@
                             <p>Mos keluvchi va mos kelmaydigan donorlar uchun variantlar.</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="quotes-actions">
+                    <a href="#" class="signup-btn" style="width: 200px!important;">
+                <span>Ro'yxatdan o'tish</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
                 </div>
             </section>
 
@@ -905,7 +536,7 @@
                     </div>
                 </div>
                 <div class="quotes-actions">
-                    <a href="#" class="signup-btn">
+                    <a href="#" class="signup-btn" style="width: 200px!important;">
                 <span>Ro'yxatdan o'tish</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
@@ -951,8 +582,7 @@
                 </div>
             </section>
 
-                        <!-- Biz qanday ishlaymiz? -->
-            <!-- ========================================================= -->
+<!-- ========================================================= -->
 <!-- === BIZ QANDAY ISHLAYMIZ? (YANGI, KREATIV DIZAYN) === -->
 <!-- ========================================================= -->
 <section class="how-we-work-section">
@@ -1027,13 +657,12 @@
                 </button>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 3rem;">
-            <div class="auth-buttons">
-            <a href="#" class="signup-btn">
+        <div class="quotes-actions">
+                    <a href="#" class="signup-btn" style="width: 200px!important;">
                 <span>Ro'yxatdan o'tish</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-        </div>
+                </div>
         </div>
     </div>
 </section>
@@ -1210,14 +839,7 @@
                         <h4>Viza yordami</h4>
                         <p>To'liq tibbiy viza yordamini oling.</p>
                     </div>
-                    <!-- Valyuta ayirboshlash -->
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-                        </div>
-                        <h4>Valyuta ayirboshlash</h4>
-                        <p>Sizning shahringizdagi qulay valyuta ayirboshlash xizmatlari.</p>
-                    </div>
+                    
                     <!-- Tarjimonlar -->
                     <div class="service-card">
                         <div class="service-icon">
@@ -1226,14 +848,7 @@
                         <h4>Tarjimonlar</h4>
                         <p>Har qadamda til to'siqlarini yengish uchun malakali mutaxassislar.</p>
                     </div>
-                    <!-- Transport yordami -->
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car-front"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H12c-.7 0-1.3.3-1.8.7C9.3 8.6 8 10 8 10s-2.7.6-4.5.8C2.7 11.1 2 11.9 2 12.8v3c0 .6.4 1 1 1h2"/><path d="M8 17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-4H8v4Z"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="12" r="1"/></svg>
-                        </div>
-                        <h4>Transport yordami</h4>
-                        <p>Bepul aeroport transferlari.</p>
-                    </div>
+                    
                     <!-- Turar joy variantlari -->
                     <div class="service-card">
                         <div class="service-icon">
@@ -1247,26 +862,21 @@
                         <div class="service-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-plus"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 14h6"/><path d="M12 11v6"/></svg>
                         </div>
-                        <h4>Qabul, Uchrashuv, Dori-darmon</h4>
+                        <h4>Qabul, uchrashuv, dori-darmon</h4>
                         <p>Tibbiy logistikaning to'liq muvofiqlashtirilishi.</p>
                     </div>
-                    <!-- Shaxsiy hamshiralik -->
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-check"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
-                        </div>
-                        <h4>Shaxsiy hamshiralik</h4>
-                        <p>Zarur bo'lganda shaxsiy hamshiralik xizmatlarini tashkil etish.</p>
-                    </div>
+                    
                 </div>
                 <div class="services-footer">
-                <button class="chat-button-services">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-                    Aloqa
-                </button>
-                <p class="services-note">
+                <div class="quotes-actions">
+                    <a href="#" class="signup-btn" style="width: 200px!important;">
+                <span>Ro'yxatdan o'tish</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+                </div>
+                <!-- <p class="services-note">
                     Bizning xizmatlarimiz BEPUL va ulardan foydalanish sizning kasalxona hisobingizni oshirmaydi!
-                </p>
+                </p> -->
             </div>
             </section>
 
@@ -1476,19 +1086,19 @@
             </div>
 
             <div class="footer-column">
-                <h4 class="footer-title">Tezkor Havolalar</h4>
+                <h4 class="footer-title">Menyu</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Bosh sahifa</a></li>
-                    <li><a href="#">Biz haqimizda</a></li>
+                    <li><a href="#">Bo'limlar</a></li>
+                    <li><a href="#">Shifoxonalar</a></li>
+                    <li><a href="#">Narxlar</a></li>
                     <li><a href="#">Shifokorlar</a></li>
-                    <li><a href="#">Kasalxonalar</a></li>
-                    <li><a href="#">Bloglar</a></li>
-                    <li><a href="#">Hamkor bo'ling</a></li>
+                    <li><a href="#">Fikrlar</a></li>
+                    <li><a href="#">Blog</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4 class="footer-title">Asosiy Yo'nalishlar</h4>
+                <h4 class="footer-title">Asosiy yo'nalishlar</h4>
                 <ul class="footer-links">
                     <li><a href="#">Kardiologiya</a></li>
                     <li><a href="#">Onkologiya</a></li>
@@ -1523,7 +1133,7 @@
             <div class="footer-legal-links">
                     <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
                     <a href="user-agreement-uz.html">Foydalanish shartlari</a>
-                    <a href="public-offer-uz.html">Ommaviy Oferta</a>
+                    <a href="public-offer-uz.html">Ommaviy oferta</a>
                 </div>
         </div>
     </div>
@@ -1541,144 +1151,9 @@
     </div>
 
 </footer>
+
 <script src="script.js"></script>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Preloader
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        preloader.classList.add('preloader-hidden');
-        setTimeout(() => {
-            preloader.style.display = 'none';
-        }, 800);
-    }
-    
-    // Header scroll effekti
-    const header = document.querySelector('.header');
-    let lastScrollTop = 0;
-    
-    // Faqat mobil qurilmalar uchun scroll effektini ishga tushirish
-    if (window.innerWidth < 1024) {
-        window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
-                // Pastga scroll
-                header.style.top = `-${header.offsetHeight}px`;
-            } else {
-                // Tepaga scroll
-                header.style.top = '0';
-            }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
-        }, false);
-    }
-
-
-    /* ================================================= */
-    /* ======== YANGI MOBIL MENYU FUNKSIONALLIGI ======= */
-    /* ================================================= */
-    const hamburgerBtn = document.getElementById('hamburger-menu');
-    const navPanel = document.getElementById('header-nav');
-    const navLinks = navPanel.querySelectorAll('a');
-
-    const openMenu = () => {
-        hamburgerBtn.classList.add('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'true');
-        navPanel.classList.add('active');
-        document.body.classList.add('nav-open');
-    };
-
-    const closeMenu = () => {
-        hamburgerBtn.classList.remove('active');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        navPanel.classList.remove('active');
-        document.body.classList.remove('nav-open');
-    };
-
-    hamburgerBtn.addEventListener('click', () => {
-        if (navPanel.classList.contains('active')) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
-    });
-
-    
-    // Menyudagi biror link bosilsa, menyu yopiladi
-    navLinks.forEach(link => {
-        link.addEventListener('click', closeMenu);
-    });
-
-    // Escape tugmasi bosilganda menyuni yopish
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navPanel.classList.contains('active')) {
-            closeMenu();
-        }
-    });
-
-
-    // --- Telefon raqam uchun maska ---
-    const phoneInput = document.getElementById('phone-number');
-    const prefix = '+998';
-    if(phoneInput) {
-        phoneInput.addEventListener('input', (e) => {
-            const input = e.target;
-            let value = input.value;
-            if (!value.startsWith(prefix)) {
-                input.value = prefix;
-                return;
-            }
-            const userDigits = value.substring(prefix.length).replace(/\D/g, '');
-            let formattedNumber = '';
-            if (userDigits.length > 0) formattedNumber += ' (' + userDigits.substring(0, 2);
-            if (userDigits.length > 2) formattedNumber += ') ' + userDigits.substring(2, 5);
-            if (userDigits.length > 5) formattedNumber += '-' + userDigits.substring(5, 7);
-            if (userDigits.length > 7) formattedNumber += '-' + userDigits.substring(7, 9);
-            input.value = prefix + formattedNumber;
-        });
-    }
-
-
-    // --- Modal oyna logikasi ---
-    const form = document.getElementById('consultation-form');
-    const statusModal = document.getElementById('status-modal');
-    const modalIconContainer = document.getElementById('modal-icon-container');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMessage = document.getElementById('modal-message');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            showModal('success', 'Muvaffaqiyatli!', 'Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog\'lanishadi.');
-            form.reset();
-        });
-    }
-
-    const showModal = (type, title, message) => {
-        modalTitle.textContent = title;
-        modalMessage.textContent = message;
-        if (type === 'success') {
-            modalIconContainer.innerHTML = `<div class="success-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>`;
-        } else {
-            modalIconContainer.innerHTML = `<div class="error-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></div>`;
-        }
-        statusModal.classList.add('show');
-    };
-
-    const closeModalWindow = () => {
-        statusModal.classList.remove('show');
-    };
-
-    modalCloseBtn.addEventListener('click', closeModalWindow);
-    statusModal.addEventListener('click', (e) => {
-        if (e.target === statusModal) {
-            closeModalWindow();
-        }
-    });
-});
-</script>
+<script src="script_new.js"></script>
 
     </body>
     </html>
