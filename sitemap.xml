@@ -1,77 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-  <!-- Bosh sahifa -->
-  <url>
-    <loc>https://medmapp.uz/</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- Asosiy bo'limlar -->
-  <url>
-    <loc>https://medmapp.uz/doctors</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://medmapp.uz/clinics</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://medmapp.uz/services</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medmapp.uz/pricing</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medmapp.uz/departments</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medmapp.uz/treatments</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
+    <!-- Bosh sahifa - eng yuqori ahamiyatga ega -->
+    <url>
+        <loc>https://medmapp.uz/</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.00</priority>
+    </url>
 
-  <!-- Misol uchun klinika va profil sahifalari -->
-  <url>
-    <loc>https://medmapp.uz/amrita-hospital</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
+    <!-- Asosiy statik sahifalar -->
+    <url>
+        <loc>https://medmapp.uz/departments</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+    </url>
 
-  <!-- Bemorlar fikrlari / testimonials -->
-  <url>
-    <loc>https://medmapp.uz/testimonials</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
+    <url>
+        <loc>https://medmapp.uz/clinics</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.80</priority>
+    </url>
 
-  <!-- Blog bo'limi (agar blog bo'lsa) - agar ko'p maqola bo'lsa ushbu qismni dinamik yaratish kerak -->
-  <url>
-    <loc>https://medmapp.uz/blog</loc>
-    <lastmod>2025-09-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
+    <url>
+        <loc>https://medmapp.uz/pricing</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.70</priority>
+    </url>
 
-  <!-- Qo'shimcha: login/admin sahifalarni indeksdan chetlashni robots.txt orqali qilamiz (shunchaki misol) -->
+    <url>
+        <loc>https://medmapp.uz/doctors</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.90</priority>
+    </url>
+
+    <url>
+        <loc>https://medmapp.uz/testimonials</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.90</priority>
+    </url>
+
+    <url>
+        <loc>https://medmapp.uz/blog</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.90</priority>
+    </url>
+
+    <!-- Yuridik hujjatlar -->
+    <url>
+        <loc>https://medmapp.uz/privacy-policy</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.30</priority>
+    </url>
+    <url>
+        <loc>https://medmapp.uz/user-agreement</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.30</priority>
+    </url>
+    <url>
+        <loc>https://medmapp.uz/public-offer</loc>
+        <lastmod>2025-09-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.30</priority>
+    </url>
+
 </urlset>

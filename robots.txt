@@ -8,10 +8,10 @@ Disallow: /login/
 Disallow: /dashboard/
 Disallow: /private/
 
-# Sitemap manzili — qidiruv tizimlariga ko'rsatamiz
+# Sitemap manzili 
 Sitemap: https://medmapp.uz/sitemap.xml
 
-# Google bot uchun maxsus qoidalar (agar kerak bo'lsa)
+# Google bot uchun maxsus qoidalar
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
