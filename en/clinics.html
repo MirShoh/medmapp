@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcha klinikalar | MedMapp</title>
+    <title>All Hospitals | MedMapp</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
-    <meta name="description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
+    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, India, kidney transplant, liver transplant, surgery, medical tourism">
+    <meta name="description" content="Get treated at the most renowned hospitals in India at affordable and transparent prices through the MedMapp platform!">
 
-    <meta property="og:title" content="MedMapp platformasi rasmiy veb-sayti">
-    <meta property="og:description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
+    <meta property="og:title" content="MedMapp Platform Official Website">
+    <meta property="og:description" content="Get treated at the most renowned hospitals in India at affordable and transparent prices through the MedMapp platform!">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://medmapp.uz/">
     <meta property="og:image" content="https://medmapp.uz/images/logo/MedMapp_logo_main_shaffof.png" />
@@ -30,13 +30,11 @@
             --page-secondary-blue: #0d324d;
         }
 
-        /* ### ANIMATSIYALAR ### */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ### KREATIV HERO BO'LIMI ### */
         .page-hero-creative {
             padding: 5rem 1rem 7.8rem 1rem;
             background: linear-gradient(135deg, var(--page-primary) 0%, var(--page-secondary-blue) 100%);
@@ -73,7 +71,6 @@
             animation-fill-mode: backwards;
         }
 
-        /* ### FILTRLAR ### */
         .filters-section {
             padding: 2rem;
             background-color: #fff;
@@ -99,13 +96,11 @@
             font-size: 1rem;
         }
 
-        /* ### KLINIKALAR RO'YXATI ### */
         .clinics-list-section { padding: 2rem 1rem 4rem 1rem; background-color: var(--page-bg); }
         .clinics-grid {
-            /* O'ZGARTIRISH: Grid o'rniga Flexbox ishlatamiz */
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* Kartalarni markazga to'g'rilaydi */
+            justify-content: center;
             gap: 2rem;
         }
         .clinic-card-item {
@@ -113,7 +108,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-            /* O'ZGARTIRISH: O'zgarmas o'lcham uchun */
             flex: 0 1 350px;
         }
         .clinic-card-item:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
@@ -130,113 +124,96 @@
 <body>
 
     <div id="preloader">
-    <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp yuklanmoqda...">
-</div>
+        <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp is loading...">
+    </div>
 
     <header class="header">
-    <a href="https://medmapp.uz/" class="header-logo">
-        <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
-    </a>
-
-    <!-- Navigatsiya paneli (mobil va desktop uchun) -->
-    <nav class="header-nav" id="header-nav">
-        <!-- Mobil menyu uchun sarlavha (faqat mobilda ko'rinadi) -->
-        <div class="mobile-nav-header">
-            <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp" class="mobile-nav-logo">
-            <h3 class="mobile-nav-title">Menyu</h3>
-        </div>
-
-        <!-- Asosiy menyu linklari -->
-        <ul>
-            <li><a href="index.html">Bosh sahifa</a></li>
-            <li><a href="departments.html">Bo'limlar</a></li>
-            <li><a href="clinics.html" class="active">Shifoxonalar</a></li>
-            <li><a href="pricing.html">Narxlar</a></li>
-            <li><a href="doctors.html">Shifokorlar</a></li>
-            <li><a href="testimonials.html">Fikrlar</a></li>
-            <li><a href="blog.html">Blog</a></li>
-        </ul>
-
-        <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
-        <div class="mobile-nav-footer">
-            <div class="language-selector-wrapper">
-                <button class="language-selector-btn" id="mobile-lang-btn">
-                    <div class="lang-text-group">
-                        <img id="mobile-selected-lang-flag" src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
-                        <span id="mobile-selected-lang-text">UZ</span>
-                    </div>
-                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <ul class="language-dropdown" id="mobile-lang-dropdown">
-                    <li><a href="#" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
-                    <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
-                    <li><a href="#" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
-                </ul>
-            </div>
-            <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- O'ng tarafdagi harakatlar uchun umumiy konteyner -->
-    <div class="header-right-container">
-        <!-- Desktop uchun harakatlar -->
-        <div class="header-actions">
-            <!-- TIL TANLASH (YANGILANGAN) -->
-            <div class="language-selector-wrapper">
-                <button class="language-selector-btn" id="desktop-lang-btn">
-                    <div class="lang-text-group">
-                        <img id="desktop-selected-lang-flag" src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
-                        <span id="desktop-selected-lang-text">UZ</span>
-                    </div>
-                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <ul class="language-dropdown" id="desktop-lang-dropdown">
-                    <li><a href="#" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
-                    <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
-                    <li><a href="#" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
-                </ul>
-            </div>
-            <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
-            <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Mobil uchun til tanlash tugmasi -->
-        <a href="#" class="mobile-lang-selector" aria-label="Tilni tanlash">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        <a href="https://medmapp.uz/" class="header-logo">
+            <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logo">
         </a>
-        
-        <!-- Mobil uchun "Kirish" tugmasi -->
-        <a href="#" class="mobile-login-btn">Kirish</a>
-
-        <!-- Gamburger tugmasi -->
-        <button class="hamburger-menu" id="hamburger-menu" aria-label="Menyuni ochish/yopish" aria-controls="header-nav" aria-expanded="false">
-            <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-    </div>
-</header>
+    
+        <nav class="header-nav" id="header-nav">
+            <div class="mobile-nav-header">
+                <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp" class="mobile-nav-logo">
+                <h3 class="mobile-nav-title">Menu</h3>
+            </div>
+    
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="departments.html">Departments</a></li>
+                <li><a href="clinics.html" class="active">Hospitals</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="doctors.html">Doctors</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+    
+            <div class="mobile-nav-footer">
+                <div class="language-selector-wrapper">
+                    <button class="language-selector-btn" id="mobile-lang-btn">
+                        <div class="lang-text-group">
+                            <img id="mobile-selected-lang-flag" src="images/language/en.png" alt="United Kingdom Flag" class="lang-flag">
+                            <span id="mobile-selected-lang-text">EN</span>
+                        </div>
+                        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <ul class="language-dropdown" id="mobile-lang-dropdown">
+                        <li><a href="#" data-lang="uz"><img src="images/language/uz.png" alt="Uzbekistan Flag" class="lang-flag"> O'zbekcha</a></li>
+                        <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Russia Flag" class="lang-flag"> Русский</a></li>
+                        <li><a href="#" data-lang="en" class="sele selected"><img src="images/language/en.png" alt="United Kingdom Flag" class="lang-flag"> English</a></li>
+                    </ul>
+                </div>
+                <div class="auth-buttons">
+                    <a href="#" class="login-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        <span>Login</span>
+                    </a>
+                    <a href="#" class="signup-btn" style="color: white!important;">
+                        <span>Sign Up</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    
+        <div class="header-right-container">
+            <div class="header-actions">
+                <div class="language-selector-wrapper">
+                    <button class="language-selector-btn" id="desktop-lang-btn">
+                        <div class="lang-text-group">
+                            <img id="desktop-selected-lang-flag" src="images/language/en.png" alt="United Kingdom Flag" class="lang-flag">
+                            <span id="desktop-selected-lang-text">EN</span>
+                        </div>
+                        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <ul class="language-dropdown" id="desktop-lang-dropdown">
+                        <li><a href="#" data-lang="uz"><img src="images/language/uz.png" alt="Uzbekistan Flag" class="lang-flag"> O'zbekcha</a></li>
+                        <li><a href="#" data-lang="ru"><img src="images/language/ru.png" alt="Russia Flag" class="lang-flag"> Русский</a></li>
+                        <li><a href="#" data-lang="en" class="sele selected"><img src="images/language/en.png" alt="United Kingdom Flag" class="lang-flag"> English</a></li>
+                    </ul>
+                </div>
+                <div class="auth-buttons">
+                    <a href="#" class="login-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        <span>Login</span>
+                    </a>
+                    <a href="#" class="signup-btn" style="color: white!important;">
+                        <span>Sign Up</span>
+                    </a>
+                </div>
+            </div>
+    
+            <button class="hamburger-menu" id="hamburger-menu" aria-label="Open/close menu" aria-controls="header-nav" aria-expanded="false">
+                <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+    </header>
 
     <main>
         <section class="page-hero-creative">
             <div class="container">
-                <h1>Eng yaxshi klinikalarni toping</h1>
-                <p>Dunyoning yetakchi shifoxonalari orasidan o'zingizga mosini tanlang va sog'ligingizga befarq bo'lmang.</p>
+                <h1>Find the Best Hospitals</h1>
+                <p>Choose the right one for you from the world's leading hospitals and take care of your health.</p>
             </div>
             <div class="wave-shape"></div>
         </section>
@@ -246,60 +223,57 @@
                 <div class="filters-section">
                     <div class="filters-container">
                         <div class="filter-group">
-                            <select id="filter-specialty" aria-label="Yo'nalish bo'yicha filtr">
-                                <option value="all">Barcha yo'nalishlar</option>
-                                <option value="kardiologiya">Kardiologiya</option>
-                                <option value="onkologiya">Onkologiya</option>
-                                <option value="nevrologiya">Nevrologiya</option>
+                            <select id="filter-specialty" aria-label="Filter by specialty">
+                                <option value="all">All Specialties</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="oncology">Oncology</option>
+                                <option value="neurology">Neurology</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <select id="filter-country" aria-label="Davlat bo'yicha filtr">
-                                <option value="all">Barcha davlatlar</option>
-                                <option value="hindiston">Hindiston</option>
-                                <option value="turkiya">Turkiya</option>
+                            <select id="filter-country" aria-label="Filter by country">
+                                <option value="all">All Countries</option>
+                                <option value="india">India</option>
+                                <option value="turkey">Turkey</option>
                             </select>
                         </div>
                         <div class="filter-group">
-                            <select id="filter-city" aria-label="Shahar bo'yicha filtr">
-                                <option value="all">Barcha shaharlar</option>
+                            <select id="filter-city" aria-label="Filter by city">
+                                <option value="all">All Cities</option>
                                 <option value="faridabad">Faridabad</option>
-                                <option value="dehli">Dehli</option>
+                                <option value="delhi">Delhi</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <p id="clinics-count" style="text-align:center; margin-bottom: 2rem;"></p>
                 <div class="clinics-grid" id="clinics-grid">
-                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="faridabad" data-href="Amrita-hospital.html">
-                        <img src="images/Amrita/1.jpg" alt="Amrita Hospital binosi" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/007BFF/FFFFFF?text=Amrita';">
+                    <div class="clinic-card-item" data-specialty="cardiology,oncology,neurology" data-country="india" data-city="faridabad" data-href="Amrita-hospital.html">
+                        <img src="images/Amrita/1.jpg" alt="Amrita Hospital building" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/007BFF/FFFFFF?text=Amrita';">
                         <div class="card-content">
                             <h3>Amrita Hospital, Faridabad</h3>
                             <p class="location">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Faridabad, Hindiston
+                                Faridabad, India
                             </p>
                             <div class="card-footer">
                                 <span class="accreditation">NABH</span>
-                                <span class="details-link">Batafsil →</span>
+                                <span class="details-link">Details →</span>
                             </div>
                         </div>
                     </div>
-                    </div>
-                    
-                    
+                </div>
             </div>
         </section>
     </main>
     
   <footer class="site-footer">
     <div class="container">
-        
         <div class="footer-main-grid">
             <div class="footer-column">
-                <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi" class="footer-logo">
+                <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logo" class="footer-logo">
                 <p class="footer-about-text">
-                    MedMapp - bu sizning Hindistondagi ishonchli tibbiy hamrohingiz. Biz eng yaxshi klinikalarda sifatli va hamyonbop davolanishni tashkil etamiz.
+                    MedMapp is your trusted medical companion in India. We organize quality and affordable treatment in the best clinics.
                 </p>
                 <div class="social-icons">
                     <a href="https://www.facebook.com/medmapp_uz" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
@@ -310,35 +284,35 @@
             </div>
 
             <div class="footer-column">
-                <h4 class="footer-title">Menyu</h4>
+                <h4 class="footer-title">Menu</h4>
                 <ul class="footer-links">
-                    <li><a href="departments.html">Bo'limlar</a></li>
-                    <li><a href="clinics.html">Shifoxonalar</a></li>
-                    <li><a href="pricing.html">Narxlar</a></li>
-                    <li><a href="doctors.html">Shifokorlar</a></li>
-                    <li><a href="testimonials.html">Fikrlar</a></li>
+                    <li><a href="departments.html">Departments</a></li>
+                    <li><a href="clinics.html">Hospitals</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="doctors.html">Doctors</a></li>
+                    <li><a href="testimonials.html">Testimonials</a></li>
                     <li><a href="blog.html">Blog</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4 class="footer-title">Asosiy yo'nalishlar</h4>
+                <h4 class="footer-title">Main Specialties</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Kardiologiya</a></li>
-                    <li><a href="#">Onkologiya</a></li>
-                    <li><a href="#">Neyroxirurgiya</a></li>
-                    <li><a href="#">Ortopediya</a></li>
-                    <li><a href="#">Transplantatsiya</a></li>
-                    <li><a href="#">Kosmetik jarrohlik</a></li>
+                    <li><a href="#">Cardiology</a></li>
+                    <li><a href="#">Oncology</a></li>
+                    <li><a href="#">Neurosurgery</a></li>
+                    <li><a href="#">Orthopedics</a></li>
+                    <li><a href="#">Transplantation</a></li>
+                    <li><a href="#">Cosmetic Surgery</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
-                <h4 class="footer-title">Biz bilan bog'laning</h4>
+                <h4 class="footer-title">Contact Us</h4>
                 <ul class="footer-contact">
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                        <span>Sirdaryo viloyati, O'zbekiston</span>
+                        <span>Syrdarya region, Uzbekistan</span>
                     </li>
                     <li>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4.18 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -353,27 +327,14 @@
         </div>
         
         <div class="footer-bottom">
-            <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>
+            <p class="copyright">&copy; 2025 MedMapp. All rights reserved.</p>
             <div class="footer-legal-links">
-                    <a href="privacy-policy-uz.html">Maxfiylik siyosati</a>
-                    <a href="user-agreement-uz.html">Foydalanish shartlari</a>
-                    <a href="public-offer-uz.html">Ommaviy oferta</a>
-                </div>
-        </div>
-    </div>
-
-    <!-- YANGI: Muvaffaqiyat/Xatolik uchun Modal Oyna -->
-    <div id="status-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div id="modal-icon-container">
-                <!-- Ikona JavaScript orqali qo'yiladi -->
+                    <a href="privacy-policy-en.html">Privacy Policy</a>
+                    <a href="user-agreement-en.html">Terms of Use</a>
+                    <a href="public-offer-en.html">Public Offer</a>
             </div>
-            <h2 id="modal-title"></h2>
-            <p id="modal-message"></p>
-            <button id="modal-close-btn" class="modal-button">Yopish</button>
         </div>
     </div>
-
 </footer>
 
     <script src="script_new.js"></script>
@@ -410,7 +371,7 @@
                     }
                 });
                 
-                clinicsCount.textContent = `${visibleCount} ta klinika topildi`;
+                clinicsCount.textContent = `${visibleCount} hospitals found`;
             }
 
             [specialtyFilter, countryFilter, cityFilter].forEach(filter => {

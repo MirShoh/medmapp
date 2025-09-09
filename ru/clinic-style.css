@@ -1,0 +1,1658 @@
+/* ========================================================= */
+/* ===           CLINIC.HTML UCHUN MAXSUS USLUBLAR         === */
+/* ========================================================= */
+
+/* ### UMUMIY STILLAR VA O'ZGARUVCHILAR ### */
+:root {
+    --clinic-primary: #00509e; /* To'q ko'k, ishonchli rang */
+    --clinic-secondary: #17a2b8; /* Och ko'k, tinchlantiruvchi */
+    --clinic-bg-light: #f8f9fa; /* Juda och kulrang fon */
+    --clinic-text-dark: #212529;
+    --clinic-text-medium: #6c757d;
+    --clinic-border-color: #dee2e6;
+    --header-height-scrolled: 3rem; /* Bosh sahifadagi o'zgaruvchi bilan bir xil */
+}
+
+html {
+    scroll-behavior: smooth; /* Menyuni bosganda silliq o'tish uchun */
+}
+
+body {
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.bg-light {
+    background-color: var(--clinic-bg-light);
+    border-top: 1px solid var(--clinic-border-color);
+    border-bottom: 1px solid var(--clinic-border-color);
+}
+
+.section-title-left {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--clinic-text-dark);
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.section-title-center {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--clinic-text-dark);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.section-subtitle-center {
+    font-size: 1.1rem;
+    color: var(--clinic-text-medium);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem auto;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--color-primary-blue);
+    border-color: var(--color-primary-blue);
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.btn-secondary {
+    color: var(--clinic-text-dark);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+.btn-secondary:hover {
+    background-color: #fff;
+}
+
+.btn-tertiary {
+    color: var(--color-primary-blue);
+    background-color: var(--color-light-blue);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+.btn-tertiary:hover {
+    background-color: #cce7ff;
+    transform: scale(1.05);
+}
+
+.btn-full {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+/* ### ANIMATSIYALAR ### */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    opacity: 0; /* Animatsiya uchun boshlang'ich holat */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+
+/* ### KLINIKA HERO BO'LIMI ### */
+.clinic-hero {
+    position: relative;
+    padding-top: 12rem;
+    padding-bottom: 6rem;
+    color: #fff;
+    overflow: hidden;
+}
+
+.clinic-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.clinic-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.clinic-hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 80, 158, 0.8) 0%, rgba(0, 80, 158, 0.4) 100%);
+    z-index: -1;
+}
+
+.clinic-hero-content .container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.clinic-name {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    animation: fadeInDown 1s ease-out 0.2s backwards;
+}
+
+.clinic-location {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 1s ease-out 0.4s backwards;
+}
+
+.clinic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    animation: fadeInDown 1s ease-out 0.6s backwards;
+}
+
+.clinic-tags .tag {
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clinic-hero-actions {
+    display: flex;
+    gap: 1rem;
+    animation: fadeInDown 1s ease-out 0.8s backwards;
+}
+
+/* ### YOPISHQOQ NAVIGATSIYA ### */
+.clinic-nav-sticky {
+    background-color: #fff;
+    border-bottom: 1px solid var(--clinic-border-color);
+    padding: 0;
+    z-index: 998;
+    transition: all 0.3s ease;
+    position: relative; /* Boshlang'ich holati */
+}
+
+.clinic-nav-sticky.is-sticky {
+    position: fixed;
+    /* top: var(--header-height-scrolled); JavaScript orqali o'rnatiladi */
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    animation: slideDown 0.4s ease-out;
+}
+
+/* Yopishqoq menyu aktiv bo'lganda kontent sakrab ketmasligi uchun */
+.page-content-wrapper {
+    transition: padding-top 0.4s ease-out;
+}
+
+.clinic-nav-sticky ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.clinic-nav-sticky ul::-webkit-scrollbar {
+  display: none;
+}
+
+.clinic-nav-sticky a {
+    display: block;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--clinic-text-medium);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.clinic-nav-sticky a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--color-primary-blue);
+    transition: width 0.3s ease;
+}
+
+.clinic-nav-sticky a:hover {
+    color: var(--clinic-text-dark);
+}
+
+.clinic-nav-sticky a.active {
+    color: var(--color-primary-blue);
+}
+.clinic-nav-sticky a.active::after {
+    width: 50%;
+}
+
+
+/* ### UMUMIY BO'LIMLAR ### */
+.clinic-section {
+    padding: 2rem 0;
+    overflow: hidden; /* Animatsiyalar uchun */
+}
+
+/* ### KLINIKA HAQIDA BO'LIMI ### */
+.clinic-about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.about-text p {
+    color: var(--clinic-text-medium);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.clinic-stats-inline {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--clinic-border-color);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e0f2fe;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #e0f2fe; 
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 15px 30px rgba(0, 80, 158, 0.15);
+}
+
+/* ### YO'NALISHLAR BO'LIMI ### */
+.treatments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.treatment-card-alt {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    border: 1px solid var(--clinic-border-color);
+    transition: all 0.3s ease;
+}
+
+.treatment-card-alt:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+    border-color: var(--color-primary-blue);
+}
+
+.treatment-icon {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0 auto 1.5rem auto;
+    background-color: var(--color-light-blue);
+    color: var(--color-primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease;
+}
+
+.treatment-card-alt:hover .treatment-icon {
+    transform: rotate(360deg);
+}
+
+.treatment-icon svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.treatment-card-alt h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--clinic-text-dark);
+}
+
+.treatment-card-alt p {
+    color: var(--clinic-text-medium);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ### SHIFOKORLAR BO'LIMI (YANGI DIZAYN) ### */
+.doctor-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.doctor-card-modern {
+    background-color: #fff;
+    border: 1px solid var(--clinic-border-color);
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem; /* Padding kamaytirildi */
+}
+
+.doctor-card-modern:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 80, 158, 0.1);
+}
+
+.doctor-card-modern img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 1.5rem auto;
+    border: 4px solid var(--color-light-blue);
+}
+
+.doctor-card-modern h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--clinic-text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.doctor-card-modern .specialty {
+    font-size: 0.9rem;
+    color: var(--clinic-text-medium);
+    margin-bottom: 1rem; /* Margin kamaytirildi */
+    line-height: 1.4;
+    min-height: 40px; /* Balandlik kamaytirildi */
+}
+
+.doctor-card-modern .doctor-details {
+    text-align: left;
+    margin-bottom: 1rem; /* Margin kamaytirildi */
+    padding-top: 1rem; /* Padding kamaytirildi */
+    border-top: 1px solid var(--clinic-border-color);
+    flex-grow: 1;
+}
+
+.doctor-card-modern .doctor-details div {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--clinic-text-medium);
+    margin-bottom: 0.75rem;
+}
+.doctor-card-modern .doctor-details b {
+    color: var(--clinic-text-dark);
+}
+
+.doctor-card-modern .doctor-details svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--clinic-text-medium);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.doctor-card-modern .consultancy-link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary-blue);
+    text-decoration: none;
+    margin-bottom: 0.75rem; /* Margin kamaytirildi */
+    display: inline-block;
+}
+
+.doctor-card-modern .btn-primary {
+    width: 90%;
+    padding: 0.75rem 1rem; /* Padding kamaytirildi */
+    font-size: 0.9rem; /* Shrift o'lchami kamaytirildi */
+    margin-bottom: 1rem;
+    white-space: nowrap; /* Matnni bir qatorga sig'dirish */
+}
+
+.doctor-card-modern .data-protection {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto; /* Elementni pastga yopishtirish */
+}
+.doctor-card-modern .data-protection svg {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+
+/* ### NARXLAR JADVALI BO'LIMI (YANGI INTERAKTIV DIZAYN) ### */
+.prices-container {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+    border: 1px solid var(--clinic-border-color);
+    overflow: hidden;
+}
+
+.prices-tabs-nav {
+    flex-shrink: 0;
+    background-color: var(--clinic-bg-light);
+    border-right: 1px solid var(--clinic-border-color);
+}
+
+.prices-tabs-nav ul {
+    list-style: none;
+    padding: 1rem;
+    margin: 0;
+}
+
+.prices-tabs-nav a {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+    color: var(--clinic-text-medium);
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.prices-tabs-nav a.active, .prices-tabs-nav a:hover {
+    background-color: var(--color-primary-blue);
+    color: #fff;
+}
+
+.prices-tabs-content {
+    flex-grow: 1;
+}
+
+.price-content-pane {
+    display: none;
+    animation: fadeInUp 0.5s ease;
+}
+
+.price-content-pane.active {
+    display: block;
+}
+
+.prices-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.prices-table th, .prices-table td {
+    padding: 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--clinic-border-color);
+}
+
+.prices-table thead {
+    background-color: #fff; /* Oq fon */
+}
+
+.prices-table th {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--clinic-text-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.prices-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.prices-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.prices-table tbody tr:hover {
+    background-color: #f1faff; /* Och ko'k fon */
+}
+
+.prices-table td {
+    color: var(--clinic-text-dark);
+    font-weight: 500;
+}
+
+.price-tag {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--clinic-primary);
+}
+
+/* ### INFRATUZILMA BO'LIMI ### */
+.clinic-infra-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.infra-image img {
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.infra-text ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.infra-text li {
+    padding-left: 2rem;
+    position: relative;
+    margin-bottom: 1rem;
+    color: var(--clinic-text-medium);
+    line-height: 1.7;
+}
+
+.infra-text li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-primary-green);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* ### GALEREYA BO'LIMI (YANGI DIZAYN) ### */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    height: 250px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+    filter: brightness(0.7);
+}
+
+.gallery-item::after {
+    content: attr(data-title); /* Rasm nomini ko'rsatish */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.gallery-item:hover::after {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.gallery-item .zoom-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.9);
+    color: var(--clinic-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.4s ease;
+}
+
+.gallery-item:hover .zoom-icon {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+/* ### LIGHTBOX ### */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+#lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border-radius: 0.5rem;
+}
+
+.lightbox-close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+/* ### MEHMON UYI BO'LIMI (YANGI DIZAYN) ### */
+.guest-house-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+    background: linear-gradient(135deg, var(--clinic-bg-light), #fff);
+    padding: 3rem;
+    border-radius: 1.5rem;
+}
+.guest-house-image {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.guest-house-image img {
+    width: 100%;
+    display: block;
+}
+.guest-house-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(0, 80, 158, 0.3), transparent);
+}
+
+.guest-house-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+.guest-house-text h3 svg {
+    color: #ffc107; /* Sariq yulduzlar */
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-left: 0.25rem;
+}
+.guest-house-text p {
+    color: var(--clinic-text-medium);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+.guest-house-text p strong {
+    color: var(--clinic-text-dark);
+}
+
+
+/* ### UCHRASHUV FORMASI BO'LIMI ### */
+.appointment-section {
+    background: linear-gradient(135deg, var(--clinic-secondary), var(--clinic-primary));
+    color: #fff;
+}
+.appointment-section .section-title-center,
+.appointment-section .section-subtitle-center {
+    color: #fff;
+}
+
+.appointment-form {
+    max-width: 700px;
+    margin: 2rem auto 0 auto;
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.form-group-alt {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-alt label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--clinic-text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-group-alt input,
+.form-group-alt textarea {
+    width: 90%;
+    padding: 0.75rem;
+    border: 1px solid var(--clinic-border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group-alt input:focus,
+.form-group-alt textarea:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.form-privacy-note {
+    font-size: 0.8rem;
+    color: var(--clinic-text-medium);
+    text-align: center;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* ### RESPONSIVE DIZAYN ### */
+@media (min-width: 768px) {
+    .prices-container {
+        flex-direction: row;
+    }
+    .prices-tabs-nav {
+        width: 250px;
+    }
+    .prices-tabs-nav ul {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .clinic-hero-content .container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+    .clinic-about-grid {
+        grid-template-columns: 1.2fr 1fr;
+    }
+    .clinic-infra-grid {
+        grid-template-columns: 1fr 1.2fr;
+    }
+    .infra-image {
+        order: -1;
+    }
+    .guest-house-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .appointment-form {
+        grid-template-columns: 1fr 1fr;
+    }
+    .form-group-full {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 767px) {
+    .section-title-left, .section-title-center {
+        font-size: 2rem;
+    }
+    .clinic-name {
+        font-size: 2.5rem;
+    }
+    .clinic-nav-sticky ul {
+        justify-content: flex-start;
+        padding: 0 1rem;
+    }
+    .clinic-stats-inline {
+        grid-template-columns: 1fr;
+    }
+    .prices-tabs-nav ul {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 0;
+    }
+    .prices-tabs-nav li {
+        flex-shrink: 0;
+    }
+    .prices-tabs-nav a {
+        border-bottom: 3px solid transparent;
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .prices-tabs-nav a.active {
+        border-color: var(--color-primary-blue);
+    }
+    .prices-table {
+        font-size: 0.9rem;
+    }
+    .prices-table th, .prices-table td {
+        padding: 0.75rem;
+    }
+}
+
+
+/* ========================================================= */
+        /* ===        CLINICS.HTML UCHUN MAXSUS USLUBLAR         === */
+        /* ========================================================= */
+        :root {
+            --clinics-bg: #f8f9fa;
+            --clinics-border: #dee2e6;
+            --clinics-text-dark: #212529;
+            --clinics-text-light: #6c757d;
+            --clinics-primary: #007BFF;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+/* ### SAHIFA SARLAVHASI ### */
+.page-header {
+    background-color: var(--clinics-bg);
+    padding: 3rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--clinics-border);
+    margin-top: 4rem; /* Header balandligi uchun */
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--clinics-text-dark);
+    margin: 0;
+}
+
+/* ### FILTRLAR BO'LIMI ### */
+.filters-section {
+    padding: 2rem 0;
+    background-color: #fff;
+    border-bottom: 1px solid var(--clinics-border);
+}
+
+.filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--clinics-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--clinics-border);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--clinics-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* ### KLINIKALAR RO'YXATI ### */
+.clinics-list-section {
+    padding: 3rem 0;
+    background-color: var(--clinics-bg);
+}
+
+#clinics-count {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: var(--clinics-text-light);
+}
+
+.clinics-grid {
+    /* O'zgartirish: Grid o'rniga Flexbox ishlatamiz */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Kartalarni markazga to'g'rilash */
+    gap: 2rem;
+}
+
+.clinic-card-item {
+    background-color: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer; /* Butun kartani bosish mumkinligini ko'rsatish */
+    
+    /* O'zgartirish: Kartalar cho'zilib ketmasligi uchun o'lcham beramiz */
+    flex: 0 1 350px; /* Kattalashmaydi, kerak bo'lsa kichrayadi, asosiy kenglik 350px */
+    max-width: 100%; /* Mobil qurilmalar uchun */
+}
+
+.clinic-card-item.hidden {
+    display: none;
+}
+
+.clinic-card-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.clinic-card-item .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.clinic-card-item .card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.clinic-card-item h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--clinics-text-dark);
+    margin: 0 0 0.5rem 0;
+}
+
+.clinic-card-item .location {
+    color: var(--clinics-text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.clinic-card-item .location svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.clinic-card-item .card-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--clinics-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clinic-card-item .accreditation {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--clinics-text-light);
+    background-color: #e9ecef;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+}
+
+.clinic-card-item .details-link {
+    font-weight: 600;
+    color: var(--clinics-primary);
+    text-decoration: none;
+}
+
+/* ========================================================= */
+/* ===        DOCTORS.HTML UCHUN MAXSUS USLUBLAR         === */
+/* ========================================================= */
+
+/* ### FILTRLAR BO'LIMI ### */
+.filters-section {
+    padding: 2rem 0;
+    background-color: #fff;
+    border-bottom: 1px solid var(--doctors-border);
+    position: sticky;
+    top: 4rem; /* Header balandligiga teng */
+    z-index: 999;
+    transition: top 0.3s ease-in-out;
+}
+
+body.scrolled .filters-section {
+    top: 3rem; /* Kichraygan header balandligiga teng */
+}
+
+.filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--doctors-border);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+}
+
+/* ### SHIFOKORLAR RO'YXATI ### */
+.doctors-list-section {
+    padding: 3rem 0;
+    background-color: var(--doctors-bg);
+}
+
+#doctors-count {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: var(--doctors-text-light);
+}
+
+.doctors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.doctor-card-item {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid var(--doctors-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    flex: 0 1 380px; /* O'zgarmas o'lcham */
+}
+
+.doctor-card-item.hidden {
+    display: none;
+}
+
+.doctor-card-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.doctor-card-item .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.doctor-card-item .doctor-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--doctors-bg);
+}
+
+.doctor-card-item .header-info h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--doctors-text-dark);
+}
+
+.doctor-card-item .header-info p {
+    font-size: 0.9rem;
+    color: var(--doctors-primary);
+    margin: 0.25rem 0 0.5rem 0;
+    font-weight: 500;
+}
+
+/* Reyting uchun yangi stil */
+.doctor-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.doctor-rating .star {
+    width: 16px;
+    height: 16px;
+    color: var(--doctors-star-color);
+}
+.doctor-rating .star.filled {
+    fill: var(--doctors-star-color);
+}
+.doctor-rating .rating-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--doctors-text-dark);
+    margin-left: 0.25rem;
+}
+
+.doctor-card-item .card-body .doctor-stats {
+    list-style: none;
+    padding: 1rem 0;
+    margin: 1rem 0;
+    border-top: 1px solid var(--doctors-border);
+    border-bottom: 1px solid var(--doctors-border);
+}
+
+.doctor-card-item .doctor-stats li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--doctors-text-light);
+    margin-bottom: 0.75rem;
+}
+
+.doctor-card-item .doctor-stats li:last-child {
+    margin-bottom: 0;
+}
+
+.doctor-card-item .doctor-stats li svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--doctors-text-light);
+}
+
+.doctor-card-item .doctor-stats li strong {
+    color: var(--doctors-text-dark);
+    font-weight: 600;
+}
+
+.doctor-card-item .card-footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.doctor-card-item .btn-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.doctor-card-item .btn {
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.doctor-card-item .btn-consult {
+    background-color: var(--doctors-green);
+    color: #fff;
+}
+.doctor-card-item .btn-consult:hover {
+    background-color: #1aa67b;
+}
+
+.doctor-card-item .btn-appoint {
+    background-color: var(--doctors-primary);
+    color: #fff;
+}
+.doctor-card-item .btn-appoint:hover {
+    background-color: #0056b3;
+}
+
+/* Rezyume yuklash tugmasi uchun yangi stil */
+.doctor-card-item .btn-download {
+    background-color: transparent;
+    color: var(--doctors-download-bg);
+    border: 1px solid var(--doctors-download-bg);
+}
+.doctor-card-item .btn-download:hover {
+    background-color: var(--doctors-download-bg);
+    color: #fff;
+}
+.doctor-card-item .btn-download svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ### YANGI HERO BO'LIMI ### */
+.hero-testimonials {
+    position: relative;
+    padding: 2.8rem 1rem;
+    background-image: url('images/Dehli.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.hero-testimonials::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(0, 80, 158, 0.8), rgba(13, 50, 77, 0.8));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    opacity: 0.9;
+}
+
+.trust-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    background-color: rgba(255,255,255,0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stat-item .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    display: block;
+}
+
+.stat-item .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* ### HIKOYALAR RO'YXATI ### */
+.testimonials-section {
+    padding: 4rem 1rem;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-card {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid var(--testimonials-border);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.testimonial-video {
+    position: relative;
+    cursor: pointer;
+}
+
+.testimonial-video .thumbnail {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.testimonial-video .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.testimonial-video:hover .play-button {
+    transform: translate(-50%, -50%) scale(1.1);
+    background-color: #fff;
+}
+
+.testimonial-video .play-button svg {
+    width: 30px;
+    height: 30px;
+    color: var(--testimonials-primary);
+    margin-left: 4px;
+}
+
+.testimonial-card .card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.verified-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 1.5rem;
+    background-color: var(--testimonials-green);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.verified-badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+.testimonial-card .quote-section {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--testimonials-text-dark);
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    border-left: 4px solid var(--testimonials-primary);
+}
+
+.testimonial-card .patient-info {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--testimonials-border);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.patient-info .patient-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.patient-info .patient-details h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: var(--testimonials-text-dark);
+}
+
+.patient-info .patient-details p {
+    font-size: 0.9rem;
+    color: var(--testimonials-text-light);
+    margin: 0;
+}
+
+/* ### HIKOYANGIZNI ULASHING CTA ### */
+.share-story-cta {
+    padding: 4rem 1rem;
+    background-color: var(--testimonials-bg);
+    text-align: center;
+}
+
+.share-story-cta h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--testimonials-text-dark);
+    margin-bottom: 1rem;
+}
+
+.share-story-cta p {
+    color: var(--testimonials-text-light);
+    max-width: 500px;
+    margin: 0 auto 2rem auto;
+}
+
+.share-story-cta .btn-share {
+    background-color: var(--testimonials-primary);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.share-story-cta .btn-share:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+/* ### VIDEO LIGHTBOX ### */
+.video-lightbox {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+.video-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+.video-lightbox-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    transform: scale(0.9);
+    transition: transform 0.4s ease;
+}
+.video-lightbox.active .video-lightbox-content {
+    transform: scale(1);
+}
+.video-lightbox iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.lightbox-close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    cursor: pointer;
+}

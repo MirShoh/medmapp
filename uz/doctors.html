@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcha klinikalar | MedMapp</title>
+    <title>Barcha shifokorlar | MedMapp</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style_new.css">
     <link rel="icon" type="image/x-icon" href="images/logo/MedMapp_logo_icon_circle.png">
+
     <style>
         :root {
             --page-bg: #f8f9fa;
@@ -27,7 +28,10 @@
             --page-text-dark: #212529;
             --page-text-light: #6c757d;
             --page-primary: #007BFF;
-            --page-secondary-blue: #0d324d;
+            --page-green: #20c997;
+            --page-dark-green: #0d4d37;
+            --doctors-star-color: #ffc107;
+            --doctors-download-bg: #6c757d;
         }
 
         /* ### ANIMATSIYALAR ### */
@@ -39,7 +43,7 @@
         /* ### KREATIV HERO BO'LIMI ### */
         .page-hero-creative {
             padding: 5rem 1rem 7.8rem 1rem;
-            background: linear-gradient(135deg, var(--page-primary) 0%, var(--page-secondary-blue) 100%);
+            background: linear-gradient(135deg, var(--page-green) 0%, var(--page-dark-green) 100%);
             position: relative;
             overflow: hidden;
             text-align: center;
@@ -72,14 +76,19 @@
             animation: fadeInUp 0.5s ease-out 0.2s;
             animation-fill-mode: backwards;
         }
+        
+        /* ### SHIFOKORLAR KONTENTI ### */
+        .doctors-main-content {
+            background-color: var(--page-bg);
+            padding-bottom: 4rem;
+        }
 
-        /* ### FILTRLAR ### */
         .filters-section {
             padding: 2rem;
             background-color: #fff;
             border-radius: 1.5rem;
             box-shadow: 0 10px 40px rgba(0,0,0,0.07);
-            margin: -8rem auto 3rem auto;
+            margin: -5rem auto 3rem auto;
             position: relative;
             z-index: 10;
             max-width: 1140px;
@@ -98,41 +107,53 @@
             border-radius: 0.5rem;
             font-size: 1rem;
         }
-
-        /* ### KLINIKALAR RO'YXATI ### */
-        .clinics-list-section { padding: 2rem 1rem 4rem 1rem; background-color: var(--page-bg); }
-        .clinics-grid {
-            /* O'ZGARTIRISH: Grid o'rniga Flexbox ishlatamiz */
+        #doctors-count { text-align: center; margin-bottom: 2rem; }
+        
+        /* SHIFOKOR KARTALARI */
+        .doctors-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center; /* Kartalarni markazga to'g'rilaydi */
+            justify-content: center;
             gap: 2rem;
         }
-        .clinic-card-item {
-            background-color: #fff; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            /* O'ZGARTIRISH: O'zgarmas o'lcham uchun */
-            flex: 0 1 350px;
+        .doctor-card-item {
+             background-color: #fff; border-radius: 1rem; border: 1px solid var(--page-border);
+             box-shadow: 0 4px 20px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease;
+             display: flex; flex-direction: column; padding: 1.5rem;
+             flex: 0 1 380px; /* O'zgarmas o'lcham uchun */
+             opacity: 0;
         }
-        .clinic-card-item:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .clinic-card-item.hidden { display: none; }
-        .clinic-card-item .card-image { width: 100%; height: 220px; object-fit: cover; }
-        .clinic-card-item .card-content { padding: 1.5rem; }
-        .clinic-card-item h3 { font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem 0; }
-        .clinic-card-item .location { color: var(--page-text-light); font-size: 0.9rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-        .clinic-card-item .card-footer { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--page-border); display: flex; justify-content: space-between; align-items: center; }
-        .accreditation { font-size: 0.8rem; background-color: #e9ecef; padding: 0.25rem 0.75rem; border-radius: 99px; }
-        .details-link { font-weight: 600; color: var(--page-primary); text-decoration: none; }
+        .doctor-card-item.visible {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        .doctor-card-item:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .doctor-card-item.hidden { display: none; }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .doctor-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--page-bg); }
+        .header-info h3 { font-size: 1.25rem; font-weight: 700; margin: 0; }
+        .header-info p { font-size: 0.9rem; color: var(--page-primary); margin: 0.25rem 0 0.5rem 0; font-weight: 500; }
+        .doctor-rating { display: flex; align-items: center; gap: 0.25rem; }
+        .doctor-rating .star { color: var(--doctors-star-color); }
+        .doctor-stats { list-style: none; padding: 1rem 0; margin: 1rem 0; border-top: 1px solid var(--page-border); border-bottom: 1px solid var(--page-border); }
+        .doctor-stats li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; color: var(--page-text-light); margin-bottom: 0.75rem; }
+        .doctor-stats li:last-child { margin-bottom: 0; }
+        .doctor-stats li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; }
+        .doctor-stats li strong { color: var(--page-text-dark); }
+        .card-footer { margin-top: auto; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .btn-group { display: flex; gap: 0.75rem; }
+        .btn { flex-grow: 1; padding: 0.75rem 1rem; font-size: 0.9rem; font-weight: 600; border-radius: 0.5rem; text-align: center; text-decoration: none; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-consult { background-color: var(--page-green); color: #fff; }
+        .btn-appoint { background-color: var(--page-primary); color: #fff; }
+        .btn-download { background-color: transparent; color: var(--doctors-download-bg); border: 1px solid var(--doctors-download-bg); }
+        .btn-download:hover { background-color: var(--doctors-download-bg); color: #fff; }
+
     </style>
 </head>
 <body>
 
     <div id="preloader">
     <img src="images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp yuklanmoqda...">
-</div>
-
+    </div>
     <header class="header">
     <a href="https://medmapp.uz/" class="header-logo">
         <img src="images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
@@ -150,9 +171,9 @@
         <ul>
             <li><a href="index.html">Bosh sahifa</a></li>
             <li><a href="departments.html">Bo'limlar</a></li>
-            <li><a href="clinics.html" class="active">Shifoxonalar</a></li>
+            <li><a href="clinics.html">Shifoxonalar</a></li>
             <li><a href="pricing.html">Narxlar</a></li>
-            <li><a href="doctors.html">Shifokorlar</a></li>
+            <li><a href="doctors.html" class="active">Shifokorlar</a></li>
             <li><a href="testimonials.html">Fikrlar</a></li>
             <li><a href="blog.html">Blog</a></li>
         </ul>
@@ -235,21 +256,21 @@
     <main>
         <section class="page-hero-creative">
             <div class="container">
-                <h1>Eng yaxshi klinikalarni toping</h1>
-                <p>Dunyoning yetakchi shifoxonalari orasidan o'zingizga mosini tanlang va sog'ligingizga befarq bo'lmang.</p>
+                <h1>Tajribali shifokorlarni toping</h1>
+                <p>O'z sohasining yetakchi mutaxassislari bilan sog'lig'ingizni ishonchli qo'llarga topshiring.</p>
             </div>
             <div class="wave-shape"></div>
         </section>
 
-        <section class="clinics-list-section">
-            <div class="container">
+        <section class="doctors-main-content">
+             <div class="container">
                 <div class="filters-section">
                     <div class="filters-container">
                         <div class="filter-group">
                             <select id="filter-specialty" aria-label="Yo'nalish bo'yicha filtr">
                                 <option value="all">Barcha yo'nalishlar</option>
                                 <option value="kardiologiya">Kardiologiya</option>
-                                <option value="onkologiya">Onkologiya</option>
+                                <option value="jarrohlik">Jarrohlik</option>
                                 <option value="nevrologiya">Nevrologiya</option>
                             </select>
                         </div>
@@ -257,7 +278,6 @@
                             <select id="filter-country" aria-label="Davlat bo'yicha filtr">
                                 <option value="all">Barcha davlatlar</option>
                                 <option value="hindiston">Hindiston</option>
-                                <option value="turkiya">Turkiya</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -269,30 +289,65 @@
                         </div>
                     </div>
                 </div>
-                <p id="clinics-count" style="text-align:center; margin-bottom: 2rem;"></p>
-                <div class="clinics-grid" id="clinics-grid">
-                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="faridabad" data-href="Amrita-hospital.html">
-                        <img src="images/Amrita/1.jpg" alt="Amrita Hospital binosi" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/007BFF/FFFFFF?text=Amrita';">
-                        <div class="card-content">
-                            <h3>Amrita Hospital, Faridabad</h3>
-                            <p class="location">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Faridabad, Hindiston
-                            </p>
-                            <div class="card-footer">
-                                <span class="accreditation">NABH</span>
-                                <span class="details-link">Batafsil →</span>
+                <p id="doctors-count"></p>
+                <div class="doctors-grid" id="doctors-grid">
+                    <div class="doctor-card-item" data-specialty="kardiologiya" data-country="hindiston" data-city="faridabad">
+                        <div class="card-header">
+                            <img src="images/doctor.jpg" alt="Dr. Ashish Kumar" class="doctor-photo" onerror="this.onerror=null;this.src='https://placehold.co/160x160/007BFF/FFFFFF?text=AK';">
+                            <div class="header-info">
+                                <h3>Dr. Ashish Kumar</h3>
+                                <p>Interventsion Kardiologiya</p>
+                                <div class="doctor-rating">
+                                    <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">☆</span>
+                                </div>
                             </div>
+                        </div>
+                        <ul class="doctor-stats">
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><strong>Tajriba:</strong> 15+ yil</li>
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2-5.5 5.5"/><path d="M20 12l-5.5-5.5"/><path d="M2 12l5.5 5.5"/><path d="m12 22 5.5-5.5"/></svg><strong>Amaliyotlar:</strong> 5,000+</li>
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg><strong>Klinika:</strong> Amrita Hospital, Faridabad</li>
+                        </ul>
+                        <div class="card-footer">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-consult">Maslahat</a>
+                                <a href="#" class="btn btn-appoint">Uchrashuv</a>
+                            </div>
+                            <a href="#" class="btn btn-download" download>Rezyume</a>
                         </div>
                     </div>
                     </div>
-                    
-                    
-            </div>
+             </div>
+             <div class="doctors-grid" id="doctors-grid">
+                    <div class="doctor-card-item" data-specialty="kardiologiya" data-country="hindiston" data-city="faridabad">
+                        <div class="card-header">
+                            <img src="images/doctor.jpg" alt="Dr. Ashish Kumar" class="doctor-photo" onerror="this.onerror=null;this.src='https://placehold.co/160x160/007BFF/FFFFFF?text=AK';">
+                            <div class="header-info">
+                                <h3>Dr. Ashish Kumar</h3>
+                                <p>Interventsion Kardiologiya</p>
+                                <div class="doctor-rating">
+                                    <span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star filled">★</span><span class="star">☆</span>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="doctor-stats">
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><strong>Tajriba:</strong> 15+ yil</li>
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2-5.5 5.5"/><path d="M20 12l-5.5-5.5"/><path d="M2 12l5.5 5.5"/><path d="m12 22 5.5-5.5"/></svg><strong>Amaliyotlar:</strong> 5,000+</li>
+                            <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg><strong>Klinika:</strong> Amrita Hospital, Faridabad</li>
+                        </ul>
+                        <div class="card-footer">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-consult">Maslahat</a>
+                                <a href="#" class="btn btn-appoint">Uchrashuv</a>
+                            </div>
+                            <a href="#" class="btn btn-download" download>Rezyume</a>
+                        </div>
+                    </div>
+                    </div>
+             </div>
         </section>
     </main>
     
-  <footer class="site-footer">
+   <footer class="site-footer">
     <div class="container">
         
         <div class="footer-main-grid">
@@ -376,58 +431,57 @@
 
 </footer>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const specialtyFilter = document.getElementById('filter-specialty');
+        const countryFilter = document.getElementById('filter-country');
+        const cityFilter = document.getElementById('filter-city');
+        const doctorsGrid = document.getElementById('doctors-grid');
+        const allDoctorCards = Array.from(doctorsGrid.querySelectorAll('.doctor-card-item'));
+        const doctorsCount = document.getElementById('doctors-count');
+
+        function filterDoctors() {
+            const selectedSpecialty = specialtyFilter.value;
+            const selectedCountry = countryFilter.value;
+            const selectedCity = cityFilter.value;
+            
+            let visibleCount = 0;
+            
+            allDoctorCards.forEach((card, index) => {
+                const cardSpecialty = card.dataset.specialty;
+                const cardCountry = card.dataset.country;
+                const cardCity = card.dataset.city;
+
+                const specialtyMatch = selectedSpecialty === 'all' || cardSpecialty.includes(selectedSpecialty);
+                const countryMatch = selectedCountry === 'all' || cardCountry === selectedCountry;
+                const cityMatch = selectedCity === 'all' || cardCity === selectedCity;
+
+                card.classList.remove('visible'); // Animatsiyani qayta ishga tushirish uchun
+                
+                if (specialtyMatch && countryMatch && cityMatch) {
+                    card.classList.remove('hidden');
+                    // Kartani animatsiya bilan ko'rsatish
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, visibleCount * 100); // Har bir keyingi karta 100ms kechikish bilan paydo bo'ladi
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            doctorsCount.textContent = `${visibleCount} ta shifokor topildi`;
+        }
+
+        [specialtyFilter, countryFilter, cityFilter].forEach(filter => {
+            filter.addEventListener('change', filterDoctors);
+        });
+
+        filterDoctors(); // Sahifa yuklanganda filtrlash
+    });
+    </script>
+
     <script src="script_new.js"></script>
     <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const specialtyFilter = document.getElementById('filter-specialty');
-            const countryFilter = document.getElementById('filter-country');
-            const cityFilter = document.getElementById('filter-city');
-            const clinicsGrid = document.getElementById('clinics-grid');
-            const allClinicCards = clinicsGrid.querySelectorAll('.clinic-card-item');
-            const clinicsCount = document.getElementById('clinics-count');
-
-            function filterClinics() {
-                const selectedSpecialty = specialtyFilter.value;
-                const selectedCountry = countryFilter.value;
-                const selectedCity = cityFilter.value;
-                let visibleCount = 0;
-
-                allClinicCards.forEach(card => {
-                    const cardSpecialties = card.dataset.specialty;
-                    const cardCountry = card.dataset.country;
-                    const cardCity = card.dataset.city;
-
-                    const specialtyMatch = selectedSpecialty === 'all' || cardSpecialties.includes(selectedSpecialty);
-                    const countryMatch = selectedCountry === 'all' || cardCountry === selectedCountry;
-                    const cityMatch = selectedCity === 'all' || cardCity === selectedCity;
-
-                    if (specialtyMatch && countryMatch && cityMatch) {
-                        card.classList.remove('hidden');
-                        visibleCount++;
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                });
-                
-                clinicsCount.textContent = `${visibleCount} ta klinika topildi`;
-            }
-
-            [specialtyFilter, countryFilter, cityFilter].forEach(filter => {
-                filter.addEventListener('change', filterClinics);
-            });
-
-            allClinicCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const link = card.dataset.href;
-                    if (link && link !== '#') {
-                        window.location.href = link;
-                    }
-                });
-            });
-
-            filterClinics(); // Initial filter on page load
-        });
-    </script>
 </body>
 </html>
