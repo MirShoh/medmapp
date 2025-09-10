@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bizning Xizmatlarimiz - MedMapp</title>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
+    <title>Bizning xizmatlarimiz - MedMapp</title>
+
+    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMMapp uz, Hindiston, India, buyrak ko'chirish, jigar ko'chirish, operatsiya, tibbiy turizm">
     <meta name="description" content="MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda arzon va shaffof narxlarda davolaning!">
 
     <meta property="og:title" content="MedMapp platformasi rasmiy veb-sayti">
@@ -16,15 +15,43 @@
     <meta property="og:image" content="https://medmapp.uz/images/logo/MedMapp_logo_main_shaffof.png" />
     <meta property="og:site_name" content="medmapp.uz">
 
+    <link rel="canonical" href="https://medmapp.uz/">
+
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../style.css">
-    <link rel="icon" type="image/x-icon" href="../../images/logo/MedMapp_logo_icon_circle.png">
+    <link rel="icon" type="image/x-icon" href="images/logo/MedMapp_logo_icon_circle.png">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style_new.css">
+    <!-- Style for the list inside the timeline -->
     <style>
         .hero-section {
             min-height: 28vh!important;
         }
+
+        .service-details-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+        .service-details-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 0.75rem;
+            color: var(--color-medium-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .service-details-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--color-primary-green);
+            font-weight: 700;
+            font-size: 1rem;
+        }
     </style>
+
     <!-- Hotjar Tracking Code for Site 6516105  -->
     <script>
         (function(h,o,t,j,a,r){
@@ -50,17 +77,27 @@
 </head>
 <body>
 
-    <!-- ========================================================= -->
-    <!-- =============== HEADER (BOSHLANISH) ===================== -->
-    <!-- ========================================================= -->
+    <div id="preloader">
+        <img src="../images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp yuklanmoqda...">
+    </div>
+    
+    <!-- ============================================= -->
+    <!-- ========== HEADER (BOSH QISM) =============== -->
+    <!-- ============================================= -->
     <header class="header">
-        <div class="header-logo"> 
-            <a href="index.html">
-                <img src="../images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
-            </a>
-        </div>
-
-        <nav class="header-nav">
+        <a href="index.html" class="header-logo">
+            <img src="../images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi">
+        </a>
+        
+        <!-- Navigatsiya paneli (mobil va desktop uchun) -->
+        <nav class="header-nav" id="header-nav">
+            <!-- Mobil menyu uchun sarlavha (faqat mobilda ko'rinadi) -->
+            <div class="mobile-nav-header">
+                <img src="../images/logo/MedMapp_logo_icon_circle.png" alt="MedMapp" class="mobile-nav-logo">
+                <h3 class="mobile-nav-title">Menyu</h3>
+            </div>
+    
+            <!-- Asosiy menyu linklari -->
             <ul>
                 <li><a href="index.html">Bosh sahifa</a></li>
                 <li><a href="services.html" class="active">Xizmatlar</a></li>
@@ -70,30 +107,72 @@
                 <li><a href="testimonials.html">Fikrlar</a></li>
                 <li><a href="blog.html">Blog</a></li>
             </ul>
-        </nav>
-
-        <div class="header-actions">
-        <div class="language-selector">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-            <span>UZ</span>
-            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <!-- YANGI: Kirish va Ro'yxatdan o'tish tugmalari guruhi -->
-        <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn">
-                    <span>Registratsiya</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
+    
+            <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
+            <div class="mobile-nav-footer">
+                <div class="language-selector-wrapper">
+                    <button class="language-selector-btn" id="mobile-lang-btn">
+                        <div class="lang-text-group">
+                            <img id="mobile-selected-lang-flag" src="../images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
+                            <span id="mobile-selected-lang-text">UZ</span>
+                        </div>
+                        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <ul class="language-dropdown" id="mobile-lang-dropdown">
+                        <li><a href="../uz/services.html" data-lang="uz" class="sele selected"><img src="../images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                        <li><a href="../ru/services.html" data-lang="ru"><img src="../images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
+                        <li><a href="../en/services.html" data-lang="en"><img src="../images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
+                    </ul>
+                </div>
+                <div class="auth-buttons">
+                    <a href="#" class="login-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        <span>Kirish</span>
+                    </a>
+                    <a href="#" class="signup-btn" style="color: white!important;">
+                        <span>Registratsiya</span>
+                    </a>
+                </div>
             </div>
-    </div>
-
-        <button class="hamburger-menu" aria-label="Menyuni ochish">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
+        </nav>
+    
+        <!-- O'ng tarafdagi harakatlar uchun umumiy konteyner -->
+         <div class="header-right-container">
+            <!-- Desktop uchun harakatlar -->
+            <div class="header-actions">
+                <!-- TIL TANLASH (YANGILANGAN) -->
+                <div class="language-selector-wrapper">
+                    <button class="language-selector-btn" id="desktop-lang-btn">
+                        <div class="lang-text-group">
+                            <img id="desktop-selected-lang-flag" src="../images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
+                            <span id="desktop-selected-lang-text">UZ</span>
+                        </div>
+                        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <ul class="language-dropdown" id="desktop-lang-dropdown">
+                        <li><a href="../uz/services.html" data-lang="uz" class="sele selected"><img src="../images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                        <li><a href="../ru/services.html" data-lang="ru"><img src="../images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
+                        <li><a href="../en/services.html" data-lang="en"><img src="../images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
+                    </ul>
+                </div>
+                <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
+                <div class="auth-buttons">
+                    <a href="#" class="login-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        <span>Kirish</span>
+                    </a>
+                    <a href="#" class="signup-btn" style="color: white!important;">
+                        <span>Registratsiya</span>
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Gamburger tugmasi -->
+            <button class="hamburger-menu" id="hamburger-menu" aria-label="Menyuni ochish/yopish" aria-controls="header-nav" aria-expanded="false">
+                <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
     </header>
 
     <main>
@@ -180,50 +259,124 @@
                     </div>
                 </div>
                 
-                <div class="services-footer" style="background-color: var(--color-light-blue); border-radius: 1rem; padding: 2rem; margin-top: 4rem;">
-                    <p class="services-note" style="color: var(--color-dark-text); font-size: 1.25rem; font-weight: 600; max-width: 600px;">
-                        Unutmang, bizning barcha tashkiliy xizmatlarimiz siz uchun mutlaqo <span style="color: var(--color-primary-green);">BEPUL!</span>
-                    </p>
-                    <p class="services-note" style="color: var(--color-medium-text); font-size: 1rem; max-width: 600px; margin-top: 0.5rem;">
-                         Bu sizning klinika hisobingizni oshirmaydi. Biz hamkor klinikalarimizdan marketing xizmatlari uchun haq olamiz.
-                    </p>
+                </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- ============ DEPARTMENTS (MULTI-SPECIALTY) ============== -->
+        <!-- ========================================================= -->
+        <section class="multi-specialty-section" style="padding: 2rem 1rem;">
+            <div class="container">
+                <div class="specialty-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                    
+                    <!-- Kardiologiya -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-pulse"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.7-1 2.1 4.4 3.2-7.4H22"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Kardiologiya</h3>
+                            <p>Yurak va qon tomir kasalliklarini tashxislash va davolash bo'yicha ilg'or yechimlar.</p>
+                        </div>
+                    </div>
+
+                    <!-- Onkologiya -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dna"><path d="M4 14.5A3.5 3.5 0 0 1 7.5 11H11a3.5 3.5 0 0 1 3.5 3.5v0A3.5 3.5 0 0 1 11 18H7.5a3.5 3.5 0 0 1-3.5-3.5Z"/><path d="M20 9.5A3.5 3.5 0 0 0 16.5 6H13a3.5 3.5 0 0 0-3.5 3.5v0A3.5 3.5 0 0 0 13 13h3.5a3.5 3.5 0 0 0 3.5-3.5Z"/><path d="M11 11v7"/><path d="M13 6v7"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Onkologiya</h3>
+                            <p>Saraton kasalliklariga qarshi kurashda eng zamonaviy texnologiyalar va individual yondashuv.</p>
+                        </div>
+                    </div>
+
+                    <!-- Neyroxirurgiya -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain-circuit"><path d="M12 5a3 3 0 1 0-5.993.295M12 5a3 3 0 1 1 5.993.295M15 13a3 3 0 1 0-5.993.295M15 13a3 3 0 1 1 5.993.295M9 13a3 3 0 1 0-5.993.295M9 13a3 3 0 1 1 5.993.295M17.5 8.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/><path d="M17.5 17.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/><path d="M6.5 8.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/><path d="M6.5 17.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z"/><path d="M12 5V2"/><path d="M12 21v-3"/><path d="m15 13 2.5-1.5"/><path d="m9 13-2.5-1.5"/><path d="m15 13 2.5 1.5"/><path d="m9 13-2.5 1.5"/><path d="m17.5 8.5-2.5 1.5"/><path d="m6.5 8.5 2.5 1.5"/><path d="m17.5 17.5-2.5-1.5"/><path d="m6.5 17.5 2.5-1.5"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Neyroxirurgiya</h3>
+                            <p>Miya va asab tizimi kasalliklarini davolashda yuqori malakali mutaxassislar xizmati.</p>
+                        </div>
+                    </div>
+
+                    <!-- Ortopediya -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bone"><path d="M15.5 20a4.5 4.5 0 0 1-7 0"/><path d="M8.5 4a4.5 4.5 0 0 1 7 0"/><path d="M12.5 12a2.5 2.5 0 0 1-1 0"/><path d="M8.5 12H4a2.5 2.5 0 0 1 0-5h4.5"/><path d="M15.5 12H20a2.5 2.5 0 0 0 0-5h-4.5"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Ortopediya</h3>
+                            <p>Bo'g'imlarni almashtirish, sport jarohatlari va suyak deformatsiyasini davolash.</p>
+                        </div>
+                    </div>
+
+                    <!-- Jigar Transplantatsiyasi -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-half"><path d="M20 13c0 5-3.5 7.5-7.69 8.95a1 1 0 0 1-.62 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v3c0 .6.4 1 1 1h2c.6 0 1-.4 1-1V6a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1z"/><path d="M12 22V10"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Jigar Transplantatsiyasi</h3>
+                            <p>Turli murakkablikdagi jigar ko'chirish amaliyotlari va donorlik dasturlari.</p>
+                        </div>
+                    </div>
+
+                    <!-- Buyrak Transplantatsiyasi -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-plus"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M16 12H8"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Buyrak Transplantatsiyasi</h3>
+                            <p>Buyrakni ko'chirib o'tkazish va operatsiyadan keyingi parvarish bo'yicha ekspert yordam.</p>
+                        </div>
+                    </div>
+
+                    <!-- Kosmetik Jarrohlik -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-smile"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Kosmetik Jarrohlik</h3>
+                            <p>Sizning orzuyingizdagi ko'rinishga erishish uchun estetik va rekonstruktiv muolajalar.</p>
+                        </div>
+                    </div>
+
+                    <!-- EKU (IVF) -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-test-tube-2"><path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5h0c-1.4 0-2.5-1.1-2.5-2.5V2"/><path d="M8.5 2h7"/><path d="M14.5 16h-5"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>EKU (IVF)</h3>
+                            <p>Bepushtlikni davolashda yuqori muvaffaqiyatga ega zamonaviy reproduktiv texnologiyalar.</p>
+                        </div>
+                    </div>
+
+                    <!-- Vazn yo'qotish (Bariatrik) -->
+                    <div class="specialty-card">
+                        <div class="icon-wrapper">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale"><path d="m16 16 3-8 3 8c-2 2-4 2-6 0Z"/><path d="M2 16h3"/><path d="M7 16h3"/><path d="M21 16h-3"/><path d="M15 16h-3"/><path d="M22 16.5c0 1.4-1.6 2.5-3.5 2.5s-3.5-1.1-3.5-2.5"/><path d="M11 16.5c0 1.4-1.6 2.5-3.5 2.5S4 17.9 4 16.5"/><path d="M12 4V2"/><path d="M12 12V7"/></svg>
+                        </div>
+                        <div class="text-content">
+                            <h3>Bariatrik Jarrohlik</h3>
+                            <p>Samarali bariatrik jarrohlik yo'li bilan sog'lom vaznga erishish va hayot sifatini yaxshilash.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- Style for the list inside the timeline -->
-        <style>
-            .service-details-list {
-                list-style: none;
-                padding-left: 0;
-                margin-top: 1rem;
-            }
-            .service-details-list li {
-                position: relative;
-                padding-left: 25px;
-                margin-bottom: 0.75rem;
-                color: var(--color-medium-text);
-                font-size: 0.95rem;
-                line-height: 1.6;
-            }
-            .service-details-list li::before {
-                content: '✓';
-                position: absolute;
-                left: 0;
-                top: 0;
-                color: var(--color-primary-green);
-                font-weight: 700;
-                font-size: 1rem;
-            }
-        </style>
-
     </main>
     
-    <!-- ========================================================= -->
-    <!-- ================== FOOTER (TUGASHI) ===================== -->
-    <!-- ========================================================= -->
     <footer class="site-footer">
         <div class="container">
+            
             <div class="footer-main-grid">
                 <div class="footer-column">
                     <img src="../images/logo/MedMapp_logo_main_shaffof.png" alt="MedMapp Logosi" class="footer-logo">
@@ -231,27 +384,27 @@
                         MedMapp - bu sizning Hindistondagi ishonchli tibbiy hamrohingiz. Biz eng yaxshi klinikalarda sifatli va hamyonbop davolanishni tashkil etamiz.
                     </p>
                     <div class="social-icons">
-                        <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-                        <a href="#" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+                        <a href="https://www.facebook.com/medmapp_uz" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                        <a href="https://www.instagram.com/medmapp_uz" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
                         <a href="https://t.me/medmapp_uz" target="_blank" aria-label="Telegram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></a>
-                        <a href="#" aria-label="Youtube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10C2.5 6 4.5 4 7 4h10c2.5 0 4.5 2 4.5 3.5a24.12 24.12 0 0 1 0 10c0 1.5-2 3.5-4.5 3.5H7c-2.5 0-4.5-2-4.5-3.5Z"/><path d="m10 15 5-3-5-3z"/></svg></a>
+                        <a href="https://www.youtube.com/medmapp_uz" aria-label="Youtube"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10C2.5 6 4.5 4 7 4h10c2.5 0 4.5 2 4.5 3.5a24.12 24.12 0 0 1 0 10c0 1.5-2 3.5-4.5 3.5H7c-2.5 0-4.5-2-4.5-3.5Z"/><path d="m10 15 5-3-5-3z"/></svg></a>
                     </div>
                 </div>
     
                 <div class="footer-column">
-                    <h4 class="footer-title">Tezkor Havolalar</h4>
+                    <h4 class="footer-title">Menyu</h4>
                     <ul class="footer-links">
-                        <li><a href="index.html">Bosh sahifa</a></li>
-                        <li><a href="#">Biz haqimizda</a></li>
+                        <li><a href="services.html">Xizmatlar</a></li>
+                        <li><a href="clinics.html">Shifoxonalar</a></li>
+                        <li><a href="pricing.html">Narxlar</a></li>
                         <li><a href="doctors.html">Shifokorlar</a></li>
-                        <li><a href="clinics.html">Kasalxonalar</a></li>
-                        <li><a href="#">Bloglar</a></li>
-                        <li><a href="#">Hamkor bo'ling</a></li>
+                        <li><a href="testimonials.html">Fikrlar</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                     </ul>
                 </div>
     
                 <div class="footer-column">
-                    <h4 class="footer-title">Asosiy Yo'nalishlar</h4>
+                    <h4 class="footer-title">Asosiy yo'nalishlar</h4>
                     <ul class="footer-links">
                         <li><a href="#">Kardiologiya</a></li>
                         <li><a href="#">Onkologiya</a></li>
@@ -284,15 +437,28 @@
             <div class="footer-bottom">
                 <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>
                 <div class="footer-legal-links">
-                    <a href="privacy-policy.html">Maxfiylik siyosati</a>
-                    <a href="user-agreement.html">Foydalanish shartlari</a>
-                    <a href="public-offer.html">Ommaviy oferta</a>
-                </div>
+                        <a href="privacy-policy.html">Maxfiylik siyosati</a> 
+                        <a href="user-agreement.html">Foydalanish shartlari</a>
+                        <a href="public-offer.html">Ommaviy oferta</a>
+                    </div>
             </div>
         </div>
+    
+        <!-- YANGI: Muvaffaqiyat/Xatolik uchun Modal Oyna -->
+        <div id="status-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div id="modal-icon-container">
+                    <!-- Ikona JavaScript orqali qo'yiladi -->
+                </div>
+                <h2 id="modal-title"></h2>
+                <p id="modal-message"></p>
+                <button id="modal-close-btn" class="modal-button">Yopish</button>
+            </div>
+        </div>
+    
     </footer>
-
-    <script src="../script_new.js"></script>    
+    
     <script src="../script.js"></script>
+    <script src="../script_new.js"></script>
 </body>
 </html>
