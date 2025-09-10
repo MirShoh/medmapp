@@ -1386,7 +1386,7 @@ body.scrolled .filters-section {
 .hero-testimonials {
     position: relative;
     padding: 2.8rem 1rem;
-    background-image: url('images/Dehli.jpg');
+    background-image: url('../images/Dehli.jpg');
     background-size: cover;
     background-position: center;
     color: #fff;
