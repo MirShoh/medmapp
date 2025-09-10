@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     }
     
-    // Header scroll effekti olib tashlandi. Endi navbar doim ko'rinib turadi.
+
 
     // --- Telefon raqam uchun maska ---
     const phoneInput = document.getElementById('phone-number');

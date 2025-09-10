@@ -165,15 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
             buttonText.style.display = 'inline';
         }
 
-        // Qolgan skriptlaringiz (header, karusel va hokazo) bu yerda bo'lishi mumkin
-        const header = document.querySelector('.header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+        
         
     // Mavjud skriptlaringizdan keyin qo'shing
     const phoneInput = document.getElementById('phone-number');
@@ -392,16 +384,6 @@ if (destinationCardsGrid && prevDestinationButton && nextDestinationButton) {
 }
 
 
-// Sahifa scroll qilinganda headerga 'scrolled' classini qo'shish/olib tashlash
-if (header) {
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-}
 });
 
 /* ======================================================== */
