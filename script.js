@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageToTelegram = `
 <b>Yangi murojaat!</b>
 -------------------------
-<b>📍 Viloyat:</b> ${formData.get('resident_of')}
-<b>💊 Davolash usuli:</b> ${formData.get('treatment')}
-<b>📞 Telefon:</b> <code>${phoneForBackend}</code>
-<b>📅 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
+<b>桃 Viloyat:</b> ${formData.get('resident_of')}
+<b>抽 Davolash usuli:</b> ${formData.get('treatment')}
+<b>到 Telefon:</b> <code>${phoneForBackend}</code>
+<b>套 Vaqt:</b> ${new Date().toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' })}
     `;
 
         // --- 3-O'ZGARISH: Google Sheetsga yuborishdan oldin formData'ni yangilash ---
@@ -520,7 +520,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Desktop va mobil uchun til tanlagichlarni sozlash
     setupLanguageSelector('desktop-lang-btn', 'desktop-lang-dropdown', 'desktop-selected-lang-text');
-    setupLanguageSelector('mobile-lang-btn', 'mobile-lang-dropdown', 'mobile-selected-lang-text');
+    // Yangi mobil til tanlash menyusi uchun chaqiruv
+    setupLanguageSelector('mobile-header-lang-btn', 'mobile-header-lang-dropdown', 'mobile-header-selected-lang-text');
+
 
     // Hujjatning istalgan joyiga bosganda ochiq menyularni yopish
     document.addEventListener('click', () => {

@@ -122,6 +122,8 @@ body.nav-open > main, body.nav-open > footer {
     align-items: center;
     padding: 1.25rem 1.5rem;
     flex-shrink: 0;
+    position: relative; /* Yopish tugmasi uchun kontekst */
+    z-index: 1; /* Yopish tugmasi orqasida qolishi uchun */
 }
 .mobile-nav-logo {
     height: 2.25rem;
@@ -193,7 +195,6 @@ body.nav-open > main, body.nav-open > footer {
 
 .language-selector-wrapper {
     position: relative;
-    width: 100%;
 }
 
 .language-selector-btn {
@@ -253,7 +254,8 @@ body.nav-open > main, body.nav-open > footer {
     list-style: none;
     padding: 0.5rem;
     margin: 0 0 0.5rem 0;
-    z-index: 10;
+    height: 8.8rem;
+    z-index: 1100; /* Z-index oshirildi */
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
@@ -360,18 +362,52 @@ body.nav-open > main, body.nav-open > footer {
 .header-right-container {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.5rem; /* Til tanlash va gamburger orasidagi masofa */
+    position: relative; /* Stacking context uchun */
+    z-index: 1003; /* O'zgartirildi: Menyudan yuqoriga chiqarildi */
 }
 
-/* Mobil uchun til va kirish tugmalarini yashiramiz (ular endi menyu ichida) */
-.mobile-lang-selector, .mobile-login-btn {
-    display: none;
+/* MOBIL UCHUN YANGI USLUBLAR */
+.mobile-header-actions {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Silliq yo'qolishi uchun */
 }
 
+/* Menyuni ochganda til tanlashni yashirish */
+body.nav-open .mobile-header-actions {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
+}
 
-/* Desktop uchun harakatlar (mobilda yashirin) */
 .header-actions {
-    display: none;
+    display: none; /* Mobilda yashirin */
+}
+
+.mobile-header-actions .language-selector-wrapper {
+    width: auto;
+}
+
+.mobile-header-actions .language-selector-btn {
+    padding: 0.5rem;
+    border: none;
+    background-color: transparent;
+}
+
+.mobile-header-actions .language-selector-btn:hover {
+     background-color: #f1f5f9;
+     border-radius: 8px;
+}
+
+.mobile-header-actions .language-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: auto;
+    width: 160px;
+    margin-top: 0.5rem;
+    z-index: 1100; /* Z-index oshirildi */
 }
 
 /* ========================================= */
@@ -401,11 +437,11 @@ body.nav-open > main, body.nav-open > footer {
     .header.scrolled .header-logo img {
         height: 3.5rem;
     }
-    
 
-    .hamburger-menu, .mobile-login-btn, .mobile-nav-header, .mobile-nav-footer, .mobile-lang-selector {
+    .hamburger-menu, .mobile-nav-header, .mobile-nav-footer, .mobile-header-actions {
         display: none;
     }
+
     .header-nav {
         position: static;
         top: auto;
@@ -420,22 +456,19 @@ body.nav-open > main, body.nav-open > footer {
         border: none;
         padding: 0;
         flex-direction: row;
-        /* margin: 0 auto; <-- O'chirildi, chunki ota elementda justify-content: space-between ishlatilgan */
     }
     .header-nav > ul {
         flex-direction: row;
         gap: 2.5rem;
         padding: 0;
         overflow-y: visible;
-        flex-grow: 0; /* O'sishni bekor qilish */
+        flex-grow: 0;
     }
 
-    /* ===== MUHIM O'ZGARTIRISH: Desktopda menyu bandlarini ko'rinadigan qilish ===== */
     .header-nav > ul li {
-        opacity: 1; /* Mobil animatsiya uchun qo'yilgan 'opacity: 0' ni bekor qiladi */
-        animation: none; /* Mobil animatsiyani o'chiradi */
+        opacity: 1;
+        animation: none;
     }
-    /* ===== O'ZGARTIRISH TUGADI ===== */
     
     .header-nav > ul a {
         font-size: 0.95rem;
@@ -459,7 +492,7 @@ body.nav-open > main, body.nav-open > footer {
     .header-nav > ul a:hover::after, .header-nav > ul a.active::after {
         width: 100%;
     }
-    /* Desktop uchun tugmalar va tilni ko'rsatish */
+    
     .header-actions {
         display: flex;
         align-items: center;
@@ -470,7 +503,6 @@ body.nav-open > main, body.nav-open > footer {
         gap: 0.75rem;
     }
     
-    /* Desktop uchun til tanlash menyusi */
     .header-actions .language-selector-wrapper {
         width: auto;
     }
@@ -484,10 +516,11 @@ body.nav-open > main, body.nav-open > footer {
     }
     .header-actions .language-dropdown {
         bottom: auto;
-        top: 100%; /* Endi tugmaning pastida ochiladi */
+        top: 100%;
         right: 0;
         left: auto;
-        width: 160px; /* Kenglikni belgilash */
+        height: 8.8rem;
+        width: 160px;
         margin: 0.5rem 0 0 0;
     }
 
@@ -496,4 +529,6 @@ body.nav-open > main, body.nav-open > footer {
         padding: 0.6rem 1rem;
     }
 }
+
+
 
