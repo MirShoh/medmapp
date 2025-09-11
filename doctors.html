@@ -202,20 +202,6 @@
 
         <!-- Mobil menyuning pastki qismi (desktopda yashirin) -->
         <div class="mobile-nav-footer">
-            <div class="language-selector-wrapper">
-                <button class="language-selector-btn" id="mobile-lang-btn">
-                    <div class="lang-text-group">
-                        <img id="mobile-selected-lang-flag" src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag">
-                        <span id="mobile-selected-lang-text">UZ</span>
-                    </div>
-                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <ul class="language-dropdown" id="mobile-lang-dropdown">
-                    <li><a href="uz/doctors.html" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
-                    <li><a href="ru/doctors.html" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
-                    <li><a href="en/doctors.html" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
-                </ul>
-            </div>
             <div class="auth-buttons">
                 <a href="#" class="login-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
@@ -242,7 +228,7 @@
                     <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <ul class="language-dropdown" id="desktop-lang-dropdown">
-                    <li><a href="uz/doctors.html" data-lang="uz" class="sele selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                    <li><a href="uz/doctors.html" data-lang="uz" class="selected"><img src="images/language/uz.png" alt="O'zbekiston bayrog'i" class="lang-flag"> O'zbekcha</a></li>
                     <li><a href="ru/doctors.html" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya bayrog'i" class="lang-flag"> Русский</a></li>
                     <li><a href="en/doctors.html" data-lang="en"><img src="images/language/en.png" alt="Birlashgan Qirollik bayrog'i" class="lang-flag"> English</a></li>
                 </ul>
@@ -259,13 +245,23 @@
             </div>
         </div>
 
-        <!-- Mobil uchun til tanlash tugmasi -->
-        <a href="#" class="mobile-lang-selector" aria-label="Tilni tanlash">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-        </a>
-        
-        <!-- Mobil uchun "Kirish" tugmasi -->
-        <a href="#" class="mobile-login-btn">Kirish</a>
+        <!-- MOBIL UCHUN TIL TANLASH -->
+        <div class="mobile-header-actions">
+            <div class="language-selector-wrapper">
+                 <button class="language-selector-btn" id="mobile-header-lang-btn">
+                    <div class="lang-text-group">
+                        <img id="mobile-header-selected-lang-flag" src="images/language/uz.png" alt="Uzbekistan Bayrog'i" class="lang-flag">
+                        <span id="mobile-header-selected-lang-text">UZ</span>
+                    </div>
+                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <ul class="language-dropdown" id="mobile-header-lang-dropdown">
+                    <li><a href="uz/doctors.html" data-lang="uz" class="selected"><img src="images/language/uz.png" alt="Uzbekistan Bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                    <li><a href="ru/doctors.html" data-lang="ru"><img src="images/language/ru.png" alt="Rossiya Bayrog'i" class="lang-flag"> Русский</a></li>
+                    <li><a href="en/doctors.html" data-lang="en"><img src="images/language/en.png" alt="Buyuk Britaniya Bayrog'i" class="lang-flag"> English</a></li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Gamburger tugmasi -->
         <button class="hamburger-menu" id="hamburger-menu" aria-label="Menyuni ochish/yopish" aria-controls="header-nav" aria-expanded="false">

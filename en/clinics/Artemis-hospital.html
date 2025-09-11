@@ -82,20 +82,7 @@
 
         <!-- Bottom part of the mobile menu (hidden on desktop) -->
         <div class="mobile-nav-footer">
-            <div class="language-selector-wrapper">
-                <button class="language-selector-btn" id="mobile-lang-btn">
-                    <div class="lang-text-group">
-                        <img id="mobile-selected-lang-flag" src="../../images/language/en.png" alt="UK Flag" class="lang-flag">
-                        <span id="mobile-selected-lang-text">EN</span>
-                    </div>
-                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <ul class="language-dropdown" id="mobile-lang-dropdown">
-                    <li><a href="../../uz/" data-lang="uz"><img src="../../images/language/uz.png" alt="Uzbekistan Flag" class="lang-flag"> O'zbekcha</a></li>
-                    <li><a href="../../ru/" data-lang="ru"><img src="../../images/language/ru.png" alt="Russia Flag" class="lang-flag"> Русский</a></li>
-                    <li><a href="../../en/" data-lang="en" class="sele selected"><img src="../../images/language/en.png" alt="UK Flag" class="lang-flag"> English</a></li>
-                </ul>
-            </div>
+            
             <div class="auth-buttons">
                 <a href="#" class="login-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
@@ -124,7 +111,7 @@
                 <ul class="language-dropdown" id="desktop-lang-dropdown">
                     <li><a href="../../uz/" data-lang="uz"><img src="../../images/language/uz.png" alt="Uzbekistan Flag" class="lang-flag"> O'zbekcha</a></li>
                     <li><a href="../../ru/" data-lang="ru"><img src="../../images/language/ru.png" alt="Russia Flag" class="lang-flag"> Русский</a></li>
-                    <li><a href="../../en/" data-lang="en" class="sele selected"><img src="../../images/language/en.png" alt="UK Flag" class="lang-flag"> English</a></li>
+                    <li><a href="../../en/" data-lang="en" class="selected"><img src="../../images/language/en.png" alt="UK Flag" class="lang-flag"> English</a></li>
                 </ul>
             </div>
             <!-- Login and Sign Up buttons -->
@@ -139,13 +126,23 @@
             </div>
         </div>
 
-        <!-- Language selector button for mobile -->
-        <a href="#" class="mobile-lang-selector" aria-label="Select language">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-        </a>
-        
-        <!-- "Login" button for mobile -->
-        <a href="#" class="mobile-login-btn">Login</a>
+        <!-- MOBIL UCHUN TIL TANLASH -->
+        <div class="mobile-header-actions">
+            <div class="language-selector-wrapper">
+                 <button class="language-selector-btn" id="mobile-header-lang-btn">
+                    <div class="lang-text-group">
+                        <img id="mobile-header-selected-lang-flag" src="../../images/language/en.png" alt="United Kingdom Flag" class="lang-flag">
+                        <span id="mobile-header-selected-lang-text">EN</span>
+                    </div>
+                    <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <ul class="language-dropdown" id="mobile-header-lang-dropdown">
+                    <li><a href="../../uz/clinics/artemis-hospital.html" data-lang="uz"><img src="../../images/language/uz.png" alt="Uzbekistan Bayrog'i" class="lang-flag"> O'zbekcha</a></li>
+                    <li><a href="../../ru/clinics/artemis-hospital.html" data-lang="ru"><img src="../../images/language/ru.png" alt="Rossiya Bayrog'i" class="lang-flag"> Русский</a></li>
+                    <li><a href="../../en/clinics/artemis-hospital.html" data-lang="en" class="selected"><img src="../../images/language/en.png" alt="Buyuk Britaniya Bayrog'i" class="lang-flag"> English</a></li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Hamburger button -->
         <button class="hamburger-menu" id="hamburger-menu" aria-label="Open/close menu" aria-controls="header-nav" aria-expanded="false">
