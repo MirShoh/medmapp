@@ -2499,6 +2499,7 @@ body.nav-open .mobile-header-actions {
 	border-radius: 0.5rem;
 	transition: background-color 0.2s ease-in-out;
 	white-space: nowrap;
+	text-align: center;
 }
 
 .view-all-link:hover {
@@ -3554,7 +3555,7 @@ body.nav-open .mobile-header-actions {
 }
 
 .data-protection {
-	font-size: 0.75rem;
+	font-size: 0.7rem;
 	color: var(--color-medium-text);
 	margin-top: 1rem;
 	display: flex;
