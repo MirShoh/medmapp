@@ -50,6 +50,9 @@
 	--testimonials-text-light: #6c757d;
 	--testimonials-primary: #007BFF;
 	--testimonials-green: #20c997;
+
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Umumiy uslublar */
@@ -73,6 +76,185 @@ body.nav-open>footer {
 	filter: blur(5px);
 	transform: scale(0.98);
 	transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+/* PRIVACY-POLICY */
+
+/* Konteyner uslublari */
+.main-content {
+	padding-top: 3rem; /* py-12 */
+	padding-bottom: 3rem; /* py-12 */
+}
+
+.main-content .container {
+	max-width: 82rem; /* max-w-4xl */
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1rem; /* px-4 */
+	padding-right: 1rem; /* px-4 */
+}
+
+/* Karta uslublari */
+.policy-card {
+	background-color: #ffffff; /* bg-white */
+	border-radius: 1rem; /* rounded-2xl */
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+	overflow: hidden; /* overflow-hidden */
+}
+
+.policy-header {
+	padding: 2.5rem 1.5rem; /* p-10 sm:p-6 */
+	background-color: rgba(241, 245, 249, 0.6); /* bg-slate-100/60 */
+	border-bottom: 1px solid #e2e8f0; /* border-b border-slate-200 */
+	text-align: center; /* Matnni markazga tekislash */
+}
+
+.header-content {
+	display: flex;
+	flex-direction: column; /* Elementlarni vertikal joylashtirish */
+	align-items: center; /* Elementlarni markazga tekislash */
+	gap: 1rem; /* gap-4 */
+}
+
+.header-icon {
+	flex-shrink: 0;
+	background-color: #3b82f6; /* bg-blue-500 */
+	color: #ffffff; /* text-white */
+	border-radius: 0.5rem; /* rounded-lg */
+	width: 3rem; /* w-12 */
+	height: 3rem; /* h-12 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-icon svg {
+	width: 1.5rem; /* w-6 */
+	height: 1.5rem; /* h-6 */
+}
+
+.policy-title {
+	font-size: 1.875rem; /* text-3xl */
+	font-weight: 800; /* font-extrabold */
+	color: #0f172a; /* text-slate-900 */
+	letter-spacing: -0.025em; /* tracking-tight */
+	margin: 0;
+}
+
+.policy-subtitle {
+	margin-top: 0.5rem;
+	color: #64748b;
+	max-width: 50ch; /* Matn qatorini chegaralash */
+	margin-left: auto; /* Avtomatik chapdan bo'sh joy */
+	margin-right: auto; /* Avtomatik o'ngdan bo'sh joy */
+}
+
+/* Matn kontenti uchun uslublar */
+.policy-content-wrapper {
+	padding: 1.5rem; /* p-6 */
+}
+
+/* Tipografiya (Prose) uslublari */
+.prose {
+	max-width: none;
+}
+.prose h2 {
+	color: #1e293b; /* Sarlavha rangi */
+	border-bottom: 1px solid #e2e8f0; /* Sarlavha ostidagi chiziq */
+	padding-bottom: 0.5rem;
+	margin-top: 2.5rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+.prose p {
+	line-height: 1.75; /* Qatorlar orasidagi masofa */
+	margin-top: 1.25rem;
+	margin-bottom: 1.25rem;
+}
+.prose ul {
+	padding-left: 1.5rem;
+	margin-top: 1.25rem;
+	margin-bottom: 1.25rem;
+	list-style-type: disc;
+}
+.prose ul > li::marker {
+	color: #3b82f6; /* Ro'yxat belgisi rangi */
+}
+.prose ul li {
+	margin-bottom: 0.5rem;
+}
+.prose strong {
+	color: #1e293b; /* Qalin matn rangi */
+}
+
+/* Rekvizitlar bloki */
+.rekvizit-card {
+	background-color: #f1f5f9; /* bg-slate-100 */
+	border-radius: 0.5rem; /* rounded-lg */
+	padding: 1rem; /* p-4 */
+	margin-top: 1.5rem; /* mt-6 */
+	font-size: 0.875rem; /* text-sm */
+}
+.rekvizit-card p {
+	margin: 0 0 0.25rem 0;
+}
+.rekvizit-title {
+	font-weight: 600; /* font-semibold */
+	color: #1e293b; /* text-slate-800 */
+}
+.rekvizit-grid {
+	margin-top: 0.5rem; /* mt-2 */
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr)); /* grid-cols-1 */
+	gap: 0.25rem 1rem; /* gap-y-1 gap-x-4 */
+}
+.rekvizit-link {
+	color: #2563eb; /* text-blue-600 */
+	text-decoration: none;
+}
+.rekvizit-link:hover {
+	text-decoration: underline; /* hover:underline */
+}
+
+/* Moslashuvchanlik (Responsiveness) */
+@media (min-width: 640px) {
+	.main-content {
+		padding-top: 4rem; /* sm:py-16 */
+		padding-bottom: 4rem; /* sm:py-16 */
+	}
+	.container {
+		padding-left: 1.5rem; /* sm:px-6 */
+		padding-right: 1.5rem; /* sm:px-6 */
+	}
+	.policy-header, .policy-content-wrapper {
+		padding: 2rem; /* sm:p-8 */
+	}
+	.policy-title {
+		font-size: 2.25rem; /* sm:text-4xl */
+	}
+	.rekvizit-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr)); /* sm:grid-cols-2 */
+	}
+	.rekvizit-full-span {
+		grid-column: span 2 / span 2; /* sm:col-span-2 */
+	}
+}
+
+@media (min-width: 768px) {
+		.main-content {
+		padding-top: 5rem; /* md:py-20 */
+		padding-bottom: 5rem; /* md:py-20 */
+	}
+	.policy-header, .policy-content-wrapper {
+		padding: 2rem; /* md:p-10 */
+	}
+}
+
+@media (min-width: 1024px) {
+	.container {
+		padding-left: 2rem; /* lg:px-8 */
+		padding-right: 2rem; /* lg:px-8 */
+	}
 }
 
 /* Preloader (Yuklanish effekti) */
