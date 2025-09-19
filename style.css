@@ -615,25 +615,6 @@ body.nav-open>footer {
 	background: linear-gradient(45deg, rgba(0, 80, 158, 0.8), rgba(13, 50, 77, 0.8));
 }
 
-.hero-content {
-	position: relative;
-	z-index: 2;
-}
-
-.hero-content h1 {
-	font-size: 3.5rem;
-	font-weight: 800;
-	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	margin-bottom: 1rem;
-}
-
-.hero-content p {
-	font-size: 1.2rem;
-	max-width: 700px;
-	margin: 0 auto 2rem auto;
-	opacity: 0.9;
-}
-
 .trust-stats {
 	display: flex;
 	justify-content: center;
@@ -1687,13 +1668,18 @@ body.nav-open>footer {
 	padding: 0.8rem 1rem;
 	display: block;
 	border-radius: 0.6rem;
-	transition: color 0.2s ease, background-color 0.2s ease;
+	transition: color 0.4s ease, background-color 0.2s ease;
 }
 
 .header-nav>ul a:hover,
 .header-nav>ul a.active {
 	color: var(--color-primary-blue);
 	background-color: rgba(0, 123, 255, 0.1);
+	transform: translateY(-3px);
+}
+
+.header-nav>ul a:hover::before {
+	transform: scaleY(1);
 }
 
 .mobile-nav-footer {
@@ -1962,7 +1948,7 @@ body.nav-open .mobile-header-actions {
 	text-align: center;
 	padding: 0 1rem;
 	max-width: 64rem;
-	margin: 0 auto;
+	margin: 0 auto 90px auto;
 }
 
 .hero-content h1 {
@@ -2874,7 +2860,7 @@ body.nav-open .mobile-header-actions {
 /* ========================================================= */
 
 .how-we-work-section {
-	padding: 5rem 1rem;
+	padding: 3rem 1rem;
 	background-color: #f8f9fa;
 }
 
@@ -3446,7 +3432,7 @@ body.nav-open .mobile-header-actions {
 
 /* Mashhur shifokorlar */
 .popular-doctors-section {
-	padding: 4rem 1rem;
+	padding: 3rem 1rem;
 	background-color: var(--color-card-bg);
 }
 
@@ -4778,7 +4764,7 @@ body.nav-open .mobile-header-actions {
 	.header-nav>ul a::after {
 		content: '';
 		position: absolute;
-		bottom: -5px;
+		bottom: 0;
 		left: 0;
 		width: 0;
 		height: 2px;
