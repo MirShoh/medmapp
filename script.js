@@ -189,39 +189,54 @@ document.addEventListener('DOMContentLoaded', function() {
         
     // Mavjud skriptlaringizdan keyin qo'shing
     const phoneInput = document.getElementById('phone-number');
-    const prefix = '+998';
+    if(phoneNumberInput) {
+        const prefix = '+998';
 
-    phoneInput.addEventListener('input', (e) => {
-        const input = e.target;
-        let value = input.value;
-
-        // Prefiks o'chirilmasligini ta'minlash
-        if (!value.startsWith(prefix)) {
-            input.value = prefix;
-            return;
-        }
-
-        // Prefiksdan keyingi raqamlarni ajratib olish
-        const userDigits = value.substring(prefix.length).replace(/\D/g, '');
+        // Input maydoniga bosilganda (fokus olinganda)
+        phoneNumberInput.addEventListener('focus', () => {
+            if (phoneNumberInput.value === '') {
+                // Agar bo'sh bo'lsa, boshlang'ich qiymatni qo'yamiz
+                phoneNumberInput.value = prefix + ' ';
+            }
+        });
         
-        // Raqamlarni formatlash
-        let formattedNumber = '';
-        if (userDigits.length > 0) {
-            formattedNumber += '(' + userDigits.substring(0, 2);
-        }
-        if (userDigits.length > 2) {
-            formattedNumber += ') ' + userDigits.substring(2, 5);
-        }
-        if (userDigits.length > 5) {
-            formattedNumber += '-' + userDigits.substring(5, 7);
-        }
-        if (userDigits.length > 7) {
-            formattedNumber += '-' + userDigits.substring(7, 9);
-        }
+        // Foydalanuvchi boshqa joyga bosganda (fokus yo'qolganda)
+        phoneNumberInput.addEventListener('blur', () => {
+            // Agar faqat "+998" qolgan bo'lsa, maydonni tozalaymiz
+            if (phoneNumberInput.value.trim() === prefix) {
+                phoneNumberInput.value = '';
+            }
+        });
 
-        // Formatlangan raqamni inputga joylash
-        input.value = prefix + formattedNumber;
-    });
+        // Har bir belgi kiritilganda maskani qo'llaymiz
+        phoneNumberInput.addEventListener('input', (e) => {
+            const input = e.target;
+            
+            // Prefiksni saqlab, qolgan raqamlarni olamiz
+            const userDigits = input.value.substring(prefix.length).replace(/\D/g, '');
+            
+            // Formatlash
+            let formattedNumber = '';
+            if (userDigits.length > 0) formattedNumber += ' (' + userDigits.substring(0, 2);
+            if (userDigits.length > 2) formattedNumber += ') ' + userDigits.substring(2, 5);
+            if (userDigits.length > 5) formattedNumber += '-' + userDigits.substring(5, 7);
+            if (userDigits.length > 7) formattedNumber += '-' + userDigits.substring(7, 9);
+            
+            input.value = prefix + formattedNumber;
+        });
+
+        // Orqaga o'chirish (backspace) va prefiksni o'chirishni oldini olish
+        phoneNumberInput.addEventListener('keydown', (e) => {
+            const input = e.target;
+            const isBackspace = e.key === 'Backspace';
+            const selectionStart = input.selectionStart;
+
+            // Agar backspace bosilsa va kursor prefiks oxirida bo'lsa, o'chirishni to'xtatamiz
+            if (isBackspace && selectionStart <= prefix.length + 1) { // "+998 " -> length 5
+                e.preventDefault();
+            }
+        });
+    }
 
 // Uchrashuv so'rash funksiyasi
 function handleRequestAppointment(doctorName) {
