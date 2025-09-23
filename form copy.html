@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitrix24 va Telegram Integratsiyasi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .file-input {
+            position: absolute;
+            font-size: 100px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-lg">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Get in touch</h1>
+        <p class="text-gray-500 mb-8">Please fill in your details, Our experts will get in touch with you</p>
+
+        <!-- Ariza formasi -->
+        <form id="bitrixForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="text" id="name" required class="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:ring-orange-500 focus:border-orange-500" placeholder="Full Name">
+                <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:ring-orange-500 focus:border-orange-500" placeholder="Enter your email">
+            </div>
+
+            <div>
+                <div class="flex">
+                    <span class="inline-flex items-center px-4 py-3 border border-r-0 border-gray-200 bg-gray-50 text-gray-600 rounded-l-lg">998</span>
+                    <input type="tel" id="phone" required class="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-r-lg focus:ring-orange-500 focus:border-orange-500" placeholder="Enter your phone number">
+                </div>
+            </div>
+            
+            <textarea id="requirements" rows="4" class="w-full px-4 py-3 border border-gray-200 bg-gray-50 rounded-lg focus:ring-orange-500 focus:border-orange-500" placeholder="Describe your treatment requirements"></textarea>
+
+            <div>
+                <div class="file-input-wrapper w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-400">
+                    <label for="medicalFile" class="file-input-label text-gray-500">
+                        <i class="ph ph-paperclip text-xl mr-2"></i>
+                        <span id="fileName">Attach your medical file</span>
+                    </label>
+                    <input type="file" id="medicalFile" class="file-input">
+                </div>
+            </div>
+
+            <div class="flex items-center">
+                <input type="checkbox" id="whatsapp" class="h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
+                <label for="whatsapp" class="ml-2 block text-sm text-gray-700">I agree to receive updates/notifications from Healthtrip via whatsapp</label>
+            </div>
+
+            <button type="submit" id="submitButton" class="w-full bg-orange-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-600 transition duration-300 disabled:bg-orange-300">
+                Submit
+            </button>
+        </form>
+        <div id="statusMessage" class="mt-4 text-center text-sm font-medium"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('bitrixForm');
+        const submitButton = document.getElementById('submitButton');
+        const statusMessage = document.getElementById('statusMessage');
+        const medicalFileInput = document.getElementById('medicalFile');
+        const fileNameDisplay = document.getElementById('fileName');
+
+        // --->>> DIQQAT! TELEGRAM UCHUN SOZLAMALAR <<<---
+        const TELEGRAM_BOT_TOKEN = '8131828140:AAFE1n8ZmVjA4FYnCUqf8DXAXdpIgmIfw8o'; // @BotFather dan olingan tokenni shu yerga qo'ying
+        const TELEGRAM_CHAT_ID = '697775505'; // Xabar yuboriladigan kanal yoki shaxsiy ID ni shu yerga qo'ying
+
+        medicalFileInput.addEventListener('change', function() {
+            fileNameDisplay.textContent = this.files.length > 0 ? this.files[0].name : 'Attach your medical file';
+        });
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Yuborilmoqda...';
+            statusMessage.textContent = '';
+            statusMessage.className = 'mt-4 text-center text-sm font-medium';
+
+            const file = medicalFileInput.files[0];
+            let fileDataForBitrix = null;
+
+            if (file) {
+                try {
+                    // Bitrix uchun faylni base64 formatiga o'tkazamiz
+                    const base64Content = await toBase64(file);
+                    fileDataForBitrix = [file.name, base64Content];
+                } catch (error) {
+                    showError('Faylni o\'qishda xatolik yuz berdi.');
+                    return;
+                }
+            }
+            
+            try {
+                // Ikkala servisga bir vaqtda so'rov yuboramiz
+                const results = await Promise.allSettled([
+                    sendToBitrix(fileDataForBitrix),
+                    sendToTelegram(file) // Telegramga original faylni yuboramiz
+                ]);
+
+                const bitrixSuccess = results[0].status === 'fulfilled' && results[0].value.result;
+                const telegramSuccess = results[1].status === 'fulfilled' && results[1].value.ok;
+                
+                if (bitrixSuccess && telegramSuccess) {
+                    statusMessage.textContent = 'Rahmat! Arizangiz muvaffaqiyatli yuborildi.';
+                    statusMessage.classList.add('text-green-600');
+                    form.reset();
+                    fileNameDisplay.textContent = 'Attach your medical file';
+                } else {
+                    let errorMessage = '';
+                    if (!bitrixSuccess) {
+                        const errorDesc = results[0].value?.error_description || 'Noma\'lum xato';
+                        errorMessage += `Bitrix24 xatosi: ${errorDesc}. `;
+                        console.error('Bitrix24 Error:', results[0].value);
+                    }
+                    if (!telegramSuccess) {
+                        const errorResult = results[1].status === 'fulfilled' ? await results[1].value.json() : { description: 'Server bilan bog\'lanishda xatolik' };
+                        errorMessage += `Telegram xatosi: ${errorResult.description}.`;
+                        console.error('Telegram Error:', errorResult);
+                    }
+                    showError(errorMessage.trim());
+                }
+
+            } catch (error) {
+                showError('Umumiy xatolik yuz berdi. Iltimos, keyinroq urinib ko\'ring.');
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit';
+            }
+        });
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+
+        function showError(message) {
+            console.error(message);
+            statusMessage.textContent = message;
+            statusMessage.classList.add('text-red-600');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit';
+        }
+
+        // --- BITRIX24 UCHUN FUNKSIYA ---
+        function sendToBitrix(fileData) {
+            const webhookURL = 'https://medmapp.bitrix24.ru/rest/1/qll2ixemwxbcimkg/crm.deal.add.json';
+            
+            // --->>> DIQQAT! BITRIX24 UCHUN <<<---
+            const CUSTOM_DEAL_FILE_FIELD_ID = 'UF_CRM_1758361948'; 
+
+            if (CUSTOM_DEAL_FILE_FIELD_ID === 'UF_CRM_BITIM_UCHUN_YANGI_ID') {
+                // Xatolikni faqat konsolga chiqaramiz, foydalanuvchiga ko'rsatmaymiz
+                console.error('Xatolik: Bitim (Сделка) uchun fayl maydoni kodi kiritilmagan!');
+            }
+
+            const name = document.getElementById('name').value;
+            const phone = '998' + document.getElementById('phone').value.replace(/\s/g, '');
+            const email = document.getElementById('email').value;
+            const requirements = document.getElementById('requirements').value;
+            const agreesToWhatsapp = document.getElementById('whatsapp').checked;
+            let comments = `Mijoz talablari: ${requirements}\n\nWhatsapp orqali xabar olishga rozilik: ${agreesToWhatsapp ? 'Ha' : 'Yo\'q'}`;
+
+            const data = {
+                fields: {
+                    TITLE: `MedMapp.uz saytidan ${name} nomli yangi bitim`,
+                    COMMENTS: `Mijoz ismi: ${name}\nTelefon: ${phone}\nEmail: ${email}\n\n${comments}`,
+                    SOURCE_ID: 'WEB'
+                }
+            };
+
+            if (fileData && CUSTOM_DEAL_FILE_FIELD_ID !== 'UF_CRM_BITIM_UCHUN_YANGI_ID') {
+                data.fields[CUSTOM_DEAL_FILE_FIELD_ID] = fileData;
+            }
+
+            return fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(response => response.json());
+        }
+
+        // --- TELEGRAM UCHUN YANGI FUNKSIYA ---
+        async function sendToTelegram(file) {
+            if (TELEGRAM_BOT_TOKEN === 'SIZNING_TELEGRAM_BOT_TOKENINGIZ' || TELEGRAM_CHAT_ID === 'SIZNING_CHAT_ID') {
+                console.error("Telegram bot tokeni yoki chat ID kiritilmagan!");
+                // Xatolikni qaytaramiz, lekin foydalanuvchiga bildirmaymiz
+                return Promise.reject(new Response(JSON.stringify({ok: false, description: "Bot sozlanmagan"}), {status: 400}));
+            }
+
+            const name = document.getElementById('name').value;
+            const phone = '998' + document.getElementById('phone').value.replace(/\s/g, '');
+            const email = document.getElementById('email').value;
+            const requirements = document.getElementById('requirements').value;
+            const agreesToWhatsapp = document.getElementById('whatsapp').checked;
+
+            let caption = `<b>MedMapp.uz saytidan yangi ariza!</b>\n\n`;
+            caption += `<b>Ism:</b> ${name}\n`;
+            caption += `<b>Telefon:</b> <code>${phone}</code>\n`;
+            caption += `<b>Email:</b> ${email}\n`;
+            caption += `<b>Talablar:</b> ${requirements}\n`;
+            caption += `<b>Whatsapp orqali xabar:</b> ${agreesToWhatsapp ? 'Ha' : 'Yo\'q'}\n`;
+            
+            const formData = new FormData();
+            formData.append('chat_id', TELEGRAM_CHAT_ID);
+            formData.append('caption', caption);
+            formData.append('parse_mode', 'HTML');
+
+            let url;
+            if (file) {
+                // Agar fayl bo'lsa, 'sendDocument' metodini ishlatamiz
+                url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
+                formData.append('document', file);
+            } else {
+                // Agar fayl bo'lmasa, 'sendMessage' metodini ishlatamiz
+                url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                // formData 'caption' o'rniga 'text' ni ishlatadi
+                formData.set('text', formData.get('caption'));
+                formData.delete('caption');
+            }
+
+            return fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+        }
+    </script>
+
+</body>
+</html>
+

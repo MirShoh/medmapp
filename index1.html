@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hindistondagi eng mashhur shifoxonalarda davolaning | MedMapp</title>
 
-    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindiston, buyrak transplantatsiyasi, jigar transplantatsiyasi, jarrohlik, tibbiy turizm">
-    <meta name="description" content="MedMapp platformasi orqali Hindistonning eng mashhur shifoxonalarida hamyonbop va shaffof narxlarda davolaning!">
+    <meta name="keywords" content="medmapp, medmapp uz, MedMapp, MedMapp uz, Hindistonda davolanish, eng yaxshi shifokorlar, top 10 klinika, onkologiya markazi, O'zbekistonliklar uchun davolanish, лечение в индии, лучшие врачи индии, топ клиник индии, saratonni davolash, jigar transplantatsiyasi, Hindiston, buyrak transplantatsiyasi, jigar transplantatsiyasi, jarrohlik, tibbiy turizm">
+    <meta name="description" content="MedMapp platformasi orqali Hindistonning eng mashhur shifoxonalarida hamyonbop va shaffof narxlarda davolaning! O'zbekistonliklar uchun Hindistondagi eng yaxshi shifokorlar va top-10 klinikalar. MedMapp bilan Hindistonning yetakchi onkologiya markazlarida davolaning. Bepul konsultatsiya oling!">
 
     <meta property="og:title" content="MedMapp platformasining rasmiy veb-sayti">
     <meta property="og:description" content="MedMapp platformasi orqali Hindistonning eng mashhur shifoxonalarida hamyonbop va shaffof narxlarda davolaning!">
@@ -18,6 +18,71 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo/favicon.png">
     <link rel="stylesheet" href="style.css">
+
+    <!-- Tailwind CSS va Ikonkalar -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <meta name='dmca-site-verification' content='NEJLMXowYndsRUJBSlVwRS9yRWJFUT090' />
+
+    <style>
+        /* Modal va uning elementlari uchun qo'shimcha stillar */
+        .modal, .success-modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-content, .success-modal-content {
+            transition: transform 0.3s ease;
+        }
+        .dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0) scale(1); }
+            20%, 80% { transform: translate3d(2px, 0, 0) scale(1); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0) scale(1); }
+            40%, 60% { transform: translate3d(4px, 0, 0) scale(1); }
+        }
+        .shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        #formModal label {
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* === PRELOADER STILLARI (YANGI QO'SHILDI) === */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #ffffff;
+            z-index: 100000; /* Eng yuqorida turishi uchun */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.75s ease, visibility 0.75s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        #preloader img {
+            width: 70px; /* Rasm o'lchami */
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
     
 </head>
 <body>
@@ -29,7 +94,7 @@
 <!-- ============================================= -->
 <!-- ========== HEADER =========================== -->
 <!-- ============================================= -->
-<header class="header scrolled">
+<header class="header">
     <a href="/" class="header-logo">
         <img src="images/logo/MedMapp_Logo.png" alt="MedMapp Logotipi">
     </a>
@@ -57,13 +122,9 @@
         <div class="mobile-nav-footer">
             <!-- TIL TANLASH BU YERDAN OLIB TASHLANDI -->
             <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
+                <button id="openModalBtnMobile" class="signup-btn" style="color: white!important; width: 100%; justify-content: center;">
+                    <span>Tibbiy konsultatsiya</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -89,13 +150,9 @@
             </div>
             <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
             <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
+                <button id="openModalBtn" class="signup-btn" style="color: white!important;">
+                    <span>Tibbiy konsultatsiya</span>
+                </button>
             </div>
         </div>
         
@@ -130,19 +187,17 @@
             <div id="success-message"></div>
             <div id="error-message"></div>
             
-            <!-- ========================================= -->
-            <!-- ====== HERO SECTION (YANGI DIZAYN) ======== -->
-            <!-- ========================================= -->
-            <section class="hero-section">
-                <!-- Orqa fon uchun dekorativ shakllar -->
-                <div class="hero-bg-shape shape1"></div>
-                <div class="hero-bg-shape shape2"></div>
-                <div class="hero-bg-shape shape3"></div>
+            <section class="hero-section" >
+                <video autoplay muted loop class="hero-video">
+                    <source src="images/Intro.mp4" type="video/mp4">
+                    Sizning brauzeringiz video tegini qo'llab-quvvatlamaydi.
+                </video>
+                <div class="hero-overlay"></div>
 
                 <div class="hero-content">
-                    <h1>Sog'ligingizga yo'l <br><span>Hindistonning</span> eng yaxshi klinikalarida</h1>
-                    <p>Dunyoning yetakchi shifokorlaridan professional tibbiy yordam oling. Sifatli davolanish va hamyonbop narxlar.</p>
-
+                    <h1>Ishonchli, xavfsiz va shaffof<br></h1>
+                    <p>MedMapp platformasi orqali Hindistondagi eng mashhur shifoxonalarda davolaning!</p>
+                   
                     <!-- Shakl kartasi -->
                     <form id="consultation-form" class="form-card">
                         <div class="form-group">
@@ -176,13 +231,13 @@
                                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.7-1 2.12 5.12 1.78-4.28h2.9L21 12"/></svg>
                                 <select id="treatment" name="treatment" required>
                                     <option value="" disabled selected>Davolash usulini tanlang</option>
-                                    <option value="Onkologiya">Onkologiya (Saratonni davolash)</option>
-                                    <option value="Kardiologiya va Kardiojarrohlik">Kardiologiya va Kardiojarrohlik (Yurak kasalliklari)</option>
-                                    <option value="Ortopediya">Ortopediya (Suyak va bo'g'im kasalliklari)</option>
-                                    <option value="Transplantologiya">Transplantologiya (A'zolar ko'chirib o'tkazish)</option>
-                                    <option value="Neyrojarrohlik">Neyrojarrohlik (Miya va umurtqa pog'onasi jarrohligi)</option>
-                                    <option value="Reproduktologiya">Reproduktologiya (EKU - Ekstrakorporal urug'lantirish)</option>
-                                    <option value="Kosmetik va Plastik jarrohlik">Kosmetik va Plastik jarrohlik</option>
+                                    <option value="Onkologiya">Saratonni davolash</option>
+                                    <option value="Kardiologiya va Kardiojarrohlik">Yurak kasalliklari</option>
+                                    <option value="Ortopediya">Suyak va bo'g'im kasalliklari</option>
+                                    <option value="Transplantologiya">A'zolar ko'chirib o'tkazish</option>
+                                    <option value="Neyrojarrohlik">Miya va umurtqa pog'onasi jarrohligi</option>
+                                    <option value="Reproduktologiya">EKU - Ekstrakorporal urug'lantirish</option>
+                                    <option value="Kosmetik va Plastik jarrohlik">Kosmetik va plastik jarrohlik</option>
                                     <option value="Boshqa">Boshqa</option>
                                 </select>
                                 <svg class="chevron-down-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -207,8 +262,6 @@
             </section>
 
             
-        </main>
-
 <footer class="site-footer">
     <div class="container">
         
@@ -266,11 +319,12 @@
                         <span>info@medmapp.uz</span>
                     </li>
                 </ul>
+                
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
+            <p class="copyright">&copy; 2025 MedMapp. Barcha huquqlar himoyalangan.</p> <a href="//www.dmca.com/Protection/Status.aspx?ID=39e4b9cd-542f-41dc-b672-0a2537b5d0fc" title="DMCA.com Protection Status" class="dmca-badge" target="_blank"> <img src ="https://images.dmca.com/Badges/dmca-badge-w100-5x1-07.png?ID=39e4b9cd-542f-41dc-b672-0a2537b5d0fc"  alt="DMCA.com Protection Status" /></a> 
             <div class="footer-legal-links">
                     <a href="privacy-policy.html">Maxfiylik siyosati</a> 
                     <a href="terms-of-use.html">Foydalanuvchi kelishuvi</a>
@@ -289,17 +343,464 @@
             <button id="modal-close-btn" class="modal-button">Yopish</button>
         </div>
     </div>
-
+    
 </footer>
+
+<!-- Pop-up Modal -->
+<div id="formModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 invisible z-[9999]">
+    <!-- O'zgarish: Modalga maksimal balandlik berildi (max-h-[95vh]) -->
+    <div class="modal-content w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl flex flex-col transform scale-95 max-h-[95vh]">
+        
+        <!-- Forma qismi -->
+        <!-- O'zgarish: Keraksiz bo'sh joyni olib tashlash uchun flex-grow olib tashlandi. Endi skroll faqat kerak bo'lganda paydo bo'ladi. -->
+        <div class="relative p-1 flex flex-col overflow-y-auto">
+            <button id="closeModalBtn" class="absolute top-0 right-0 text-gray-400 hover:text-gray-600 transition z-10">
+                <i class="ph-bold ph-x text-2xl"></i>
+            </button>
+            <div class="flex-shrink-0">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Konsultatsiya uchun anketa</h1>
+                <!-- O'zgarish: Pastki bo'shliq kamaytirildi (mb-4) -->
+                <p class="text-gray-500 mb-4">Xorijiy klinikadan tibbiy xulosa olish uchun formani to'ldiring!</p>
+            </div>
+            
+            <!-- O'zgarish: Keraksiz bo'sh joyni olib tashlash uchun flex-grow olib tashlandi -->
+            <form id="bitrixForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label for="name" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-user text-base mr-2 text-gray-500"></i>
+                            Ism-familiya <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <input type="text" id="name" required class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="F.I.O">
+                    </div>
+                    <div>
+                        <label for="dob" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                           <i class="ph ph-calendar text-base mr-2 text-gray-500"></i>
+                           Tug'ilgan sana <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <input type="text" id="dob" required class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="kun.oy.yil">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                         <label for="phone" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-phone text-base mr-2 text-gray-500"></i>
+                            Telefon raqamingiz <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center px-3 text-gray-500 bg-gray-100 border border-r-0 border-gray-200 rounded-l-lg h-full py-2 text-sm">+998</span>
+                            <input type="tel" id="phone" required class="w-full px-3 py-2 border border-l-0 border-gray-200 bg-gray-50 rounded-r-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="(90) 123-45-67">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="email" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-envelope-simple text-base mr-2 text-gray-500"></i>
+                            E-mail
+                        </label>
+                        <input type="email" id="email" class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="e-mail@gmail.com">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="requirements" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                        <i class="ph ph-chat-circle-dots text-base mr-2 text-gray-500"></i>
+                        Sizni nima bezovta qilmoqda?
+                    </label>
+                    <textarea id="requirements" rows="3" class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Avvalgi tashxislar (mavjud bo'lsa)"></textarea>
+                </div>
+
+                <div>
+                    <label class="flex items-center mb-0 text-sm font-medium text-gray-700">
+                        <i class="ph ph-file-arrow-up text-base mr-2 text-gray-500"></i>
+                        Tibbiy fayllar <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <div id="dropZone" class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition-colors">
+                        <label for="medicalFiles" class="flex items-center justify-center text-gray-500 cursor-pointer">
+                            <i class="ph ph-paperclip text-lg mr-2"></i>
+                            <span id="fileName" class="text-sm text-center">Fayllarni tanlang yoki bu yerga tashlang</span>
+                        </label>
+                        <input type="file" id="medicalFiles" class="hidden" multiple>
+                    </div>
+                    <div id="fileList" class="mt-2 flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="pt-0">
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" required class="h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="terms" class="ml-0 block text-sm text-gray-700" style="font-size: 0.7rem;">
+                            Men kiritgan barcha ma'lumotlarning to'g'riligini tasdiqlayman hamda <a href="https://medmapp.uz/public-offer" target="_blank" class="text-blue-600 hover:underline font-medium">Ommaviy oferta</a> va <a href="https://medmapp.uz/privacy-policy" target="_blank" class="text-blue-600 hover:underline font-medium">Maxfiylik siyosati</a> bilan tanishib chiqdim. <span class="text-red-500">*</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitButton" class="w-full flex-shrink-0 flex items-center justify-center bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-blue-400">
+                    <i class="ph ph-paper-plane-tilt text-xl mr-2"></i>
+                    Yuborish
+                </button>
+            </form>
+            <div id="statusMessage" class="mt-4 text-center text-sm font-medium flex-shrink-0"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Muvaffaqiyatli xabar oynasi -->
+<div id="successModal" class="success-modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 invisible z-[9999]">
+    <div class="success-modal-content bg-white rounded-2xl shadow-xl p-8 text-center max-w-sm mx-auto transform scale-95">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ph-bold ph-check text-4xl text-green-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Muvaffaqiyatli!</h2>
+        <p class="text-gray-600 mb-6">Murojaatingiz qabul qilindi! Tez orada operatorlarimiz siz bilan bog'lanishadi.</p>
+        <button id="closeSuccessModalBtn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Yopish</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/uz_latn.js"></script>
+<script src="https://unpkg.com/imask"></script>
+
+<!-- MAXFIY SOZLAMALAR YUKLANDI -->
+<script src="config.js"></script>
+
+<script>
+    // PRELOADER MANTIG'I (YANGI QO'SHILDI)
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            // Animatsiya ko'rinishi uchun kichik kechiktirish
+            setTimeout(() => {
+                 preloader.classList.add('hidden');
+            }, 200); 
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('bitrixForm');
+        const submitButton = document.getElementById('submitButton');
+        const statusMessage = document.getElementById('statusMessage');
+        const medicalFilesInput = document.getElementById('medicalFiles');
+        const fileListDisplay = document.getElementById('fileList');
+        const fileNameDisplay = document.getElementById('fileName');
+        const dropZone = document.getElementById('dropZone');
+        
+        let selectedFiles = [];
+
+        const modal = document.getElementById('formModal');
+        const modalContent = modal.querySelector('.modal-content');
+        const openModalButtons = document.querySelectorAll('#openModalBtn, #openModalBtnMobile, #openModalBtnHero');
+        const closeBtn = document.getElementById('closeModalBtn');
+
+        const successModal = document.getElementById('successModal');
+        const successModalContent = successModal.querySelector('.success-modal-content');
+        const closeSuccessBtn = document.getElementById('closeSuccessModalBtn');
+
+        // --- NAVIGATSIYA MENYUSI UCHUN ELEMENTLAR (YANGI QO'SHILDI) ---
+        const navMenu = document.getElementById('header-nav');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+
+        // --- MAXFIY KALITLAR "config.js" FAYLIDAN O'QILADI ---
+
+        // Tug'ilgan sana maydonini sozlash (kengaytirilgan)
+        const dobPicker = flatpickr("#dob", {
+            locale: "uz_latn",
+            altInput: true,
+            altFormat: "d.m.Y",
+            dateFormat: "Y-m-d",
+            allowInput: true,
+            defaultDate: null, // Avtomatik sana kiritilmasligi uchun
+            maxDate: "today", // <<-- XATOLIK TUZATILDI: Kelajakdagi sanani tanlashni cheklash
+            onOpen: function(selectedDates, dateStr, instance) {
+                // Agar sana tanlanmagan bo'lsa, kalendarni 1990-yilga o'tkazish
+                if (selectedDates.length === 0) {
+                    instance.jumpToDate("1990-01-01");
+                }
+            },
+            onReady: function(selectedDates, dateStr, instance) {
+                if (instance.altInput) {
+                    // Qo'lda kiritish uchun niqob va cheklovlar
+                    IMask(instance.altInput, {
+                        mask: Date,
+                        pattern: 'd.m.Y',
+                        lazy: false,
+                        placeholderChar: '_',
+                        // Kun, oy va yil uchun cheklovlar
+                        blocks: {
+                            d: {
+                                mask: IMask.MaskedRange,
+                                from: 1,
+                                to: 31,
+                                maxLength: 2,
+                            },
+                            m: {
+                                mask: IMask.MaskedRange,
+                                from: 1,
+                                to: 12,
+                                maxLength: 2,
+                            },
+                            Y: {
+                                mask: IMask.MaskedRange,
+                                from: 1900,
+                                to: new Date().getFullYear() // <<-- XATOLIK TUZATILDI: Joriy yil bilan cheklash
+                            }
+                        },
+                        // IMask va Flatpickr o'rtasida sanani sinxronlashtirish
+                        format: function(date) {
+                            let day = String(date.getDate()).padStart(2, '0');
+                            let month = String(date.getMonth() + 1).padStart(2, '0');
+                            let year = date.getFullYear();
+                            return [day, month, year].join('.');
+                        },
+                        parse: function(str) {
+                            const [day, month, year] = str.split('.');
+                            // Sanani to'g'ri formatda qaytarish
+                            return new Date(year, month - 1, day);
+                        },
+                        autofix: true // Kiritishda xatoliklarni avtomatik to'g'irlash
+                    });
+                }
+            }
+        });
+
+        const phoneMask = IMask(document.getElementById('phone'), { mask: '(00) 000-00-00' });
+
+        const saveFormData = () => {
+            localStorage.setItem('formData', JSON.stringify({
+                name: document.getElementById('name').value, dob: document.getElementById('dob').value,
+                phone: phoneMask.unmaskedValue, email: document.getElementById('email').value,
+                requirements: document.getElementById('requirements').value,
+            }));
+        };
+        const loadFormData = () => {
+            const data = JSON.parse(localStorage.getItem('formData'));
+            if (data) {
+                document.getElementById('name').value = data.name || '';
+                dobPicker.setDate(data.dob || '', true);
+                phoneMask.value = data.phone || '';
+                document.getElementById('email').value = data.email || '';
+                document.getElementById('requirements').value = data.requirements || '';
+            }
+        };
+        form.querySelectorAll('input, textarea').forEach(input => {
+            if(input.type !== 'file') input.addEventListener('input', saveFormData);
+        });
+
+        // --- MOBIL MENYUNI YOPISH FUNKSIYASI (YANGI QO'SHILDI) ---
+        const closeNavMenu = () => {
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                hamburgerMenu.classList.remove('active');
+                document.body.classList.remove('nav-open');
+            }
+        };
+
+        const openModal = () => {
+            closeNavMenu(); // <<< O'ZGARTIRISH: Modal ochilishidan oldin menyuni yopish
+            loadFormData();
+            document.body.classList.add('modal-open');
+            modal.classList.remove('invisible', 'opacity-0');
+            modalContent.classList.remove('scale-95');
+        };
+        const closeModal = () => {
+            document.body.classList.remove('modal-open');
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('invisible'), 300);
+        };
+        const openSuccessModal = () => {
+            closeModal();
+            successModal.classList.remove('invisible', 'opacity-0');
+            successModalContent.classList.remove('scale-95');
+        }
+        const closeSuccessModal = () => {
+            successModal.classList.add('opacity-0');
+            successModalContent.classList.add('scale-95');
+            setTimeout(() => successModal.classList.add('invisible'), 300);
+        }
+
+        openModalButtons.forEach(btn => btn.addEventListener('click', openModal));
+        closeBtn.addEventListener('click', closeModal);
+        closeSuccessBtn.addEventListener('click', closeSuccessModal);
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                 modalContent.classList.add('shake');
+                 setTimeout(() => modalContent.classList.remove('shake'), 820);
+            }
+        });
+
+        const handleFiles = (files) => {
+            Array.from(files).forEach(file => {
+                if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            });
+            renderFileList();
+        };
+        const getFileIcon = (fileName) => {
+            const ext = fileName.split('.').pop().toLowerCase();
+            if (['pdf'].includes(ext)) return 'ph-file-pdf';
+            if (['doc', 'docx'].includes(ext)) return 'ph-file-doc';
+            if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(ext)) return 'ph-image';
+            return 'ph-file';
+        };
+        const renderFileList = () => {
+            fileListDisplay.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const fileElement = document.createElement('div');
+                fileElement.className = "inline-flex items-center bg-gray-100 rounded-md py-1.5 pl-2 pr-1 text-xs transition-all max-w-full";
+                fileElement.innerHTML = `<i class="ph ${getFileIcon(file.name)} text-lg mr-2 text-gray-500 flex-shrink-0"></i><span class="truncate min-w-0" title="${file.name}">${file.name}</span><button type="button" data-index="${index}" class="remove-file-btn ml-2 flex-shrink-0 text-red-500 hover:text-red-700 p-1"><i class="ph-bold ph-x"></i></button>`;
+                fileListDisplay.appendChild(fileElement);
+            });
+            fileNameDisplay.textContent = selectedFiles.length > 0 ? `${selectedFiles.length} ta fayl tanlandi` : 'Fayllarni tanlang yoki bu yerga tashlang';
+        };
+        medicalFilesInput.addEventListener('change', (e) => handleFiles(e.target.files));
+        fileListDisplay.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-file-btn');
+            if (removeBtn) {
+                selectedFiles.splice(parseInt(removeBtn.dataset.index, 10), 1);
+                renderFileList();
+            }
+        });
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
+        });
+        ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover')));
+        ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover')));
+        dropZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            if (selectedFiles.length === 0) {
+                showError("Iltimos, kamida bitta tibbiy fayl yuklang."); return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Yuborilmoqda... <i class="ph-bold ph-spinner-gap animate-spin ml-2"></i>';
+            statusMessage.textContent = '';
+
+            let filesDataForBitrix = [];
+            try {
+                 for (const file of selectedFiles) {
+                    filesDataForBitrix.push([file.name, await toBase64(file)]);
+                }
+            } catch (error) {
+                showError("Fayllarni o'qishda xatolik.");
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="ph ph-paper-plane-tilt text-xl mr-2"></i> Yuborish';
+                return;
+            }
+            
+            try {
+                const [bitrixResult, telegramResult] = await Promise.all([
+                    sendToBitrix(filesDataForBitrix),
+                    sendToTelegram(selectedFiles)
+                ]);
+
+                if ((bitrixResult && bitrixResult.result) || (telegramResult && telegramResult.ok)) {
+                    localStorage.removeItem('formData');
+                    form.reset();
+                    phoneMask.value = '';
+                    selectedFiles = [];
+                    renderFileList();
+                    openSuccessModal();
+                } else {
+                    let errorMessage = 'Xatolik yuz berdi. ';
+                    if (bitrixResult && bitrixResult.error_description) errorMessage += `Bitrix24: ${bitrixResult.error_description}. `;
+                    if (telegramResult && telegramResult.description) errorMessage += `Telegram: ${telegramResult.description}.`;
+                    showError(errorMessage.trim());
+                }
+            } catch (error) {
+                console.error("Submission Error:", error);
+                showError("Server bilan bog'lanishda xatolik. Iltimos, keyinroq urinib ko'ring.");
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = `<i class="ph ph-paper-plane-tilt text-xl mr-2"></i> Yuborish`;
+            }
+        });
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+
+        function showError(message) {
+            statusMessage.textContent = message;
+            statusMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+        }
+
+        const getFormData = () => ({
+            name: document.getElementById('name').value, dob: document.getElementById('dob').value,
+            phone: '+998' + phoneMask.unmaskedValue, email: document.getElementById('email').value,
+            requirements: document.getElementById('requirements').value,
+        });
+        
+        function sendToBitrix(filesData) {
+            if (typeof BITRIX_WEBHOOK_URL === 'undefined' || !BITRIX_WEBHOOK_URL) {
+                console.warn("Bitrix24 webhook URL o'rnatilmagan.");
+                return Promise.resolve({ result: null, error_description: "Webhook URL not configured." });
+            }
+            const formData = getFormData();
+            const data = {
+                fields: {
+                    TITLE: `Saytdan yangi ariza: ${formData.name}`,
+                    NAME: formData.name,
+                    PHONE: [{ VALUE: formData.phone, VALUE_TYPE: "WORK" }],
+                    EMAIL: [{ VALUE: formData.email, VALUE_TYPE: "WORK" }],
+                    COMMENTS: `Bemor kasalliklari: ${formData.requirements}`,
+                    BIRTHDATE: formData.dob,
+                    SOURCE_ID: "WEB"
+                }
+            };
+            
+            if (filesData.length > 0 && typeof CUSTOM_LEAD_FILE_FIELD_ID !== 'undefined' && CUSTOM_LEAD_FILE_FIELD_ID) {
+                data.fields[CUSTOM_LEAD_FILE_FIELD_ID] = filesData;
+            }
+            
+            return fetch(BITRIX_WEBHOOK_URL, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify(data) 
+            }).then(res => res.json());
+        }
+        
+        async function sendToTelegram(files) {
+            if (typeof TELEGRAM_BOT_TOKEN === 'undefined' || typeof TELEGRAM_CHAT_ID === 'undefined') {
+                console.warn("Telegram bot token yoki chat ID o'rnatilmagan.");
+                return Promise.resolve({ok: false, description: "Bot sozlanmagan"});
+            }
+            const formData = getFormData();
+            let caption = `<b>Saytdan yangi ariza!</b>\n\n`;
+            caption += `<b>👤 Ism:</b> ${formData.name}\n<b>📅 T. Sana:</b> ${formData.dob}\n`;
+            caption += `<b>📞 Telefon:</b> <code>${formData.phone}</code>\n<b>📧 Email:</b> ${formData.email || "Kiritilmagan"}\n`;
+            caption += `<b>📝 Izohlar:</b>\n${formData.requirements || "Kiritilmagan"}`;
+            
+            const tgFormData = new FormData();
+            tgFormData.append('chat_id', TELEGRAM_CHAT_ID);
+            
+            if (files.length === 0) {
+                tgFormData.append('text', caption);
+                tgFormData.append('parse_mode', 'HTML');
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                return fetch(url, { method: 'POST', body: tgFormData }).then(res => res.json());
+            }
+            
+            const mediaToSend = files.slice(0, 10).map((file, index) => {
+                const fileKey = `file${index}`;
+                tgFormData.append(fileKey, file);
+                return { type: 'document', media: `attach://${fileKey}`, caption: index === 0 ? caption : undefined, parse_mode: 'HTML' };
+            });
+
+            tgFormData.append('media', JSON.stringify(mediaToSend));
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup`;
+            return fetch(url, { method: 'POST', body: tgFormData }).then(res => res.json());
+        }
+    });
+</script>
 
 <script src="script.js"></script>
 
-<script>
-    (function(w,d,u){
-            var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/60000|0);
-            var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
-    })(window,document,'https://cdn-ru.bitrix24.ru/b35079736/crm/site_button/loader_2_t814vm.js');
-</script>
-
 </body>
 </html>
+
