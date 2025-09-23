@@ -14,6 +14,11 @@
     <meta property="og:url" content="https://medmapp.uz/">
     <meta property="og:image" content="https://medmapp.uz/images/logo/MedMapp_Logo.png" />
     <meta property="og:site_name" content="medmapp.uz">
+
+    <!-- Tailwind CSS va Ikonkalar -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/logo/favicon.png">
@@ -82,6 +87,29 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+
+        /* Bosh sahifa formasi uchun kengaytirilgan en */
+        @media (min-width: 1024px) { /* Faqat katta ekranlar uchun */
+            .hero-content {
+                max-width: 72rem;
+            }
+        }
+        
+        /* === YANGI TUGMA STILLARI === */
+        .signup-btn {
+            background-image: linear-gradient(to right, #3b82f6 0%, #60a5fa 51%, #3b82f6 100%);
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.4);
+            border: none;
+            transition: all 0.4s ease-out;
+        }
+
+        .signup-btn:hover {
+            background-position: right center; /* Gradient yo'nalishini o'zgartirish */
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+        }
     </style>
     
 </head>
@@ -122,7 +150,8 @@
         <div class="mobile-nav-footer">
             <!-- TIL TANLASH BU YERDAN OLIB TASHLANDI -->
             <div class="auth-buttons">
-                <button id="openModalBtnMobile" class="signup-btn" style="color: white!important; width: 100%; justify-content: center;">
+                <button id="openModalBtnMobile" class="signup-btn" style="width: 100%; justify-content: center;">
+                    <i class="ph-bold ph-user-plus text-xl mr-2"></i>
                     <span>Tibbiy konsultatsiya</span>
                 </button>
             </div>
@@ -150,7 +179,8 @@
             </div>
             <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
             <div class="auth-buttons">
-                <button id="openModalBtn" class="signup-btn" style="color: white!important;">
+                <button id="openModalBtn" class="signup-btn">
+                    <i class="ph-bold ph-user-plus text-xl mr-2"></i>
                     <span>Tibbiy konsultatsiya</span>
                 </button>
             </div>
@@ -188,7 +218,7 @@
             <div id="error-message"></div>
             
             <section class="hero-section" >
-                <video autoplay muted loop class="hero-video">
+                <video autoplay muted loop playsinline class="hero-video">
                     <source src="images/Intro.mp4" type="video/mp4">
                     Sizning brauzeringiz video tegini qo'llab-quvvatlamaydi.
                 </video>
@@ -204,7 +234,7 @@
                             <label for="resident-of">Qayerda istiqomat qilasiz?</label>
                             <div class="select-wrapper has-icon">
                                 <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                <select id="resident-of" name="resident_of" required>
+                                <select id="resident-of" name="resident_of" style="font-size: 16px!important;" required>
                                     <option value="" disabled selected>Viloyatni tanlang</option>
                                     <option value="Toshkent shahri">Toshkent shahri</option>
                                     <option value="Andijon viloyati">Andijon viloyati</option>
@@ -254,7 +284,7 @@
 
                         <button type="submit" id="chat-button" class="chat-button">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-                            <span id="button-text">Bepul konsultatsiya</span>
+                            <span id="button-text">Yuborish</span>
                             <div id="loader-container"></div>
                         </button>
                     </form>

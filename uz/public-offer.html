@@ -15,6 +15,15 @@
     <meta property="og:url" content="https://medmapp.uz/">
     <meta property="og:image" content="https://medmapp.uz/images/logo/MedMapp_Logo.png" />
     <meta property="og:site_name" content="medmapp.uz">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Tailwind CSS va Ikonkalar -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <!-- Google Fonts: Inter fontini yuklash -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -76,13 +85,10 @@
         <div class="mobile-nav-footer">
             
             <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
+                <button id="openModalBtn" class="signup-btn" style="color: white!important;">
+                    <i class="ph-bold ph-heartbeat text-xl mr-2"></i>
+                    <span>Tibbiy konsultatsiya</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -108,13 +114,10 @@
             </div>
             <!-- Kirish va Ro'yxatdan o'tish tugmalari -->
             <div class="auth-buttons">
-                <a href="#" class="login-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
-                    <span>Kirish</span>
-                </a>
-                <a href="#" class="signup-btn" style="color: white!important;">
-                    <span>Registratsiya</span>
-                </a>
+                <button id="openModalBtn" class="signup-btn" style="color: white!important;">
+                    <i class="ph-bold ph-heartbeat text-xl mr-2"></i>
+                    <span>Tibbiy konsultatsiya</span>
+                </button>
             </div>
         </div>
 
@@ -404,7 +407,122 @@
 
 </footer>
     
-    <script src="../script.js"></script>
+    
+<!-- Pop-up Modal -->
+<div id="formModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 invisible z-[9999]">
+    <!-- O'zgarish: Modalga maksimal balandlik berildi (max-h-[95vh]) -->
+    <div class="modal-content w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl flex flex-col transform scale-95 max-h-[95vh]">
+        
+        <!-- Forma qismi -->
+        <!-- O'zgarish: Keraksiz bo'sh joyni olib tashlash uchun flex-grow olib tashlandi. Endi skroll faqat kerak bo'lganda paydo bo'ladi. -->
+        <div class="relative p-1 flex flex-col overflow-y-auto">
+            <button id="closeModalBtn" class="absolute top-0 right-0 text-gray-400 hover:text-gray-600 transition z-10">
+                <i class="ph-bold ph-x text-2xl"></i>
+            </button>
+            <div class="flex-shrink-0">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Konsultatsiya uchun anketa</h1>
+                <!-- O'zgarish: Pastki bo'shliq kamaytirildi (mb-4) -->
+                <p class="text-gray-500 mb-4">Xorijiy klinikadan tibbiy xulosa olish uchun formani to'ldiring!</p>
+            </div>
+            
+            <!-- O'zgarish: Keraksiz bo'sh joyni olib tashlash uchun flex-grow olib tashlandi -->
+            <form id="bitrixForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label for="name" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-user text-base mr-2 text-gray-500"></i>
+                            Ism-familiya <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <input type="text" id="name" required class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="F.I.O">
+                    </div>
+                    <div>
+                        <label for="dob" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                           <i class="ph ph-calendar text-base mr-2 text-gray-500"></i>
+                           Tug'ilgan sana <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <input type="text" id="dob" required class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="kun.oy.yil">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                         <label for="phone" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-phone text-base mr-2 text-gray-500"></i>
+                            Telefon raqamingiz <span class="text-red-500 ml-1">*</span>
+                        </label>
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center px-3 text-gray-500 bg-gray-100 border border-r-0 border-gray-200 rounded-l-lg h-full py-2 text-sm">+998</span>
+                            <input type="tel" id="phone" required class="w-full px-3 py-2 border border-l-0 border-gray-200 bg-gray-50 rounded-r-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="(90) 123-45-67">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="email" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                            <i class="ph ph-envelope-simple text-base mr-2 text-gray-500"></i>
+                            E-mail
+                        </label>
+                        <input type="email" id="email" class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="e-mail@gmail.com">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="requirements" class="flex items-center mb-1 text-sm font-medium text-gray-700">
+                        <i class="ph ph-chat-circle-dots text-base mr-2 text-gray-500"></i>
+                        Sizni nima bezovta qilmoqda?
+                    </label>
+                    <textarea id="requirements" rows="3" class="w-full px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Avvalgi tashxislar (mavjud bo'lsa)"></textarea>
+                </div>
+
+                <div>
+                    <label class="flex items-center mb-0 text-sm font-medium text-gray-700">
+                        <i class="ph ph-file-arrow-up text-base mr-2 text-gray-500"></i>
+                        Tibbiy fayllar <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <div id="dropZone" class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 transition-colors">
+                        <label for="medicalFiles" class="flex items-center justify-center text-gray-500 cursor-pointer">
+                            <i class="ph ph-paperclip text-lg mr-2"></i>
+                            <span id="fileName" class="text-sm text-center">Fayllarni tanlang yoki bu yerga tashlang</span>
+                        </label>
+                        <input type="file" id="medicalFiles" class="hidden" multiple>
+                    </div>
+                    <div id="fileList" class="mt-2 flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="pt-0">
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" required class="h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="terms" class="ml-0 block text-sm text-gray-700" style="font-size: 0.7rem;">
+                            Men kiritgan barcha ma'lumotlarning to'g'riligini tasdiqlayman hamda <a href="https://medmapp.uz/public-offer" target="_blank" class="text-blue-600 hover:underline font-medium">Ommaviy oferta</a> va <a href="https://medmapp.uz/privacy-policy" target="_blank" class="text-blue-600 hover:underline font-medium">Maxfiylik siyosati</a> bilan tanishib chiqdim. <span class="text-red-500">*</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitButton" class="w-full flex-shrink-0 flex items-center justify-center bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300 disabled:bg-blue-400">
+                    <i class="ph ph-paper-plane-tilt text-xl mr-2"></i>
+                    Yuborish
+                </button>
+            </form>
+            <div id="statusMessage" class="mt-4 text-center text-sm font-medium flex-shrink-0"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Muvaffaqiyatli xabar oynasi -->
+<div id="successModal" class="success-modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 invisible z-[9999]">
+    <div class="success-modal-content bg-white rounded-2xl shadow-xl p-8 text-center max-w-sm mx-auto transform scale-95">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ph-bold ph-check text-4xl text-green-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Muvaffaqiyatli!</h2>
+        <p class="text-gray-600 mb-6">Sizning tibbiy konsultatsiya olish uchun arizangiz qabul qilindi! <br> Tez orada mutaxassislarimiz siz bilan bog'lanishadi.</p>
+        <button id="closeSuccessModalBtn" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Yopish</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/uz_latn.js"></script>
+<script src="https://unpkg.com/imask"></script>
+
+<script src="../config.js"></script>
+<script src="../script.js"></script>
 
     <script>
     (function(w,d,u){

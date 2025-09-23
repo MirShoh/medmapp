@@ -670,3 +670,337 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// PRELOADER MANTIG'I (YANGI QO'SHILDI)
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        // Animatsiya ko'rinishi uchun kichik kechiktirish
+        setTimeout(() => {
+                preloader.classList.add('hidden');
+        }, 200); 
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('bitrixForm');
+    const submitButton = document.getElementById('submitButton');
+    const statusMessage = document.getElementById('statusMessage');
+    const medicalFilesInput = document.getElementById('medicalFiles');
+    const fileListDisplay = document.getElementById('fileList');
+    const fileNameDisplay = document.getElementById('fileName');
+    const dropZone = document.getElementById('dropZone');
+    
+    let selectedFiles = [];
+
+    const modal = document.getElementById('formModal');
+    const modalContent = modal.querySelector('.modal-content');
+    const openModalButtons = document.querySelectorAll('#openModalBtn, #openModalBtnMobile, #openModalBtnHero');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    const successModal = document.getElementById('successModal');
+    const successModalContent = successModal.querySelector('.success-modal-content');
+    const closeSuccessBtn = document.getElementById('closeSuccessModalBtn');
+
+    // --- NAVIGATSIYA MENYUSI UCHUN ELEMENTLAR (YANGI QO'SHILDI) ---
+    const navMenu = document.getElementById('header-nav');
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+
+    // --- MAXFIY KALITLAR "config.js" FAYLIDAN O'QILADI ---
+
+    // Tug'ilgan sana maydonini sozlash (kengaytirilgan)
+    const dobPicker = flatpickr("#dob", {
+        locale: "uz_latn",
+        altInput: true,
+        altFormat: "d.m.Y",
+        dateFormat: "Y-m-d",
+        allowInput: true,
+        defaultDate: null, // Avtomatik sana kiritilmasligi uchun
+        maxDate: "today", // <<-- XATOLIK TUZATILDI: Kelajakdagi sanani tanlashni cheklash
+        onOpen: function(selectedDates, dateStr, instance) {
+            // Agar sana tanlanmagan bo'lsa, kalendarni 1990-yilga o'tkazish
+            if (selectedDates.length === 0) {
+                instance.jumpToDate("1990-01-01");
+            }
+        },
+        onReady: function(selectedDates, dateStr, instance) {
+            if (instance.altInput) {
+                // Qo'lda kiritish uchun niqob va cheklovlar
+                IMask(instance.altInput, {
+                    mask: Date,
+                    pattern: 'd.m.Y',
+                    lazy: false,
+                    placeholderChar: '_',
+                    // Kun, oy va yil uchun cheklovlar
+                    blocks: {
+                        d: {
+                            mask: IMask.MaskedRange,
+                            from: 1,
+                            to: 31,
+                            maxLength: 2,
+                        },
+                        m: {
+                            mask: IMask.MaskedRange,
+                            from: 1,
+                            to: 12,
+                            maxLength: 2,
+                        },
+                        Y: {
+                            mask: IMask.MaskedRange,
+                            from: 1900,
+                            to: new Date().getFullYear() // <<-- XATOLIK TUZATILDI: Joriy yil bilan cheklash
+                        }
+                    },
+                    // IMask va Flatpickr o'rtasida sanani sinxronlashtirish
+                    format: function(date) {
+                        let day = String(date.getDate()).padStart(2, '0');
+                        let month = String(date.getMonth() + 1).padStart(2, '0');
+                        let year = date.getFullYear();
+                        return [day, month, year].join('.');
+                    },
+                    parse: function(str) {
+                        const [day, month, year] = str.split('.');
+                        // Sanani to'g'ri formatda qaytarish
+                        return new Date(year, month - 1, day);
+                    },
+                    autofix: true // Kiritishda xatoliklarni avtomatik to'g'irlash
+                });
+            }
+        }
+    });
+
+    const phoneMask = IMask(document.getElementById('phone'), { mask: '(00) 000-00-00' });
+
+    const saveFormData = () => {
+        localStorage.setItem('formData', JSON.stringify({
+            name: document.getElementById('name').value, dob: document.getElementById('dob').value,
+            phone: phoneMask.unmaskedValue, email: document.getElementById('email').value,
+            requirements: document.getElementById('requirements').value,
+        }));
+    };
+    const loadFormData = () => {
+        const data = JSON.parse(localStorage.getItem('formData'));
+        if (data) {
+            document.getElementById('name').value = data.name || '';
+            dobPicker.setDate(data.dob || '', true);
+            phoneMask.value = data.phone || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('requirements').value = data.requirements || '';
+        }
+    };
+    form.querySelectorAll('input, textarea').forEach(input => {
+        if(input.type !== 'file') input.addEventListener('input', saveFormData);
+    });
+
+    // --- MOBIL MENYUNI YOPISH FUNKSIYASI (YANGI QO'SHILDI) ---
+    const closeNavMenu = () => {
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            hamburgerMenu.classList.remove('active');
+            document.body.classList.remove('nav-open');
+        }
+    };
+
+    const openModal = () => {
+        closeNavMenu(); // <<< O'ZGARTIRISH: Modal ochilishidan oldin menyuni yopish
+        loadFormData();
+        document.body.classList.add('modal-open');
+        modal.classList.remove('invisible', 'opacity-0');
+        modalContent.classList.remove('scale-95');
+    };
+    const closeModal = () => {
+        document.body.classList.remove('modal-open');
+        modal.classList.add('opacity-0');
+        modalContent.classList.add('scale-95');
+        setTimeout(() => modal.classList.add('invisible'), 300);
+    };
+    const openSuccessModal = () => {
+        closeModal();
+        successModal.classList.remove('invisible', 'opacity-0');
+        successModalContent.classList.remove('scale-95');
+    }
+    const closeSuccessModal = () => {
+        successModal.classList.add('opacity-0');
+        successModalContent.classList.add('scale-95');
+        setTimeout(() => successModal.classList.add('invisible'), 300);
+    }
+
+    openModalButtons.forEach(btn => btn.addEventListener('click', openModal));
+    closeBtn.addEventListener('click', closeModal);
+    closeSuccessBtn.addEventListener('click', closeSuccessModal);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+                modalContent.classList.add('shake');
+                setTimeout(() => modalContent.classList.remove('shake'), 820);
+        }
+    });
+
+    const handleFiles = (files) => {
+        Array.from(files).forEach(file => {
+            if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                selectedFiles.push(file);
+            }
+        });
+        renderFileList();
+    };
+    const getFileIcon = (fileName) => {
+        const ext = fileName.split('.').pop().toLowerCase();
+        if (['pdf'].includes(ext)) return 'ph-file-pdf';
+        if (['doc', 'docx'].includes(ext)) return 'ph-file-doc';
+        if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'].includes(ext)) return 'ph-image';
+        return 'ph-file';
+    };
+    const renderFileList = () => {
+        fileListDisplay.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const fileElement = document.createElement('div');
+            fileElement.className = "inline-flex items-center bg-gray-100 rounded-md py-1.5 pl-2 pr-1 text-xs transition-all max-w-full";
+            fileElement.innerHTML = `<i class="ph ${getFileIcon(file.name)} text-lg mr-2 text-gray-500 flex-shrink-0"></i><span class="truncate min-w-0" title="${file.name}">${file.name}</span><button type="button" data-index="${index}" class="remove-file-btn ml-2 flex-shrink-0 text-red-500 hover:text-red-700 p-1"><i class="ph-bold ph-x"></i></button>`;
+            fileListDisplay.appendChild(fileElement);
+        });
+        fileNameDisplay.textContent = selectedFiles.length > 0 ? `${selectedFiles.length} ta fayl tanlandi` : 'Fayllarni tanlang yoki bu yerga tashlang';
+    };
+    medicalFilesInput.addEventListener('change', (e) => handleFiles(e.target.files));
+    fileListDisplay.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.remove-file-btn');
+        if (removeBtn) {
+            selectedFiles.splice(parseInt(removeBtn.dataset.index, 10), 1);
+            renderFileList();
+        }
+    });
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
+    });
+    ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover')));
+    ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover')));
+    dropZone.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        if (selectedFiles.length === 0) {
+            showError("Iltimos, kamida bitta tibbiy fayl yuklang."); return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.innerHTML = 'Yuborilmoqda... <i class="ph-bold ph-spinner-gap animate-spin ml-2"></i>';
+        statusMessage.textContent = '';
+
+        let filesDataForBitrix = [];
+        try {
+                for (const file of selectedFiles) {
+                filesDataForBitrix.push([file.name, await toBase64(file)]);
+            }
+        } catch (error) {
+            showError("Fayllarni o'qishda xatolik.");
+            submitButton.disabled = false;
+            submitButton.innerHTML = '<i class="ph ph-paper-plane-tilt text-xl mr-2"></i> Yuborish';
+            return;
+        }
+        
+        try {
+            const [bitrixResult, telegramResult] = await Promise.all([
+                sendToBitrix(filesDataForBitrix),
+                sendToTelegram(selectedFiles)
+            ]);
+
+            if ((bitrixResult && bitrixResult.result) || (telegramResult && telegramResult.ok)) {
+                localStorage.removeItem('formData');
+                form.reset();
+                phoneMask.value = '';
+                selectedFiles = [];
+                renderFileList();
+                openSuccessModal();
+            } else {
+                let errorMessage = 'Xatolik yuz berdi. ';
+                if (bitrixResult && bitrixResult.error_description) errorMessage += `Bitrix24: ${bitrixResult.error_description}. `;
+                if (telegramResult && telegramResult.description) errorMessage += `Telegram: ${telegramResult.description}.`;
+                showError(errorMessage.trim());
+            }
+        } catch (error) {
+            console.error("Submission Error:", error);
+            showError("Server bilan bog'lanishda xatolik. Iltimos, keyinroq urinib ko'ring.");
+        } finally {
+            submitButton.disabled = false;
+            submitButton.innerHTML = `<i class="ph ph-paper-plane-tilt text-xl mr-2"></i> Yuborish`;
+        }
+    });
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+    });
+
+    function showError(message) {
+        statusMessage.textContent = message;
+        statusMessage.className = 'mt-4 text-center text-sm font-medium text-red-600';
+    }
+
+    const getFormData = () => ({
+        name: document.getElementById('name').value, dob: document.getElementById('dob').value,
+        phone: '+998' + phoneMask.unmaskedValue, email: document.getElementById('email').value,
+        requirements: document.getElementById('requirements').value,
+    });
+    
+    function sendToBitrix(filesData) {
+        if (typeof BITRIX_WEBHOOK_URL === 'undefined' || !BITRIX_WEBHOOK_URL) {
+            console.warn("Bitrix24 webhook URL o'rnatilmagan.");
+            return Promise.resolve({ result: null, error_description: "Webhook URL not configured." });
+        }
+        const formData = getFormData();
+        const data = {
+            fields: {
+                TITLE: `Saytdan yangi ariza: ${formData.name}`,
+                NAME: formData.name,
+                PHONE: [{ VALUE: formData.phone, VALUE_TYPE: "WORK" }],
+                EMAIL: [{ VALUE: formData.email, VALUE_TYPE: "WORK" }],
+                COMMENTS: `Bemor kasalliklari: ${formData.requirements}`,
+                BIRTHDATE: formData.dob,
+                SOURCE_ID: "WEB"
+            }
+        };
+        
+        if (filesData.length > 0 && typeof CUSTOM_LEAD_FILE_FIELD_ID !== 'undefined' && CUSTOM_LEAD_FILE_FIELD_ID) {
+            data.fields[CUSTOM_LEAD_FILE_FIELD_ID] = filesData;
+        }
+        
+        return fetch(BITRIX_WEBHOOK_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(data) 
+        }).then(res => res.json());
+    }
+    
+    async function sendToTelegram(files) {
+        if (typeof TELEGRAM_BOT_TOKEN === 'undefined' || typeof TELEGRAM_CHAT_ID === 'undefined') {
+            console.warn("Telegram bot token yoki chat ID o'rnatilmagan.");
+            return Promise.resolve({ok: false, description: "Bot sozlanmagan"});
+        }
+        const formData = getFormData();
+        let caption = `<b>Saytdan yangi ariza!</b>\n\n`;
+        caption += `<b>👤 Ism:</b> ${formData.name}\n<b>📅 T. Sana:</b> ${formData.dob}\n`;
+        caption += `<b>📞 Telefon:</b> <code>${formData.phone}</code>\n<b>📧 Email:</b> ${formData.email || "Kiritilmagan"}\n`;
+        caption += `<b>📝 Izohlar:</b>\n${formData.requirements || "Kiritilmagan"}`;
+        
+        const tgFormData = new FormData();
+        tgFormData.append('chat_id', TELEGRAM_CHAT_ID);
+        
+        if (files.length === 0) {
+            tgFormData.append('text', caption);
+            tgFormData.append('parse_mode', 'HTML');
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            return fetch(url, { method: 'POST', body: tgFormData }).then(res => res.json());
+        }
+        
+        const mediaToSend = files.slice(0, 10).map((file, index) => {
+            const fileKey = `file${index}`;
+            tgFormData.append(fileKey, file);
+            return { type: 'document', media: `attach://${fileKey}`, caption: index === 0 ? caption : undefined, parse_mode: 'HTML' };
+        });
+
+        tgFormData.append('media', JSON.stringify(mediaToSend));
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMediaGroup`;
+        return fetch(url, { method: 'POST', body: tgFormData }).then(res => res.json());
+    }
+});

@@ -14,7 +14,7 @@
 	--color-shadow-strong: rgba(0, 0, 0, 0.15);
 
 	--header-height: 4rem;
-	--header-height-scrolled: 3.5rem;
+	--header-height-scrolled: 4.5rem;
 
 	--page-bg: #f8f9fa;
 	--page-border: #dee2e6;
@@ -1921,15 +1921,12 @@ body.nav-open .mobile-header-actions {
 
 .hero-video {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	min-width: 100%;
-	min-height: 100%;
-	width: auto;
-	height: auto;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* background-size o'rniga ishlatiladi */
 	z-index: 5;
-	transform: translate(-50%, -50%);
-	background-size: cover;
 }
 
 .hero-overlay {
@@ -2045,7 +2042,7 @@ body.nav-open .mobile-header-actions {
 }
 
 .form-group .phone-input-wrapper input {
-	padding-left: 3rem;
+	padding-left: 2.5rem;
 }
 
 .form-group .phone-input-wrapper .phone-icon {
@@ -4829,7 +4826,7 @@ body.nav-open .mobile-header-actions {
 		top: 100%;
 		right: 0;
 		left: auto;
-        height: 9rem;
+        height: 10rem;
 		width: 160px;
 		margin: 0.5rem 0 0 0;
 	}
@@ -4882,5 +4879,83 @@ body.nav-open .mobile-header-actions {
 
 	#modal-title {
 		font-size: 1.3rem;
+	}
+}
+
+/* Modal va uning elementlari uchun qo'shimcha stillar */
+.modal, .success-modal {
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	font-family: 'Inter', sans-serif;
+}
+.modal-content, .success-modal-content {
+	transition: transform 0.3s ease;
+}
+.dragover {
+	border-color: #3b82f6;
+	background-color: #eff6ff;
+}
+@keyframes shake {
+	10%, 90% { transform: translate3d(-1px, 0, 0) scale(1); }
+	20%, 80% { transform: translate3d(2px, 0, 0) scale(1); }
+	30%, 50%, 70% { transform: translate3d(-4px, 0, 0) scale(1); }
+	40%, 60% { transform: translate3d(4px, 0, 0) scale(1); }
+}
+.shake {
+	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+#formModal label {
+	margin-bottom: 0.25rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #374151;
+}
+body.modal-open {
+	overflow: hidden;
+}
+
+/* === PRELOADER STILLARI (YANGI QO'SHILDI) === */
+#preloader {
+	position: fixed;
+	inset: 0;
+	background-color: #ffffff;
+	z-index: 100000; /* Eng yuqorida turishi uchun */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: opacity 0.75s ease, visibility 0.75s ease;
+}
+#preloader.hidden {
+	opacity: 0;
+	visibility: hidden;
+}
+#preloader img {
+	width: 70px; /* Rasm o'lchami */
+	animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.05); }
+	100% { transform: scale(1); }
+}
+
+/* === YANGI TUGMA STILLARI === */
+.signup-btn {
+	background-image: linear-gradient(to right, #3b82f6 0%, #60a5fa 51%, #3b82f6 100%);
+	background-size: 200% auto;
+	color: white;
+	box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.4);
+	border: none;
+	transition: all 0.4s ease-out;
+}
+
+.signup-btn:hover {
+	background-position: right center; /* Gradient yo'nalishini o'zgartirish */
+	transform: translateY(-1px);
+	box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.5);
+}
+
+	@media (min-width: 1024px) { /* Faqat katta ekranlar uchun */
+	.hero-content {
+		max-width: 80rem;
 	}
 }
