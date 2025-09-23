@@ -4847,6 +4847,7 @@ body.nav-open .mobile-header-actions {
 
 	.form-card {
 		grid-template-columns: repeat(4, 1fr);
+		margin: 0 auto;
 	}
 
 	.footer-main-grid {

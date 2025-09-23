@@ -130,6 +130,8 @@
     padding-bottom: 6rem;
     color: #fff;
     overflow: hidden;
+    padding-left: 5rem;
+    padding-right: 5rem;
 }
 
 .clinic-hero-bg {
@@ -281,7 +283,7 @@
 
 /* ### UMUMIY BO'LIMLAR ### */
 .clinic-section {
-    padding: 2rem 0;
+    padding: 2rem 6rem;
     overflow: hidden; /* Animatsiyalar uchun */
 }
 
