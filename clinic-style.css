@@ -130,8 +130,6 @@
     padding-bottom: 6rem;
     color: #fff;
     overflow: hidden;
-    padding-left: 5rem;
-    padding-right: 5rem;
 }
 
 .clinic-hero-bg {
@@ -163,7 +161,7 @@
 .clinic-hero-content .container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .clinic-name {
@@ -876,6 +874,7 @@
     .prices-tabs-nav ul {
         padding: 1rem;
     }
+    
 }
 
 @media (min-width: 992px) {
@@ -943,25 +942,25 @@
 
 
 /* ========================================================= */
-        /* ===        CLINICS.HTML UCHUN MAXSUS USLUBLAR         === */
-        /* ========================================================= */
-        :root {
-            --clinics-bg: #f8f9fa;
-            --clinics-border: #dee2e6;
-            --clinics-text-dark: #212529;
-            --clinics-text-light: #6c757d;
-            --clinics-primary: #007BFF;
-        }
+/* ===        CLINICS.HTML UCHUN MAXSUS USLUBLAR         === */
+/* ========================================================= */
+:root {
+    --clinics-bg: #f8f9fa;
+    --clinics-border: #dee2e6;
+    --clinics-text-dark: #212529;
+    --clinics-text-light: #6c757d;
+    --clinics-primary: #007BFF;
+}
 
-        body {
-            background-color: #fff;
-        }
+body {
+    background-color: #fff;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
 /* ### SAHIFA SARLAVHASI ### */
 .page-header {
@@ -1252,3 +1251,4 @@ body.scrolled .filters-section {
     width: 14px;
     height: 14px;
 }
+
