@@ -281,7 +281,7 @@
 
 /* ### UMUMIY BO'LIMLAR ### */
 .clinic-section {
-    padding: 2rem 6rem;
+    padding: 2rem;
     overflow: hidden; /* Animatsiyalar uchun */
 }
 
@@ -914,9 +914,7 @@
         justify-content: flex-start;
         padding: 0 1rem;
     }
-    .clinic-stats-inline {
-        grid-template-columns: 1fr;
-    }
+   
     .prices-tabs-nav ul {
         display: flex;
         overflow-x: auto;
