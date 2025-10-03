@@ -170,14 +170,16 @@
                             <select id="filter-country" aria-label="Davlat bo'yicha filtr">
                                 <option value="all">Barcha davlatlar</option>
                                 <option value="hindiston">Hindiston</option>
-                                <option value="turkiya">Turkiya</option>
+                                <!-- <option value="turkiya">Turkiya</option> -->
                             </select>
                         </div>
                         <div class="filter-group">
                             <select id="filter-city" aria-label="Shahar bo'yicha filtr">
                                 <option value="all">Barcha shaharlar</option>
-                                <option value="faridabad">Faridabad</option>
-                                <option value="gurgaon">Gurgaon</option>
+                                <option value="Yangi_dehli">Yangi Dehli</option>
+                                <option value="Faridobod">Faridobod</option>
+                                <option value="Gurgaon">Gurgaon</option>
+                                <option value="Bangalor">Bangalor</option>
                             </select>
                         </div>
                     </div>
@@ -185,13 +187,74 @@
                 
                 <p id="clinics-count" style="text-align:center; margin-bottom: 2rem;"></p>
                 <div class="clinics-grid" id="clinics-grid">
-                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="faridabad" data-href="clinics/amrita-hospital.html">
-                        <img src="images/Amrita/1.jpg" alt="Amrita Hospital binosi" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/007BFF/FFFFFF?text=Amrita';">
+                    
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Faridobod" data-href="clinics/amrita-hospital.html">
+                        <img src="images/Amrita/1.jpg" alt="Amrita shifoxonasi binosi" class="card-image">
                         <div class="card-content">
-                            <h3>Amrita Hospital, Faridabad</h3>
+                            <h3>Amrita shifoxonasi</h3>
                             <p class="location">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Faridabad, Hindiston
+                                Faridobod, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">NABH, ISO, NABL</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Gurgaon" data-href="clinics/artemis-hospital.html">
+                        <img src="images/Artemis/Artemis-main.jpg" alt="Artemis shifoxonasi binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>Artemis shifoxonasi</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Gurgaon, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">NABH, JCI</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Bangalor" data-href="#">
+                        <img src="images/Apollo/Apollo.jpg" alt="Apollo Hospital binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>Apollo Hospital</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Bangalor, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">JCI</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Yangi_dehli" data-href="#">
+                        <img src="images/Max/max-main.jpg" alt="MAX shifoxonasi binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>MAX shifoxonasi</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Yangi Dehli, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">JCI, NABH</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Gurgaon" data-href="#">
+                        <img src="images/Medanta/main.jpg" alt="Medanta shifoxonasi binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>Medanta shifoxonasi</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Gurgaon, Hindiston
                             </p>
                             <div class="card-footer">
                                 <span class="accreditation">NABH</span>
@@ -200,13 +263,13 @@
                         </div>
                     </div>
 
-                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="gurgaon" data-href="clinics/artemis-hospital.html">
-                        <img src="images/Artemis/Artemis-main.jpg" alt="Artemis Hospital binosi" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/007BFF/FFFFFF?text=Amrita';">
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Faridobod" data-href="#">
+                        <img src="images/Metro/main.jpg" alt="Metro shifoxonasi binosi" class="card-image">
                         <div class="card-content">
-                            <h3>Artemis Hospital, Gurgaon</h3>
+                            <h3>Metro shifoxonasi</h3>
                             <p class="location">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Gurgaon, Hindiston
+                                Faridobod, Hindiston
                             </p>
                             <div class="card-footer">
                                 <span class="accreditation">JCI, NABH</span>
@@ -214,6 +277,37 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Gurgaon" data-href="#">
+                        <img src="images/Fortis/main.jpg" alt="Fortis shifoxonasi binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>Fortis shifoxonasi</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Gurgaon, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">JCI, NABH, NABL</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clinic-card-item" data-specialty="kardiologiya,onkologiya,nevrologiya" data-country="hindiston" data-city="Faridobod" data-href="#">
+                        <img src="images/Artemis/Artemis-main.jpg" alt="Marengo Osiyo shifoxonasi binosi" class="card-image">
+                        <div class="card-content">
+                            <h3>Marengo Osiyo shifoxonasi</h3>
+                            <p class="location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                Faridobod, Hindiston
+                            </p>
+                            <div class="card-footer">
+                                <span class="accreditation">NABH, NABL</span>
+                                <span class="details-link">Batafsil →</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 
                     
@@ -389,7 +483,7 @@
                 <div class="pt-0">
                     <div class="flex items-start">
                         <input type="checkbox" id="terms" required class="h-4 w-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="terms" class="ml-0 block text-sm text-gray-700" style="font-size: 0.7rem;">
+                        <label for="terms" class="ml-0 block text-sm text-gray-700" style="font-size: 0.85rem;">
                             Men kiritgan barcha ma'lumotlarning to'g'riligini tasdiqlayman hamda <a href="https://medmapp.uz/public-offer" target="_blank" class="text-blue-600 hover:underline font-medium">Ommaviy oferta</a> va <a href="https://medmapp.uz/privacy-policy" target="_blank" class="text-blue-600 hover:underline font-medium">Maxfiylik siyosati</a> bilan tanishib chiqdim. <span class="text-red-500">*</span>
                         </label>
                     </div>
