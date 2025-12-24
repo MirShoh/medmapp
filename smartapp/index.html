@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaktika Qahramoni - 3D Interaktiv O'yin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <canvas id="canvas3d"></canvas>
+        <video id="video" autoplay playsinline></video>
+        <div class="hand-cursor" id="handCursor"></div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen active">
+            <h1>🚀 GALAKTIKA QAHRAMONI 🌟</h1>
+            <p style="color: white; font-size: 20px; margin-bottom: 30px;">Bolajonlar uchun 3D Sarguzasht</p>
+            <div class="menu-container">
+                <button class="menu-button" onclick="showCharacterSelect()">
+                    🎮 Boshlash
+                </button>
+                <button class="menu-button" onclick="showHelp()">
+                    ❓ Yordam
+                </button>
+            </div>
+        </div>
+
+        <!-- Character Selection -->
+        <div id="characterScreen" class="screen">
+            <button class="back-button" onclick="showStartScreen()">⬅️</button>
+            <h1>👨‍🚀 Qahramonni Tanlang</h1>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('boy')">
+                    <div class="character-icon">👦</div>
+                    <div class="character-name">Astronaut Bola</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('girl')">
+                    <div class="character-icon">👧</div>
+                    <div class="character-name">Astronaut Qiz</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('robot')">
+                    <div class="character-icon">🤖</div>
+                    <div class="character-name">Robot Do'st</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('alien')">
+                    <div class="character-icon">👽</div>
+                    <div class="character-name">Do'st Alien</div>
+                </div>
+            </div>
+            <button class="menu-button" onclick="showMissionSelect()" style="margin-top: 30px;">
+                Davom etish ➡️
+            </button>
+        </div>
+
+        <!-- Mission Selection -->
+        <div id="missionScreen" class="screen">
+            <button class="back-button" onclick="showCharacterSelect()">⬅️</button>
+            <h1>🎯 Missiyani Tanlang</h1>
+            <div class="mission-list">
+                <div class="mission-card" onclick="startMission('drag')">
+                    <div class="mission-icon">🎨</div>
+                    <div class="mission-info">
+                        <h3>Drag & Drop</h3>
+                        <p>Qo'lingiz bilan sayyoralarni to'g'ri joyiga qo'ying</p>
+                    </div>
+                </div>
+                <div class="mission-card" onclick="startMission('quiz')">
+                    <div class="mission-icon">🧠</div>
+                    <div class="mission-info">
+                        <h3>Tanlash Quiz</h3>
+                        <p>Sayyoralar haqida 10 ta savolga javob bering</p>
+                    </div>
+                </div>
+                <div class="mission-card" onclick="startMission('movement')">
+                    <div class="mission-icon">🎮</div>
+                    <div class="mission-info">
+                        <h3>Harakatli Javob</h3>
+                        <p>Qo'lingiz bilan to'g'ri javobni ko'rsating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game UI -->
+        <div id="gameUI">
+            <button class="back-button" onclick="exitGame()">⬅️</button>
+            
+            <div class="game-header">
+                <div class="stat-item">
+                    <span>⭐</span>
+                    <span id="scoreDisplay">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>💎</span>
+                    <span id="levelDisplay">1</span>
+                </div>
+                <div class="stat-item">
+                    <span>❤️</span>
+                    <span id="livesDisplay">3</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0/10</div>
+            </div>
+
+            <div class="gesture-hint">
+                <h3>🤚 Qo'l Ishoralari</h3>
+                <div class="gesture-item">
+                    <span>👋</span>
+                    <span>Ochiq - Tanlash</span>
+                </div>
+                <div class="gesture-item">
+                    <span>🤏</span>
+                    <span>Qisish - Ushlab olish</span>
+                </div>
+                <div class="gesture-item">
+                    <span>👍</span>
+                    <span>Tasdiqlash</span>
+                </div>
+            </div>
+
+            <!-- Drag & Drop Targets -->
+            <div class="drag-targets" id="dragTargets" style="display: none;">
+                <div class="drop-zone" data-planet="sun">
+                    ☀️
+                    <div class="drop-zone-label">Quyosh</div>
+                </div>
+                <div class="drop-zone" data-planet="earth">
+                    🌍
+                    <div class="drop-zone-label">Yer</div>
+                </div>
+                <div class="drop-zone" data-planet="mars">
+                    🔴
+                    <div class="drop-zone-label">Mars</div>
+                </div>
+                <div class="drop-zone" data-planet="jupiter">
+                    🪐
+                    <div class="drop-zone-label">Yupiter</div>
+                </div>
+                <div class="drop-zone" data-planet="saturn">
+                    💍
+                    <div class="drop-zone-label">Saturn</div>
+                </div>
+                <div class="drop-zone" data-planet="moon">
+                    🌙
+                    <div class="drop-zone-label">Oy</div>
+                </div>
+            </div>
+
+            <!-- Quiz Panel -->
+            <div class="question-panel" id="questionPanel" style="display: none;">
+                <div class="question-text" id="questionText"></div>
+                <div class="answers-grid" id="answersGrid"></div>
+            </div>
+
+            <!-- Movement Game -->
+            <div class="movement-game" id="movementGame" style="display: none;">
+                <div class="movement-instruction" id="movementInstruction">
+                    Qo'lingizni ko'rsating!
+                </div>
+                <div class="movement-options" id="movementOptions"></div>
+            </div>
+
+            <!-- Result Screen -->
+            <div class="result-screen" id="resultScreen">
+                <div class="result-icon" id="resultIcon">🏆</div>
+                <div class="result-title" id="resultTitle">Ajoyib!</div>
+                <div class="stars" id="resultStars">⭐⭐⭐</div>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span>Yig'ilgan ballar:</span>
+                        <span id="finalScore">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span>To'g'ri javoblar:</span>
+                        <span id="correctAnswers">0/10</span>
+                    </div>
+                </div>
+                <button class="menu-button" onclick="showMissionSelect()">
+                    Yana o'ynash 🔄
+                </button>
+                <button class="menu-button" onclick="showStartScreen()">
+                    Bosh menyu 🏠
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
