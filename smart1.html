@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kosmik Mozaika - 3D Puzzle</title>
+    <title>Kosmik Darvoza - 3D Puzzle</title>
     <style>
         body { 
             margin: 0; 
@@ -30,7 +30,7 @@
         
         h1 { 
             margin: 0; font-size: 1.5rem; text-transform: uppercase; 
-            background: linear-gradient(90deg, #ffd700, #ff8c00); 
+            background: linear-gradient(90deg, #00ffff, #ff00ff); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
         }
 
@@ -43,8 +43,8 @@
         }
         
         .status-badge {
-            display: inline-block; background: rgba(0, 0, 0, 0.6); border: 1px solid #ffd700;
-            padding: 5px 15px; border-radius: 15px; font-size: 1rem; color: #ffd700; margin-top: 10px;
+            display: inline-block; background: rgba(0, 0, 0, 0.6); border: 1px solid #00ffff;
+            padding: 5px 15px; border-radius: 15px; font-size: 1rem; color: #00ffff; margin-top: 10px;
         }
 
         /* G'alaba ekrani */
@@ -54,6 +54,7 @@
             text-shadow: 0 0 20px #00ff00;
         }
         #win-screen h2 { font-size: 3rem; color: white; margin: 0; animation: pulse 1s infinite; }
+        #win-screen p { font-size: 1.5rem; color: #aaa; }
 
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
@@ -65,9 +66,9 @@
         }
 
         .btn {
-            background: linear-gradient(45deg, #ffd700, #ff4500); border: none; padding: 15px 40px;
+            background: linear-gradient(45deg, #00ffff, #0066ff); border: none; padding: 15px 40px;
             color: white; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 20px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); font-weight: bold;
         }
         .btn:disabled { background: #555; box-shadow: none; color: #aaa; }
     </style>
@@ -81,22 +82,22 @@
 <body>
 
     <div id="loading-screen">
-        <h1 style="font-size: 2rem; margin-bottom: 20px;">Kosmik Mozaika</h1>
-        <p>Kristall bo'laklarini yig'ib,<br>qadimiy artefaktni tiklang.</p>
+        <h1 style="font-size: 2rem; margin-bottom: 20px;">Kosmik Darvoza</h1>
+        <p>Belgilarni o'z joyiga qo'yib,<br>darvozani oching.</p>
         <div id="status-text" style="margin-top: 20px; color: #aaa;">AI yuklanmoqda...</div>
         <button id="start-btn" class="btn" disabled>BOSHLASH</button>
     </div>
 
     <div id="ui-layer">
-        <h1>Mozaika</h1>
+        <h1>Kod: KOSMOS</h1>
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <div id="score-text">0 / 12 Tiklandi</div>
+        <div id="score-text">0 / 8 Kod terildi</div>
         <div id="gesture-display" class="status-badge">Kutilmoqda...</div>
     </div>
 
     <div id="win-screen">
-        <h2>G'ALABA!</h2>
-        <p>Artefakt tiklandi</p>
+        <h2>DARVOZA OCHILDI!</h2>
+        <p>Koinotga xush kelibsiz</p>
     </div>
     
     <video id="input-video" playsinline webkit-playsinline muted autoplay style="display:none"></video>
@@ -106,19 +107,20 @@
 <script>
     // --- SOZLAMALAR ---
     const CONFIG = {
-        sensitivity: 3.5, // Mobil uchun sezgirlik
-        snapDistance: 1.5, // Qulflanish masofasi (kattaroq = osonroq)
-        puzzleRadius: 2.5 // Yig'ilgan shar radiusi
+        sensitivity: 3.5,
+        snapDistance: 1.2, 
+        radius: 3.5, // Aylana radiusi
+        symbols: ["K", "O", "S", "M", "O", "S", "2", "4"] // O'yin belgilari
     };
 
     const state = {
         handVisible: false,
         handPos: { x: 0, y: 0 },
-        gesture: 'NONE', // OPEN, PINCH
+        gesture: 'NONE', 
         grabbedObj: null,
         hoveredObj: null,
         lockedCount: 0,
-        totalPieces: 12,
+        totalPieces: CONFIG.symbols.length,
         isWon: false
     };
 
@@ -134,14 +136,14 @@
     const previewCanvas = document.getElementById('video-preview');
     const previewCtx = previewCanvas.getContext('2d');
 
-    // --- 1. KAMERA VA AI (MediaPipe) ---
+    // --- 1. KAMERA VA AI ---
     let hands;
     
     function initAI() {
         hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
         hands.setOptions({
             maxNumHands: 1,
-            modelComplexity: 0, // Lite mode
+            modelComplexity: 0, 
             minDetectionConfidence: 0.5,
             minTrackingConfidence: 0.5
         });
@@ -162,7 +164,6 @@
             alert("Kamera ishlashi uchun HTTPS talab qilinadi.");
         }
 
-        // Kamera strategiyalari
         const strategies = [
             { video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } },
             { video: { facingMode: 'user' } },
@@ -186,7 +187,7 @@
                 processVideoLoop();
             };
         } else {
-            alert("Kamerani ochib bo'lmadi. Ruxsatlarni tekshiring.");
+            alert("Kamera xatosi. Ruxsatlarni tekshiring.");
             startBtn.innerText = "Xatolik";
         }
     });
@@ -199,7 +200,6 @@
     }
 
     function onAIResults(results) {
-        // Preview chizish
         previewCanvas.width = videoElement.videoWidth;
         previewCanvas.height = videoElement.videoHeight;
         previewCtx.save();
@@ -210,7 +210,6 @@
             const landmarks = results.multiHandLandmarks[0];
             drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 3});
             
-            // Koordinatalar
             const rawX = 1 - landmarks[9].x; 
             const rawY = landmarks[9].y;
 
@@ -218,7 +217,6 @@
             state.handPos.y = -(rawY - 0.5) * CONFIG.sensitivity;
             state.handVisible = true;
 
-            // Gesture aniqlash
             const thumb = landmarks[4];
             const index = landmarks[8];
             const distance = Math.sqrt(Math.pow(thumb.x - index.x, 2) + Math.pow(thumb.y - index.y, 2));
@@ -243,9 +241,42 @@
         previewCtx.restore();
     }
 
-    // --- 2. 3D SAHNA (THREE.JS) ---
+    // --- 2. 3D SAHNA VA TEXTURE ---
+    
+    // Matnli Texture yaratish funksiyasi
+    function createTextTexture(text, isGhost = false) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        
+        // Orqa fon
+        if (isGhost) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; // Xira
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(4, 4, 120, 120); // Ramka
+        } else {
+            ctx.fillStyle = '#003366'; // To'q ko'k kub
+            ctx.fillRect(0,0,128,128);
+            ctx.strokeStyle = '#00ffff'; // Neon ramka
+            ctx.lineWidth = 8;
+            ctx.strokeRect(4, 4, 120, 120);
+        }
+        
+        // Matn
+        ctx.font = 'bold 80px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = isGhost ? 'rgba(255, 255, 255, 0.3)' : '#ffffff';
+        ctx.fillText(text, 64, 64);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        return tex;
+    }
+
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050510, 0.035);
+    scene.fog = new THREE.FogExp2(0x050510, 0.03);
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.z = 10;
@@ -255,14 +286,10 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-    // Chiroqlar
     scene.add(new THREE.AmbientLight(0x404040, 3));
-    const dirLight = new THREE.DirectionalLight(0xffa500, 2); // Oltin nur
-    dirLight.position.set(5, 5, 5);
+    const dirLight = new THREE.DirectionalLight(0x00ffff, 2);
+    dirLight.position.set(0, 5, 5);
     scene.add(dirLight);
-    const blueLight = new THREE.PointLight(0x0088ff, 1, 20);
-    blueLight.position.set(-5, -5, 5);
-    scene.add(blueLight);
 
     // Yulduzlar
     const starGeo = new THREE.BufferGeometry();
@@ -271,80 +298,65 @@
     starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
     scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.1})));
 
-    // --- PUZZLE TIZIMI ---
+    // --- O'YIN OBYEKTLARI ---
     const piecesGroup = new THREE.Group();
     scene.add(piecesGroup);
-    const ghostGroup = new THREE.Group(); // Qolip (shaffof)
+    const ghostGroup = new THREE.Group();
     scene.add(ghostGroup);
 
-    // Icosahedron (20 yuzli) vertices dan foydalanamiz
-    // Maqsad shakli: Kristal Shar
-    const baseGeo = new THREE.IcosahedronGeometry(CONFIG.puzzleRadius, 0);
-    const positions = baseGeo.attributes.position;
-    
-    // 12 ta cho'qqini (vertices) olamiz
-    // Icosahedron (detail 0) da 12 ta cho'qqi bor
-    const targetPositions = [];
-    for(let i=0; i<positions.count; i++) {
-        const v = new THREE.Vector3();
-        v.fromBufferAttribute(positions, i);
-        
-        // Takrorlanishlarni oldini olish (oddiy usul)
-        let isDuplicate = false;
-        for(let t of targetPositions) {
-            if(t.distanceTo(v) < 0.1) isDuplicate = true;
-        }
-        if(!isDuplicate) targetPositions.push(v);
-    }
-    
-    state.totalPieces = targetPositions.length;
+    const total = CONFIG.symbols.length;
+    const angleStep = (Math.PI * 2) / total;
 
-    // Bo'laklarni yaratish
-    targetPositions.forEach((targetPos, idx) => {
-        // 1. Qolip (Ghost) yaratish
-        const ghostGeo = new THREE.OctahedronGeometry(0.6);
-        const ghostMat = new THREE.MeshBasicMaterial({ 
-            color: 0x444444, wireframe: true, transparent: true, opacity: 0.3 
-        });
-        const ghostMesh = new THREE.Mesh(ghostGeo, ghostMat);
-        ghostMesh.position.copy(targetPos);
-        ghostMesh.lookAt(0, 0, 0); // Markazga qarash
-        ghostGroup.add(ghostMesh);
+    CONFIG.symbols.forEach((char, i) => {
+        // Joylashuv (Aylana bo'ylab)
+        const angle = i * angleStep;
+        const targetX = Math.cos(angle) * CONFIG.radius;
+        const targetY = Math.sin(angle) * CONFIG.radius;
+        const targetPos = new THREE.Vector3(targetX, targetY, 0);
 
-        // 2. O'ynaladigan Bo'lak (Piece) yaratish
-        const pieceGeo = new THREE.OctahedronGeometry(0.55); // Biroz kichikroq
+        // 1. GHOST (Qolip - Joyi)
+        const ghostTex = createTextTexture(char, true);
+        const ghostMat = new THREE.MeshBasicMaterial({ map: ghostTex, transparent: true, opacity: 0.5 });
+        const ghostGeo = new THREE.BoxGeometry(1, 1, 0.1); // Yassi quti
+        const ghost = new THREE.Mesh(ghostGeo, ghostMat);
+        ghost.position.copy(targetPos);
+        ghostGroup.add(ghost);
+
+        // 2. PIECE (O'ynaladigan Bo'lak)
+        const pieceTex = createTextTexture(char, false);
         const pieceMat = new THREE.MeshPhysicalMaterial({
-            color: new THREE.Color().setHSL(idx / 12, 1, 0.5), // Kamalak ranglari
-            metalness: 0.2, roughness: 0.1, transmission: 0.6, transparent: true
+            map: pieceTex,
+            color: 0xffffff,
+            metalness: 0.2, roughness: 0.1, transmission: 0.2, transparent: true
         });
+        const pieceGeo = new THREE.BoxGeometry(0.8, 0.8, 0.8); // Kub
         const piece = new THREE.Mesh(pieceGeo, pieceMat);
         
-        // Tasodifiy joyga qo'yish (boshlanishida)
+        // Tasodifiy joylashtirish
         piece.position.set(
-            (Math.random() - 0.5) * 12,
-            (Math.random() - 0.5) * 12,
-            (Math.random() - 0.5) * 5 + 2 // Z o'qi bo'yicha oldinroq
+            (Math.random() - 0.5) * 8,
+            (Math.random() - 0.5) * 6,
+            (Math.random() * 3) + 2 // Oldinroqda
         );
-        
-        // Muhim ma'lumotlarni saqlash
+
         piece.userData = {
-            id: idx,
+            id: i,
+            char: char,
             targetPos: targetPos.clone(),
             isLocked: false,
             rotSpeed: { x: Math.random()*0.02, y: Math.random()*0.02 }
         };
-        
         piecesGroup.add(piece);
     });
 
     // Kursor
     const cursor = new THREE.Mesh(
-        new THREE.SphereGeometry(0.2, 16, 16),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 })
+        new THREE.SphereGeometry(0.15, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.6 })
     );
     scene.add(cursor);
 
-    // --- MANTIQ VA ANIMATSIYA ---
+    // --- MANTIQ ---
     const raycaster = new THREE.Raycaster();
     const mouseVec = new THREE.Vector2();
     const clock = new THREE.Clock();
@@ -352,18 +364,26 @@
     function updateProgress() {
         const percent = (state.lockedCount / state.totalPieces) * 100;
         progressFill.style.width = `${percent}%`;
-        scoreText.innerText = `${state.lockedCount} / ${state.totalPieces} Tiklandi`;
+        scoreText.innerText = `${state.lockedCount} / ${state.totalPieces} Kod terildi`;
 
         if (state.lockedCount === state.totalPieces && !state.isWon) {
             state.isWon = true;
             winScreen.style.display = 'block';
             
-            // G'alaba effekti: Markaziy nurni portlatish
-            const light = new THREE.PointLight(0xffffff, 5, 50);
+            // Portal Effekti
+            const light = new THREE.PointLight(0x00ffff, 5, 50);
             scene.add(light);
             
-            // Aylanishni tezlashtirish
-            ghostGroup.visible = false;
+            // Markazda spiral effekt
+            const portalGeo = new THREE.RingGeometry(0.1, 4.5, 32);
+            const portalMat = new THREE.MeshBasicMaterial({ 
+                color: 0x00ffff, side: THREE.DoubleSide, transparent: true, opacity: 0.5, wireframe: true 
+            });
+            const portal = new THREE.Mesh(portalGeo, portalMat);
+            scene.add(portal);
+            
+            // Animatsiya loopiga qo'shish uchun
+            state.portal = portal;
         }
     }
 
@@ -371,7 +391,6 @@
         requestAnimationFrame(animate);
         const time = clock.getElapsedTime();
 
-        // Kursor
         mouseVec.x += (state.handPos.x - mouseVec.x) * 0.2;
         mouseVec.y += (state.handPos.y - mouseVec.y) * 0.2;
 
@@ -384,10 +403,9 @@
             cursor.visible = true;
         } else cursor.visible = false;
 
-        // O'zaro ta'sir
         let intersects = raycaster.intersectObjects(piecesGroup.children);
         
-        // Reset colors
+        // Bo'sh turgan kublarni aylantirish
         piecesGroup.children.forEach(p => {
             if (!p.userData.isLocked && p !== state.grabbedObj) {
                 p.material.emissive.setHex(0x000000);
@@ -397,7 +415,6 @@
         });
 
         if (state.handVisible && !state.isWon) {
-            // Hover (Sichqoncha ustiga kelganda)
             if (intersects.length > 0 && !state.grabbedObj) {
                 const obj = intersects[0].object;
                 if (!obj.userData.isLocked) {
@@ -406,38 +423,36 @@
                 }
             } else state.hoveredObj = null;
 
-            // Grab (Ushlash)
             if (state.gesture === 'PINCH') {
                 if (!state.grabbedObj && state.hoveredObj) state.grabbedObj = state.hoveredObj;
                 
                 if (state.grabbedObj) {
                     const p = state.grabbedObj;
-                    p.position.lerp(cursorWorldPos, 0.2); // Silliq harakat
-                    p.material.emissive.setHex(0xffaa00);
-
-                    // SNAP CHECK (Joyiga tushishini tekshirish)
-                    const distToTarget = p.position.distanceTo(p.userData.targetPos);
+                    p.position.lerp(cursorWorldPos, 0.2); 
+                    p.material.emissive.setHex(0x00aaaa);
                     
-                    // Agar maqsadga yaqin bo'lsa, magnit kabi tortish chizig'ini ko'rsatish mumkin (hozircha vizualsiz)
+                    // To'g'rilash (Rotation)
+                    p.rotation.x *= 0.9; 
+                    p.rotation.y *= 0.9;
+                    p.rotation.z *= 0.9;
+
+                    const distToTarget = p.position.distanceTo(p.userData.targetPos);
                     if (distToTarget < CONFIG.snapDistance) {
-                        p.material.emissive.setHex(0x00ff00); // Yashil ishora
+                        p.material.emissive.setHex(0x00ff00); 
                     }
                 }
             } else {
-                // Qo'yib yuborish (Drop)
                 if (state.grabbedObj) {
                     const p = state.grabbedObj;
                     const distToTarget = p.position.distanceTo(p.userData.targetPos);
                     
                     if (distToTarget < CONFIG.snapDistance) {
-                        // Qulflash!
                         p.userData.isLocked = true;
-                        p.position.copy(p.userData.targetPos); // Aniq joyiga qo'yish
-                        p.rotation.set(0, 0, 0); // Aylanishni to'xtatish
-                        p.lookAt(0, 0, 0);
-                        p.material.emissive.setHex(0x005500); // Xira yashil nur
+                        p.position.copy(p.userData.targetPos);
+                        p.rotation.set(0, 0, 0); 
+                        p.material.emissive.setHex(0x00ff00);
                         
-                        // Ovoz effekti o'rniga vizual chaqnash
+                        // Chaqnash
                         const flash = new THREE.PointLight(0x00ff00, 2, 3);
                         flash.position.copy(p.position);
                         scene.add(flash);
@@ -451,19 +466,15 @@
             }
         }
 
-        // G'alaba animatsiyasi (Butun shar aylanadi)
         if (state.isWon) {
-            piecesGroup.rotation.y += 0.02;
-            piecesGroup.rotation.z += 0.01;
+            ghostGroup.visible = false;
+            // Butun darvozani aylantirish
+            piecesGroup.rotation.z -= 0.01;
             
-            // Bo'laklar pulsatsiyasi
-            const scale = 1 + Math.sin(time * 3) * 0.05;
-            piecesGroup.scale.setScalar(scale);
-        }
-
-        // Ghost (qolip) ni sekin aylantirish
-        if (!state.isWon) {
-            // ghostGroup.rotation.y += 0.001; // Qiyinlashtirish uchun yoqish mumkin
+            if (state.portal) {
+                state.portal.rotation.z += 0.05;
+                state.portal.scale.setScalar(1 + Math.sin(time * 5) * 0.1);
+            }
         }
 
         renderer.render(scene, camera);
@@ -480,4 +491,4 @@
 
 </script>
 </body>
-</html> 
+</html>
