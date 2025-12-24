@@ -356,8 +356,8 @@
             this.head.add(lEye, rEye);
             this.robot.add(this.head);
 
-            // Qo'llar
-            const armGeo = new THREE.CapsuleGeometry(0.15, 0.6, 4, 8);
+            // Qo'llar (Silindr shakliga o'zgartirildi, chunki CapsuleGeometry eski versiyalarda yo'q)
+            const armGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.6, 8);
             
             this.lArm = new THREE.Group();
             const lArmMesh = new THREE.Mesh(armGeo, matDark);
