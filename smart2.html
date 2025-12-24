@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galaktika Sayohatchisi - 3D Puzzle</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background-color: #000; 
+            font-family: 'Segoe UI', sans-serif; 
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        
+        #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        /* Kamera (Selfie) */
+        #video-preview {
+            position: absolute; bottom: 20px; right: 20px; width: 100px; height: 133px;
+            border-radius: 12px; border: 2px solid rgba(0, 255, 255, 0.3); z-index: 2; 
+            transform: scaleX(-1); box-shadow: 0 0 20px rgba(0,0,0,0.5); background: #000; object-fit: cover;
+        }
+
+        #ui-layer {
+            position: absolute; top: 20px; left: 20px; z-index: 3; color: white;
+            pointer-events: none; text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            width: 90%;
+        }
+        
+        h1 { 
+            margin: 0; font-size: 1.5rem; text-transform: uppercase; 
+            background: linear-gradient(90deg, #00ffff, #ff00ff); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+
+        .level-info {
+            font-size: 1.2rem; color: #ffd700; margin-bottom: 5px; font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 200px; height: 10px; background: rgba(255,255,255,0.2); border-radius: 5px;
+            margin-top: 10px; overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%; height: 100%; background: #00ff00; transition: width 0.3s;
+        }
+        
+        .status-badge {
+            display: inline-block; background: rgba(0, 0, 0, 0.6); border: 1px solid #00ffff;
+            padding: 5px 15px; border-radius: 15px; font-size: 1rem; color: #00ffff; margin-top: 10px;
+        }
+
+        /* Bosqich tugashi ekrani */
+        #win-screen {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; display: none; z-index: 20;
+            text-shadow: 0 0 20px #00ff00; width: 80%;
+        }
+        #win-screen h2 { font-size: 2.5rem; color: #fff; margin: 0; animation: pulse 1s infinite; }
+        #win-screen p { font-size: 1.2rem; color: #aaa; margin: 10px 0; }
+        
+        #next-level-btn {
+            background: linear-gradient(45deg, #00ff00, #006400); border: none; padding: 15px 40px;
+            color: white; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); font-weight: bold; pointer-events: auto;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Yuklash ekrani */
+        #loading-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050510; z-index: 10; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white; text-align: center; padding: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #0066ff); border: none; padding: 15px 40px;
+            color: white; font-size: 1.2rem; border-radius: 30px; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); font-weight: bold;
+        }
+        .btn:disabled { background: #555; box-shadow: none; color: #aaa; }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div id="loading-screen">
+        <h1 style="font-size: 2rem; margin-bottom: 20px;">Galaktika Sayohatchisi</h1>
+        <p>Darvoza kodlarini terib,<br>yangi sayyoralarni kashf eting.</p>
+        <div id="status-text" style="margin-top: 20px; color: #aaa;">AI yuklanmoqda...</div>
+        <button id="start-btn" class="btn" disabled>BOSHLASH</button>
+    </div>
+
+    <div id="ui-layer">
+        <div class="level-info" id="level-title">1-BOSQICH: MARS</div>
+        <h2 id="target-word" style="margin: 0; color: #ccc; letter-spacing: 5px;">KOD: MARS</h2>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div id="gesture-display" class="status-badge">Kutilmoqda...</div>
+    </div>
+
+    <div id="win-screen">
+        <h2 id="win-title">DARVOZA OCHILDI!</h2>
+        <p id="planet-name">MARS SAYYORASI</p>
+        <button id="next-level-btn">KEYINGI SAYYORA >></button>
+    </div>
+    
+    <video id="input-video" playsinline webkit-playsinline muted autoplay style="display:none"></video>
+    <canvas id="video-preview"></canvas>
+    <div id="canvas-container"></div>
+
+<script>
+    // --- O'YIN MA'LUMOTLARI ---
+    const LEVELS = [
+        {
+            name: "MARS",
+            code: ["M", "A", "R", "S"],
+            color: 0xff4500, // Qizil
+            radius: 3.5
+        },
+        {
+            name: "YER",
+            code: ["Y", "E", "R"],
+            color: 0x0066ff, // Ko'k
+            radius: 3.0
+        },
+        {
+            name: "OY",
+            code: ["O", "Y"],
+            color: 0xdddddd, // Oq-kulrang
+            radius: 2.5
+        },
+        {
+            name: "SATURN",
+            code: ["S", "A", "T", "U", "R", "N"],
+            color: 0xffd700, // Oltin
+            radius: 4.0
+        },
+        {
+            name: "NEPTUN",
+            code: ["N", "E", "P", "T", "U", "N"],
+            color: 0x00008b, // To'q ko'k
+            radius: 4.0
+        }
+    ];
+
+    const CONFIG = {
+        sensitivity: 3.5,
+        snapDistance: 1.2,
+    };
+
+    const state = {
+        levelIndex: 0,
+        handVisible: false,
+        handPos: { x: 0, y: 0 },
+        gesture: 'NONE', 
+        grabbedObj: null,
+        hoveredObj: null,
+        lockedCount: 0,
+        isWon: false
+    };
+
+    // --- DOM ELEMENTLAR ---
+    const startBtn = document.getElementById('start-btn');
+    const nextLvlBtn = document.getElementById('next-level-btn');
+    const loadingScreen = document.getElementById('loading-screen');
+    const statusText = document.getElementById('status-text');
+    const gestureDisplay = document.getElementById('gesture-display');
+    const progressFill = document.getElementById('progress-fill');
+    const levelTitle = document.getElementById('level-title');
+    const targetWord = document.getElementById('target-word');
+    const winScreen = document.getElementById('win-screen');
+    const winTitle = document.getElementById('win-title');
+    const planetName = document.getElementById('planet-name');
+    const videoElement = document.getElementById('input-video');
+    const previewCanvas = document.getElementById('video-preview');
+    const previewCtx = previewCanvas.getContext('2d');
+
+    // --- 1. KAMERA VA AI ---
+    let hands;
+    
+    function initAI() {
+        hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 0, 
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+        
+        hands.onResults(onAIResults);
+        
+        hands.initialize().then(() => {
+            statusText.innerText = "Tayyor!";
+            startBtn.disabled = false;
+        });
+    }
+
+    startBtn.addEventListener('click', async () => {
+        startBtn.innerText = "Yuklanmoqda...";
+        startBtn.disabled = true;
+
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            alert("Kamera ishlashi uchun HTTPS talab qilinadi.");
+        }
+
+        const strategies = [
+            { video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } },
+            { video: { facingMode: 'user' } },
+            { video: true }
+        ];
+
+        let stream = null;
+        for (const constraints of strategies) {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                break;
+            } catch (e) { console.warn(e); }
+        }
+
+        if (stream) {
+            videoElement.srcObject = stream;
+            videoElement.onloadedmetadata = () => {
+                videoElement.play();
+                loadingScreen.style.opacity = 0;
+                setTimeout(() => loadingScreen.remove(), 500);
+                
+                // O'yinni boshlash
+                initLevel(0);
+                processVideoLoop();
+            };
+        } else {
+            alert("Kamera xatosi.");
+            startBtn.innerText = "Xatolik";
+        }
+    });
+
+    nextLvlBtn.addEventListener('click', () => {
+        state.levelIndex++;
+        if (state.levelIndex >= LEVELS.length) state.levelIndex = 0; // Qayta boshlash
+        initLevel(state.levelIndex);
+        winScreen.style.display = 'none';
+    });
+
+    async function processVideoLoop() {
+        if (!videoElement.paused && !videoElement.ended) {
+            await hands.send({image: videoElement});
+        }
+        requestAnimationFrame(processVideoLoop);
+    }
+
+    function onAIResults(results) {
+        previewCanvas.width = videoElement.videoWidth;
+        previewCanvas.height = videoElement.videoHeight;
+        previewCtx.save();
+        previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+        previewCtx.drawImage(results.image, 0, 0, previewCanvas.width, previewCanvas.height);
+        
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+            const landmarks = results.multiHandLandmarks[0];
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 3});
+            
+            const rawX = 1 - landmarks[9].x; 
+            const rawY = landmarks[9].y;
+
+            state.handPos.x = (rawX - 0.5) * CONFIG.sensitivity;
+            state.handPos.y = -(rawY - 0.5) * CONFIG.sensitivity;
+            state.handVisible = true;
+
+            const thumb = landmarks[4];
+            const index = landmarks[8];
+            const distance = Math.sqrt(Math.pow(thumb.x - index.x, 2) + Math.pow(thumb.y - index.y, 2));
+            
+            if (distance < 0.06) {
+                state.gesture = 'PINCH';
+                gestureDisplay.innerText = "✊ USHLASH";
+                gestureDisplay.style.color = "#ffff00";
+                gestureDisplay.style.borderColor = "#ffff00";
+            } else {
+                state.gesture = 'OPEN';
+                gestureDisplay.innerText = "✋ HARAKAT";
+                gestureDisplay.style.color = "#00ffff";
+                gestureDisplay.style.borderColor = "#00ffff";
+            }
+        } else {
+            state.handVisible = false;
+            gestureDisplay.innerText = "Qo'l yo'q";
+            gestureDisplay.style.color = "#aaa";
+            gestureDisplay.style.borderColor = "#555";
+        }
+        previewCtx.restore();
+    }
+
+    // --- 2. 3D TEXTURE YARATISH ---
+    function createTextTexture(text, isGhost = false, colorHex = '#003366') {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        
+        if (isGhost) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; 
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(4, 4, 120, 120);
+        } else {
+            ctx.fillStyle = colorHex; 
+            ctx.fillRect(0,0,128,128);
+            ctx.strokeStyle = '#ffffff'; 
+            ctx.lineWidth = 8;
+            ctx.strokeRect(4, 4, 120, 120);
+        }
+        
+        ctx.font = 'bold 80px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = isGhost ? 'rgba(255, 255, 255, 0.5)' : '#ffffff';
+        ctx.fillText(text, 64, 64);
+
+        return new THREE.CanvasTexture(canvas);
+    }
+
+    // --- 3. 3D SAHNA ---
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050510, 0.03);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 10;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0x404040, 3));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+    dirLight.position.set(0, 5, 5);
+    scene.add(dirLight);
+
+    // Yulduzlar
+    const starGeo = new THREE.BufferGeometry();
+    const starPos = [];
+    for(let i=0; i<1000; i++) starPos.push((Math.random()-0.5)*60, (Math.random()-0.5)*60, (Math.random()-0.5)*60);
+    starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+    scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.1})));
+
+    // --- GURUHLAR ---
+    const piecesGroup = new THREE.Group();
+    scene.add(piecesGroup);
+    const ghostGroup = new THREE.Group();
+    scene.add(ghostGroup);
+    
+    // Portal va Sayyora
+    const portalGroup = new THREE.Group();
+    scene.add(portalGroup);
+    
+    // Portal Halqasi
+    const portalRingGeo = new THREE.RingGeometry(0.1, 5, 64);
+    const portalRingMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, side: THREE.DoubleSide, transparent: true, opacity: 0, wireframe: true });
+    const portalRing = new THREE.Mesh(portalRingGeo, portalRingMat);
+    portalGroup.add(portalRing);
+
+    // Sayyora Shari (Markazda)
+    const planetGeo = new THREE.SphereGeometry(2, 32, 32);
+    const planetMat = new THREE.MeshPhysicalMaterial({ color: 0xff0000, metalness: 0.1, roughness: 0.8, emissive: 0x220000 });
+    const planetMesh = new THREE.Mesh(planetGeo, planetMat);
+    planetMesh.scale.set(0,0,0); // Boshida ko'rinmaydi
+    portalGroup.add(planetMesh);
+    
+    // Kursor
+    const cursor = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.6 })
+    );
+    scene.add(cursor);
+
+
+    // --- BOSQICHNI BOSHLASH ---
+    function initLevel(lvlIndex) {
+        // Tozalash
+        while(piecesGroup.children.length > 0) piecesGroup.remove(piecesGroup.children[0]);
+        while(ghostGroup.children.length > 0) ghostGroup.remove(ghostGroup.children[0]);
+        
+        const lvlData = LEVELS[lvlIndex];
+        state.lockedCount = 0;
+        state.isWon = false;
+        state.levelCode = lvlData.code;
+        state.grabbedObj = null;
+
+        // UI yangilash
+        levelTitle.innerText = `${lvlIndex + 1}-BOSQICH: ${lvlData.name}`;
+        targetWord.innerText = `KOD: ${lvlData.code.join("")}`;
+        progressFill.style.width = "0%";
+        winScreen.style.display = "none";
+        
+        // Portalni yashirish
+        portalRing.material.opacity = 0;
+        planetMesh.scale.set(0,0,0);
+        
+        // Sayyora rangini yangilash
+        planetMesh.material.color.setHex(lvlData.color);
+        planetMesh.material.emissive.setHex(lvlData.color);
+        planetMesh.material.emissiveIntensity = 0.2;
+
+        // Yangi bo'laklarni yaratish
+        const total = lvlData.code.length;
+        const angleStep = (Math.PI * 2) / total;
+        const radius = lvlData.radius;
+
+        lvlData.code.forEach((char, i) => {
+            const angle = i * angleStep;
+            const targetX = Math.cos(angle) * radius;
+            const targetY = Math.sin(angle) * radius;
+            const targetPos = new THREE.Vector3(targetX, targetY, 0);
+
+            // GHOST (Joyi)
+            const ghostTex = createTextTexture(char, true);
+            const ghostMat = new THREE.MeshBasicMaterial({ map: ghostTex, transparent: true, opacity: 0.5 });
+            const ghost = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.1), ghostMat);
+            ghost.position.copy(targetPos);
+            ghostGroup.add(ghost);
+
+            // PIECE (Bo'lak)
+            // Sayyora rangiga mos kubik
+            const colorHex = '#' + lvlData.color.toString(16).padStart(6, '0');
+            const pieceTex = createTextTexture(char, false, colorHex);
+            
+            const pieceMat = new THREE.MeshPhysicalMaterial({
+                map: pieceTex,
+                color: 0xffffff,
+                metalness: 0.2, roughness: 0.1, transmission: 0.2, transparent: true
+            });
+            const piece = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), pieceMat);
+            
+            // Tasodifiy joy
+            piece.position.set(
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 6,
+                (Math.random() * 3) + 2
+            );
+
+            piece.userData = {
+                id: i,
+                targetPos: targetPos.clone(),
+                isLocked: false,
+                rotSpeed: { x: Math.random()*0.02, y: Math.random()*0.02 }
+            };
+            piecesGroup.add(piece);
+        });
+        
+        ghostGroup.visible = true;
+        piecesGroup.visible = true;
+        piecesGroup.rotation.set(0,0,0);
+    }
+
+    // --- MANTIQ VA ANIMATSIYA ---
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+    const clock = new THREE.Clock();
+
+    function checkWin() {
+        state.lockedCount++;
+        const total = state.levelCode.length;
+        const percent = (state.lockedCount / total) * 100;
+        progressFill.style.width = `${percent}%`;
+
+        if (state.lockedCount === total) {
+            startWinSequence();
+        }
+    }
+
+    function startWinSequence() {
+        state.isWon = true;
+        ghostGroup.visible = false;
+        
+        // UI
+        const lvlData = LEVELS[state.levelIndex];
+        planetName.innerText = `${lvlData.name} SAYYORASI OCHILDI`;
+        winScreen.style.display = 'block';
+
+        // Chaqnash effekti
+        const light = new THREE.PointLight(lvlData.color, 5, 50);
+        scene.add(light);
+        setTimeout(() => scene.remove(light), 1000);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const time = clock.getElapsedTime();
+
+        mouseVec.x += (state.handPos.x - mouseVec.x) * 0.2;
+        mouseVec.y += (state.handPos.y - mouseVec.y) * 0.2;
+
+        raycaster.setFromCamera(mouseVec, camera);
+        const dist = -camera.position.z / raycaster.ray.direction.z;
+        const cursorWorldPos = raycaster.ray.origin.clone().add(raycaster.ray.direction.clone().multiplyScalar(dist));
+
+        if (state.handVisible) {
+            cursor.position.copy(cursorWorldPos);
+            cursor.visible = true;
+        } else cursor.visible = false;
+
+        // O'yin jarayoni
+        if (!state.isWon) {
+            let intersects = raycaster.intersectObjects(piecesGroup.children);
+            
+            // Animatsiya (suzish)
+            piecesGroup.children.forEach(p => {
+                if (!p.userData.isLocked && p !== state.grabbedObj) {
+                    p.material.emissive.setHex(0x000000);
+                    p.rotation.x += p.userData.rotSpeed.x;
+                    p.rotation.y += p.userData.rotSpeed.y;
+                }
+            });
+
+            if (state.handVisible) {
+                if (intersects.length > 0 && !state.grabbedObj) {
+                    const obj = intersects[0].object;
+                    if (!obj.userData.isLocked) {
+                        state.hoveredObj = obj;
+                        obj.material.emissive.setHex(0x333333);
+                    }
+                } else state.hoveredObj = null;
+
+                if (state.gesture === 'PINCH') {
+                    if (!state.grabbedObj && state.hoveredObj) state.grabbedObj = state.hoveredObj;
+                    
+                    if (state.grabbedObj) {
+                        const p = state.grabbedObj;
+                        p.position.lerp(cursorWorldPos, 0.2); 
+                        p.material.emissive.setHex(0x00aaaa);
+                        p.rotation.set(0,0,0);
+
+                        if (p.position.distanceTo(p.userData.targetPos) < CONFIG.snapDistance) {
+                            p.material.emissive.setHex(0x00ff00); 
+                        }
+                    }
+                } else {
+                    if (state.grabbedObj) {
+                        const p = state.grabbedObj;
+                        if (p.position.distanceTo(p.userData.targetPos) < CONFIG.snapDistance) {
+                            p.userData.isLocked = true;
+                            p.position.copy(p.userData.targetPos);
+                            p.material.emissive.setHex(0x00ff00);
+                            checkWin();
+                        }
+                        state.grabbedObj = null;
+                    }
+                }
+            }
+        } 
+        // G'alaba animatsiyasi
+        else {
+            // 1. Darvoza aylanadi
+            piecesGroup.rotation.z -= 0.02;
+            
+            // 2. Portal ochiladi
+            portalRing.material.opacity = Math.min(portalRing.material.opacity + 0.01, 0.8);
+            portalRing.rotation.z += 0.05;
+            
+            // 3. Sayyora kattalashadi
+            if (planetMesh.scale.x < 1) {
+                planetMesh.scale.addScalar(0.02);
+            }
+            
+            // 4. Sayyora aylanadi
+            planetMesh.rotation.y += 0.01;
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    initAI();
+
+</script>
+</body>
+</html>
