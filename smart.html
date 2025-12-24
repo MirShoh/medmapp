@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobil Kosmik Boshqaruv</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background-color: #000; 
+            font-family: 'Segoe UI', sans-serif; 
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        
+        #canvas-container { 
+            width: 100vw; 
+            height: 100vh; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            z-index: 1; 
+        }
+        
+        /* Kamera ko'rinishi (Selfie) */
+        #video-preview {
+            position: absolute; 
+            bottom: 20px; 
+            right: 20px; 
+            width: 120px; 
+            height: 160px; /* Vertikal nisbat */
+            border-radius: 12px; 
+            border: 2px solid rgba(0, 255, 255, 0.3); 
+            z-index: 2; 
+            transform: scaleX(-1); /* Ko'zgudek qilish */
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: #000;
+            object-fit: cover;
+        }
+
+        #ui-layer {
+            position: absolute; top: 20px; left: 20px; z-index: 3; color: white;
+            pointer-events: none;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+        
+        h1 { 
+            margin: 0; 
+            font-size: 1.2rem; 
+            text-transform: uppercase; 
+            background: linear-gradient(90deg, #00ffff, #ff00ff); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        .status-badge {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ffff;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: #00ffff;
+            margin-top: 10px;
+        }
+
+        /* Yuklash ekrani */
+        #loading-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050510; z-index: 10; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white;
+            transition: opacity 0.5s;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ffff, #0066ff);
+            border: none;
+            padding: 15px 40px;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            font-weight: bold;
+        }
+        .btn:disabled { background: #555; box-shadow: none; color: #aaa; }
+        
+        .gesture-guide {
+            font-size: 0.8rem; opacity: 0.8; margin-top: 5px;
+            line-height: 1.5;
+        }
+    </style>
+    
+    <!-- Three.js (3D Grafika) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Google MediaPipe (Sun'iy Intellekt) -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Yuklash va Boshlash ekrani -->
+    <div id="loading-screen">
+        <h1 style="font-size: 2rem; margin-bottom: 20px;">Kosmik Boshqaruv</h1>
+        <p>Telefoningiz kamerasidan foydalanib,<br>qo'l harakati bilan bloklarni o'ynang.</p>
+        <p style="color: #ffff00; font-size: 0.9rem; margin-top: 20px;">DIQQAT: HTTPS talab qilinadi</p>
+        
+        <div id="status-text" style="margin-top: 20px; color: #aaa;">Tizim yuklanmoqda...</div>
+        <button id="start-btn" class="btn" disabled>BOSHLASH</button>
+    </div>
+
+    <!-- O'yin interfeysi -->
+    <div id="ui-layer">
+        <h1>Kosmos</h1>
+        <div class="gesture-guide">
+            ✋ Harakatlantirish<br>
+            👌 Chimchilash = Ushlash<br>
+            ✊ Musht = Portlatish
+        </div>
+        <div id="gesture-display" class="status-badge">Kutilmoqda...</div>
+    </div>
+    
+    <!-- Yashirin video va ko'rinadigan kanvas -->
+    <video id="input-video" playsinline webkit-playsinline muted autoplay style="display:none"></video>
+    <canvas id="video-preview"></canvas>
+    <div id="canvas-container"></div>
+
+<script>
+    // --- O'ZGARUVCHILAR ---
+    const CONFIG = {
+        blockCount: 8, // Mobilda qotmasligi uchun kamroq blok
+        sensitivity: 3.0, // Qo'l harakati tezligi (telefon uchun balandroq)
+    };
+
+    const state = {
+        handVisible: false,
+        handPos: { x: 0, y: 0 },
+        gesture: 'NONE',
+        grabbedObj: null,
+        hoveredObj: null,
+        lastThumbTime: 0
+    };
+
+    // DOM Elementlar
+    const startBtn = document.getElementById('start-btn');
+    const loadingScreen = document.getElementById('loading-screen');
+    const statusText = document.getElementById('status-text');
+    const gestureDisplay = document.getElementById('gesture-display');
+    const videoElement = document.getElementById('input-video');
+    const previewCanvas = document.getElementById('video-preview');
+    const previewCtx = previewCanvas.getContext('2d');
+
+    // --- 1. MEDIA PIPE (AI) YUKLASH ---
+    let hands;
+    
+    function initAI() {
+        hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 0, // 0 = Lite (Mobil uchun juda muhim, tez ishlaydi)
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+        
+        hands.onResults(onAIResults);
+        
+        // Kutubxona tayyor bo'lgach tugmani yoqamiz
+        hands.initialize().then(() => {
+            statusText.innerText = "Tayyor! Kamerani yoqish uchun bosing.";
+            startBtn.disabled = false;
+        });
+    }
+
+    // --- 2. KAMERANI ISHGA TUSHIRISH (TUGMA BOSILGANDA) ---
+    startBtn.addEventListener('click', async () => {
+        startBtn.innerText = "Ulanmoqda...";
+        
+        // HTTPS tekshiruvi (faqat ogohlantirish uchun)
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            alert("Diqqat! Kamera ishlashi uchun sayt HTTPS bo'lishi kerak.");
+        }
+
+        try {
+            // Mobil uchun optimallashtirilgan kamera so'rovi
+            const constraints = {
+                video: {
+                    facingMode: 'user', // Old kamera
+                    width: { ideal: 480 }, // Kichikroq o'lcham (tezlik uchun)
+                    height: { ideal: 640 }
+                },
+                audio: false
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            videoElement.srcObject = stream;
+            
+            // Videoni majburiy o'ynatish (iPhone uchun kerak)
+            videoElement.onloadedmetadata = () => {
+                videoElement.play();
+                loadingScreen.style.opacity = 0;
+                setTimeout(() => loadingScreen.remove(), 500);
+                
+                // AI ishlashini boshlash
+                processVideoLoop();
+            };
+
+        } catch (err) {
+            console.error(err);
+            alert("Kameraga ruxsat berilmadi yoki xatolik yuz berdi: " + err.name);
+            startBtn.innerText = "Xatolik";
+        }
+    });
+
+    // --- 3. AI QAYTA ISHLASH SIKLI ---
+    async function processVideoLoop() {
+        if (!videoElement.paused && !videoElement.ended) {
+            await hands.send({image: videoElement});
+        }
+        requestAnimationFrame(processVideoLoop);
+    }
+
+    function onAIResults(results) {
+        // Selfie kamerani chizish
+        previewCanvas.width = videoElement.videoWidth;
+        previewCanvas.height = videoElement.videoHeight;
+        previewCtx.save();
+        previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+        previewCtx.drawImage(results.image, 0, 0, previewCanvas.width, previewCanvas.height);
+        
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+            const landmarks = results.multiHandLandmarks[0];
+            
+            // Skeletni chizish
+            drawConnectors(previewCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 3});
+            
+            // Koordinatalarni olish (0 dan 1 gacha)
+            // X o'qini teskari qilamiz (oyna effekti)
+            const rawX = 1 - landmarks[9].x; 
+            const rawY = landmarks[9].y;
+
+            // Markazlashtirish va sezgirlikni oshirish
+            state.handPos.x = (rawX - 0.5) * CONFIG.sensitivity;
+            state.handPos.y = -(rawY - 0.5) * CONFIG.sensitivity; // Y o'qi Three.js da teskari
+
+            state.handVisible = true;
+            detectGesture(landmarks);
+        } else {
+            state.handVisible = false;
+            state.gesture = 'NONE';
+            gestureDisplay.innerText = "Qo'l ko'rinmayapti";
+            gestureDisplay.style.borderColor = "#555";
+            gestureDisplay.style.color = "#aaa";
+        }
+        previewCtx.restore();
+    }
+
+    function detectGesture(lm) {
+        const thumb = lm[4];
+        const index = lm[8];
+        
+        // Masofani hisoblash (Pinch uchun)
+        const distance = Math.sqrt(Math.pow(thumb.x - index.x, 2) + Math.pow(thumb.y - index.y, 2));
+        
+        // Mushtni aniqlash (barmoq uchlari pastda)
+        const isFist = lm[8].y > lm[6].y && lm[12].y > lm[10].y && lm[16].y > lm[14].y;
+
+        if (isFist) {
+            state.gesture = 'FIST';
+            gestureDisplay.innerText = "💥 PORTLATISH";
+            gestureDisplay.style.borderColor = "#ff0000";
+            gestureDisplay.style.color = "#ff0000";
+        } else if (distance < 0.05) { // Juda yaqin bo'lsa
+            state.gesture = 'PINCH';
+            gestureDisplay.innerText = "✊ USHLASH";
+            gestureDisplay.style.borderColor = "#ffff00";
+            gestureDisplay.style.color = "#ffff00";
+        } else {
+            state.gesture = 'OPEN';
+            gestureDisplay.innerText = "✋ HARAKAT";
+            gestureDisplay.style.borderColor = "#00ffff";
+            gestureDisplay.style.color = "#00ffff";
+        }
+    }
+
+    // --- 4. 3D SAHNA (THREE.JS) ---
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x000000, 0.03);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 8;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Retina ekranlar uchun limit
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    // Chiroqlar
+    scene.add(new THREE.AmbientLight(0x404040, 3));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+    dirLight.position.set(5, 10, 5);
+    scene.add(dirLight);
+
+    // Yulduzlar
+    const starGeo = new THREE.BufferGeometry();
+    const starPos = [];
+    for(let i=0; i<600; i++) starPos.push((Math.random()-0.5)*40, (Math.random()-0.5)*40, (Math.random()-0.5)*40);
+    starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+    const starMat = new THREE.PointsMaterial({color: 0xffffff, size: 0.1});
+    scene.add(new THREE.Points(starGeo, starMat));
+
+    // Kursor (Qo'l o'rnini ko'rsatuvchi shar)
+    const cursor = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.8 })
+    );
+    scene.add(cursor);
+
+    // Bloklar guruhi
+    const blocks = [];
+    const blockGroup = new THREE.Group();
+    scene.add(blockGroup);
+
+    // Zarrachalar guruhi (portlash uchun)
+    const particleGroup = new THREE.Group();
+    scene.add(particleGroup);
+
+    // Blok yaratish funksiyasi
+    function addBlock() {
+        const geo = new THREE.BoxGeometry(1, 1, 1);
+        const mat = new THREE.MeshPhysicalMaterial({
+            color: Math.random() * 0xffffff,
+            metalness: 0.1, roughness: 0.2, transmission: 0.6, transparent: true
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        
+        mesh.position.set((Math.random()-0.5)*6, (Math.random()-0.5)*8, (Math.random()-0.5)*4);
+        mesh.userData = { 
+            rotSpeed: { x: Math.random()*0.02, y: Math.random()*0.02 },
+            floatOffset: Math.random() * 10
+        };
+        
+        blockGroup.add(mesh);
+        blocks.push(mesh);
+    }
+
+    // Dastlabki bloklar
+    for(let i=0; i<CONFIG.blockCount; i++) addBlock();
+
+    // Portlash funksiyasi
+    function explode(obj) {
+        const pos = obj.position.clone();
+        const color = obj.material.color;
+        
+        blockGroup.remove(obj);
+        blocks.splice(blocks.indexOf(obj), 1);
+        
+        // Kichik bo'laklar
+        const shardGeo = new THREE.TetrahedronGeometry(0.3, 0);
+        const shardMat = new THREE.MeshBasicMaterial({ color: color });
+        
+        for(let i=0; i<6; i++) { // Mobilda ko'p zarracha qotiradi, shuning uchun 6 ta
+            const p = new THREE.Mesh(shardGeo, shardMat);
+            p.position.copy(pos);
+            p.userData.velocity = new THREE.Vector3(
+                (Math.random()-0.5)*0.3, (Math.random()-0.5)*0.3, (Math.random()-0.5)*0.3
+            );
+            p.userData.life = 1.0;
+            particleGroup.add(p);
+        }
+        
+        // O'rniga yangisini qo'shamiz (sahna bo'shab qolmasligi uchun)
+        setTimeout(addBlock, 1000);
+    }
+
+    // --- 5. ANIMATSIYA SIKLI ---
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+    const clock = new THREE.Clock();
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const time = clock.getElapsedTime();
+
+        // Kursorni silliq harakatlantirish (Lerp)
+        const targetX = state.handPos.x;
+        const targetY = state.handPos.y;
+        mouseVec.x += (targetX - mouseVec.x) * 0.2;
+        mouseVec.y += (targetY - mouseVec.y) * 0.2;
+
+        // Raycasting (3D makonda nishon olish)
+        raycaster.setFromCamera(mouseVec, camera);
+        
+        // Kursor joylashuvi (Z=0 tekislikda)
+        const dist = -camera.position.z / raycaster.ray.direction.z;
+        const cursorWorldPos = raycaster.ray.origin.clone().add(raycaster.ray.direction.clone().multiplyScalar(dist));
+        
+        if (state.handVisible) {
+            cursor.position.copy(cursorWorldPos);
+            cursor.visible = true;
+        } else {
+            cursor.visible = false;
+        }
+
+        // Interaktivlik
+        let intersects = raycaster.intersectObjects(blocks);
+
+        // Reset (Hammasini oddiy holga qaytarish)
+        blocks.forEach(b => {
+            if (b !== state.grabbedObj) {
+                b.scale.setScalar(1);
+                b.material.emissive.setHex(0x000000);
+            }
+        });
+
+        if (state.handVisible) {
+            if (intersects.length > 0 && !state.grabbedObj) {
+                state.hoveredObj = intersects[0].object;
+                state.hoveredObj.material.emissive.setHex(0x444444);
+                state.hoveredObj.scale.setScalar(1.1);
+                
+                if (state.gesture === 'FIST') {
+                    explode(state.hoveredObj);
+                    state.hoveredObj = null;
+                }
+            } else {
+                state.hoveredObj = null;
+            }
+
+            // Ushlash (Drag)
+            if (state.gesture === 'PINCH') {
+                if (!state.grabbedObj && state.hoveredObj) {
+                    state.grabbedObj = state.hoveredObj;
+                }
+                
+                if (state.grabbedObj) {
+                    // Blokni kursorga silliq olib borish
+                    state.grabbedObj.position.lerp(cursorWorldPos, 0.1);
+                    state.grabbedObj.rotation.x += 0.1;
+                    state.grabbedObj.rotation.y += 0.1;
+                    state.grabbedObj.material.emissive.setHex(0x00aaaa);
+                }
+            } else {
+                state.grabbedObj = null;
+            }
+        }
+
+        // Bloklarning o'z-o'zidan aylanishi va suzishi
+        blocks.forEach(b => {
+            if (b !== state.grabbedObj) {
+                b.rotation.x += b.userData.rotSpeed.x;
+                b.rotation.y += b.userData.rotSpeed.y;
+                b.position.y += Math.sin(time + b.userData.floatOffset) * 0.003;
+            }
+        });
+
+        // Zarrachalar harakati
+        for (let i = particleGroup.children.length - 1; i >= 0; i--) {
+            const p = particleGroup.children[i];
+            p.position.add(p.userData.velocity);
+            p.userData.life -= 0.02;
+            p.scale.setScalar(p.userData.life);
+            if (p.userData.life <= 0) particleGroup.remove(p);
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    // Oyna o'lchami o'zgarganda
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Dasturni ishga tushirish (AI yuklash)
+    initAI();
+    animate();
+
+</script>
+</body>
+</html>
