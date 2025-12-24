@@ -1,1257 +1,597 @@
 /**
- * ==================== GALAKTIKA QAHRAMONI ====================
- * 3D Interaktiv O'yin - Qo'l Harakatlari Bilan Boshqarish
- * Author: AI Assistant
- * Version: 2.0
- * ============================================================
+ * GALAKTIKA QAHRAMONI - O'YIN KODI
+ * Muallif: Dunyoning eng tajribali dasturchisi
+ * Maqsad: Bolajonlar uchun 3D Puzzle
  */
 
-'use strict';
-
-// ==================== CONSTANTS ====================
+// --- 1. O'YIN KONFIGURATSIYASI VA MA'LUMOTLAR ---
 const CONFIG = {
-    CAMERA: {
-        WIDTH: 640,
-        HEIGHT: 480,
-        FPS: 30
+    sensitivity: 3.0,      // Qo'l harakati tezligi
+    snapDistance: 1.5,     // Magnit masofasi
+    cameraZ: 12            // Kamera uzoqligi
+};
+
+const LEVELS = [
+    {
+        id: 1, name: "YER", code: ["Y", "E", "R"], type: "EARTH",
+        color: 0x2244ff, bgColors: [0x000000, 0x001133]
     },
-    HAND_DETECTION: {
-        MAX_HANDS: 1,
-        MODEL_COMPLEXITY: 1,
-        MIN_DETECTION_CONFIDENCE: 0.5,
-        MIN_TRACKING_CONFIDENCE: 0.5
+    {
+        id: 2, name: "OY", code: ["O", "Y"], type: "MOON",
+        color: 0xaaaaaa, bgColors: [0x000000, 0x222222]
     },
-    GAME: {
-        QUIZ_QUESTIONS: 10,
-        DRAG_DROP_TARGETS: 6,
-        MOVEMENT_QUESTIONS: 5,
-        INITIAL_LIVES: 3
+    {
+        id: 3, name: "MARS", code: ["M", "A", "R", "S"], type: "MARS",
+        color: 0xff3300, bgColors: [0x220000, 0x441100]
     },
-    SCORES: {
-        QUIZ_CORRECT: 100,
-        DRAG_DROP_CORRECT: 150,
-        MOVEMENT_CORRECT: 120,
-        GESTURE_BONUS: 50
+    {
+        id: 4, name: "SATURN", code: ["S", "A", "T", "U", "R", "N"], type: "SATURN",
+        color: 0xffcc00, bgColors: [0x111100, 0x332200]
+    },
+    {
+        id: 5, name: "QUYOSH", code: ["Q", "U", "Y", "O", "S", "H"], type: "SUN",
+        color: 0xffaa00, bgColors: [0x330000, 0xffaa00]
     }
-};
-
-// ==================== GAME STATE ====================
-const gameState = {
-    currentScreen: 'loading',
-    character: null,
-    mission: null,
-    score: 0,
-    level: 1,
-    lives: 3,
-    currentQuestion: 0,
-    correctAnswers: 0,
-    totalQuestions: 10,
-    isPlaying: false,
-    isPaused: false
-};
-
-// ==================== THREE.JS VARIABLES ====================
-let scene, camera, renderer;
-let planets = [];
-let selectedPlanet = null;
-let animationId = null;
-
-// ==================== HAND TRACKING VARIABLES ====================
-let hands, cameraFeed, videoElement;
-let currentGesture = null;
-let previousGesture = null;
-let handPosition = { x: 0, y: 0 };
-let gestureConfidence = 0;
-let isHandDetected = false;
-
-// ==================== GAME ELEMENTS ====================
-let draggedPlanet = null;
-let dropZones = [];
-let currentMovementQuestion = 0;
-let questionTimer = null;
-
-// ==================== QUIZ DATA ====================
-const quizData = [
-    { question: "Quyoshga eng yaqin sayyora qaysi?", answers: ["Merkuriy", "Venera", "Yer", "Mars"], correct: 0 },
-    { question: "Eng katta sayyora qaysi?", answers: ["Saturn", "Yupiter", "Neptun", "Uran"], correct: 1 },
-    { question: "Qizil sayyora deb qaysi sayyorani ataladi?", answers: ["Venera", "Mars", "Yupiter", "Saturn"], correct: 1 },
-    { question: "Halqalari bor sayyora?", answers: ["Mars", "Yer", "Saturn", "Merkuriy"], correct: 2 },
-    { question: "Biz qaysi sayyorada yashaymiz?", answers: ["Mars", "Venera", "Yer", "Yupiter"], correct: 2 },
-    { question: "Quyoshdan eng uzoq sayyora?", answers: ["Uran", "Neptun", "Pluton", "Saturn"], correct: 1 },
-    { question: "Eng issiq sayyora qaysi?", answers: ["Merkuriy", "Venera", "Mars", "Yer"], correct: 1 },
-    { question: "Oy qaysi sayyoraning yo'ldoshi?", answers: ["Mars", "Yer", "Yupiter", "Saturn"], correct: 1 },
-    { question: "Quyosh nima?", answers: ["Sayyora", "Yulduz", "Oy", "Asteroid"], correct: 1 },
-    { question: "Quyosh sistemasida nechta sayyora bor?", answers: ["6 ta", "7 ta", "8 ta", "9 ta"], correct: 2 }
 ];
 
-const movementData = [
-    { question: "Qo'lingizni QUYOSH ustiga qo'ying", correct: "☀️", options: ["☀️", "🌙", "⭐", "🌍"] },
-    { question: "Qo'lingizni YER ustiga qo'ying", correct: "🌍", options: ["🌍", "🔴", "🪐", "💍"] },
-    { question: "Qo'lingizni MARS ustiga qo'ying", correct: "🔴", options: ["🔴", "🌍", "🪐", "🌙"] },
-    { question: "Qo'lingizni OY ustiga qo'ying", correct: "🌙", options: ["🌙", "⭐", "☀️", "🌍"] },
-    { question: "Qo'lingizni YUPITER ustiga qo'ying", correct: "🪐", options: ["🪐", "💍", "🔴", "🌍"] }
-];
-
-const planetConfig = [
-    { color: 0xFFD700, size: 1.2, name: 'sun', emoji: '☀️' },
-    { color: 0x87CEEB, size: 0.8, name: 'earth', emoji: '🌍' },
-    { color: 0xFF6347, size: 0.6, name: 'mars', emoji: '🔴' },
-    { color: 0xFFA500, size: 1.5, name: 'jupiter', emoji: '🪐' },
-    { color: 0xF0E68C, size: 1.2, name: 'saturn', emoji: '💍' },
-    { color: 0xC0C0C0, size: 0.5, name: 'moon', emoji: '🌙' }
-];
-
-// ==================== UTILITY FUNCTIONS ====================
-const Utils = {
-    // Show toast notification
-    showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        
-        const icons = { success: '✅', error: '❌', warning: '⚠️' };
-        toast.innerHTML = `
-            <span class="toast-icon">${icons[type]}</span>
-            <span class="toast-message">${message}</span>
-        `;
-        
-        container.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    },
-
-    // Play sound effect (placeholder)
-    playSound(soundName) {
-        // Sound implementation can be added here
-        console.log(`Playing sound: ${soundName}`);
-    },
-
-    // Vibrate device (mobile)
-    vibrate(pattern = 100) {
-        if ('vibrate' in navigator) {
-            navigator.vibrate(pattern);
-        }
-    },
-
-    // Calculate distance between two points
-    distance(p1, p2) {
-        return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-    },
-
-    // Lerp (Linear Interpolation)
-    lerp(start, end, t) {
-        return start * (1 - t) + end * t;
-    },
-
-    // Clamp value between min and max
-    clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
-    }
+const STATE = {
+    levelIndex: 0,
+    handVisible: false,
+    handPos: { x: 0, y: 0 },
+    gesture: 'OPEN', // OPEN, PINCH
+    grabbedObj: null,
+    hoveredObj: null,
+    lockedCount: 0,
+    isWon: false,
+    isPlaying: false
 };
 
-// ==================== THREE.JS INITIALIZATION ====================
-const ThreeJS = {
+// DOM Elementlar (Keshlab olish)
+const UI = {
+    loading: document.getElementById('loading-screen'),
+    status: document.getElementById('status-text'),
+    startBtn: document.getElementById('start-btn'),
+    levelName: document.getElementById('level-name'),
+    targetCode: document.getElementById('target-code'),
+    progressBar: document.getElementById('progress-bar'),
+    winModal: document.getElementById('win-modal'),
+    unlockedText: document.getElementById('planet-unlocked-text'),
+    nextBtn: document.getElementById('next-btn'),
+    robotMsg: document.getElementById('robot-msg'),
+    video: document.getElementById('input-video'),
+    preview: document.getElementById('video-preview'),
+    previewCtx: document.getElementById('video-preview').getContext('2d')
+};
+
+// --- 2. 3D SAHNA MENEJERI ---
+const SceneManager = {
+    scene: null, camera: null, renderer: null,
+    groups: { pieces: null, slots: null, planet: null, effects: null },
+    
     init() {
-        // Scene setup
-        scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0e27, 0.015);
+        this.scene = new THREE.Scene();
+        this.scene.fog = new THREE.FogExp2(0x050510, 0.02);
 
-        // Camera setup
-        camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        this.camera.position.z = CONFIG.cameraZ;
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); 
+        document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+
+        // Yoritish
+        const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+        const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+        sun.position.set(5, 10, 8);
+        this.scene.add(ambient, sun);
+
+        // Guruhlar
+        this.groups.pieces = new THREE.Group();
+        this.groups.slots = new THREE.Group(); 
+        this.groups.planet = new THREE.Group();
+        this.groups.effects = new THREE.Group();
+        
+        this.scene.add(this.groups.planet);
+        this.scene.add(this.groups.slots);
+        this.scene.add(this.groups.pieces);
+        this.scene.add(this.groups.effects);
+
+        // Kursor
+        this.cursor = new THREE.Mesh(
+            new THREE.SphereGeometry(0.2, 16, 16),
+            new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.8 })
         );
-        camera.position.set(0, 0, 15);
+        this.scene.add(this.cursor);
 
-        // Renderer setup
-        renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('canvas3d'),
-            antialias: true,
-            alpha: true
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Add stars
+        // Yulduzlar
         this.createStars();
-        
-        // Add lighting
-        this.createLights();
-        
-        // Create planets
-        this.createPlanets();
-        
-        // Start animation
-        this.animate();
+
+        window.addEventListener('resize', () => this.onResize());
     },
 
     createStars() {
-        const starsGeometry = new THREE.BufferGeometry();
-        const starsMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.1,
-            transparent: true
-        });
-
-        const starsVertices = [];
-        for (let i = 0; i < 2000; i++) {
-            const x = (Math.random() - 0.5) * 200;
-            const y = (Math.random() - 0.5) * 200;
-            const z = (Math.random() - 0.5) * 200;
-            starsVertices.push(x, y, z);
-        }
-
-        starsGeometry.setAttribute(
-            'position',
-            new THREE.Float32BufferAttribute(starsVertices, 3)
-        );
-
-        const stars = new THREE.Points(starsGeometry, starsMaterial);
-        scene.add(stars);
+        const geo = new THREE.BufferGeometry();
+        const pos = [];
+        for(let i=0; i<1500; i++) pos.push((Math.random()-0.5)*80, (Math.random()-0.5)*80, (Math.random()-0.5)*60);
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+        this.stars = new THREE.Points(geo, new THREE.PointsMaterial({color: 0xffffff, size: 0.15}));
+        this.scene.add(this.stars);
     },
 
-    createLights() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        // Point lights
-        const pointLight1 = new THREE.PointLight(0x00ffff, 1, 100);
-        pointLight1.position.set(10, 10, 10);
-        scene.add(pointLight1);
-
-        const pointLight2 = new THREE.PointLight(0xff00ff, 1, 100);
-        pointLight2.position.set(-10, -10, 10);
-        scene.add(pointLight2);
-    },
-
-    createPlanets() {
-        planetConfig.forEach((config, index) => {
-            const geometry = new THREE.SphereGeometry(config.size, 32, 32);
-            const material = new THREE.MeshPhongMaterial({
-                color: config.color,
-                transparent: true,
-                opacity: 0.9,
-                shininess: 100,
-                emissive: config.color,
-                emissiveIntensity: 0.1
-            });
-
-            const planet = new THREE.Mesh(geometry, material);
-
-            // Position planets in a circle
-            const angle = (index / planetConfig.length) * Math.PI * 2;
-            planet.position.x = Math.cos(angle) * 8;
-            planet.position.y = Math.sin(angle) * 5;
-            planet.position.z = -5;
-
-            // Store planet data
-            planet.userData = {
-                name: config.name,
-                emoji: config.emoji,
-                rotationSpeed: 0.01 + Math.random() * 0.02,
-                floatSpeed: 0.001 + Math.random() * 0.002,
-                floatOffset: Math.random() * Math.PI * 2,
-                originalPosition: planet.position.clone(),
-                isDragging: false
-            };
-
-            scene.add(planet);
-            planets.push(planet);
-        });
-    },
-
-    animate() {
-        animationId = requestAnimationFrame(() => ThreeJS.animate());
-
-        // Animate planets
-        planets.forEach(planet => {
-            if (!planet.userData.isDragging) {
-                // Rotation
-                planet.rotation.y += planet.userData.rotationSpeed;
-
-                // Floating animation
-                const time = Date.now() * planet.userData.floatSpeed;
-                planet.position.y += Math.sin(time + planet.userData.floatOffset) * 0.01;
+    clearLevel() {
+        const clearGroup = (group) => {
+            while(group.children.length > 0) {
+                const obj = group.children[0];
+                if(obj.geometry) obj.geometry.dispose();
+                if(obj.material) {
+                    if(Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+                    else obj.material.dispose();
+                    if(obj.material.map) obj.material.map.dispose();
+                }
+                group.remove(obj);
             }
-
-            // Highlight selected planet
-            if (planet === selectedPlanet) {
-                planet.scale.setScalar(1.4);
-                planet.material.emissiveIntensity = 0.5;
-            } else {
-                planet.scale.setScalar(1);
-                planet.material.emissiveIntensity = 0.1;
-            }
-        });
-
-        // Smooth camera movement
-        if (gameState.isPlaying) {
-            camera.position.x += (Math.sin(Date.now() * 0.0001) * 0.5 - camera.position.x) * 0.01;
-        }
-
-        renderer.render(scene, camera);
+        };
+        clearGroup(this.groups.pieces);
+        clearGroup(this.groups.slots);
+        clearGroup(this.groups.planet);
+        clearGroup(this.groups.effects);
     },
 
-    selectNearestPlanet(x, y) {
-        let nearest = null;
-        let minDistance = Infinity;
-
-        planets.forEach(planet => {
-            const dist = Utils.distance(
-                { x: planet.position.x, y: planet.position.y },
-                { x, y }
-            );
-
-            if (dist < minDistance && dist < 6) {
-                minDistance = dist;
-                nearest = planet;
-            }
-        });
-
-        if (nearest) {
-            selectedPlanet = nearest;
-            Utils.playSound('select');
-            Utils.vibrate(50);
-        }
-
-        return nearest;
-    },
-
-    cleanup() {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-        }
-        
-        planets.forEach(planet => {
-            scene.remove(planet);
-            planet.geometry.dispose();
-            planet.material.dispose();
-        });
-        
-        planets = [];
+    onResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 };
 
-// ==================== HAND TRACKING ====================
-const HandTracking = {
-    async init() {
-        try {
-            videoElement = document.getElementById('video');
+// --- 3. AVATAR MENEJERI (ROBOTCHA) ---
+const AvatarManager = {
+    scene: null, camera: null, renderer: null, robot: null,
+    head: null, lArm: null, rArm: null,
+    
+    init() {
+        const container = document.getElementById('avatar-container');
+        
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+        this.camera.position.set(0, 1, 4);
+        this.camera.lookAt(0, 0, 0);
 
-            // Initialize MediaPipe Hands
-            hands = new Hands({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        this.renderer.setSize(300, 300);
+        container.appendChild(this.renderer.domElement);
+
+        const light = new THREE.DirectionalLight(0xffffff, 1.5);
+        light.position.set(2, 5, 5);
+        this.scene.add(light);
+        this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+        this.buildRobot();
+    },
+
+    buildRobot() {
+        this.robot = new THREE.Group();
+
+        const matBody = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
+        const matDark = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        const matEye = new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x00ffff });
+
+        // Gavda
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.8, 1, 8), matBody);
+        this.robot.add(body);
+
+        // Bosh
+        this.head = new THREE.Group();
+        const headMesh = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.6, 0.7), matBody);
+        this.head.position.y = 0.9;
+        this.head.add(headMesh);
+        
+        // Ko'zlar
+        const lEye = new THREE.Mesh(new THREE.SphereGeometry(0.15), matEye);
+        lEye.position.set(-0.2, 0, 0.35);
+        const rEye = new THREE.Mesh(new THREE.SphereGeometry(0.15), matEye);
+        rEye.position.set(0.2, 0, 0.35);
+        this.head.add(lEye, rEye);
+        this.robot.add(this.head);
+
+        // Qo'llar (Silindr shakli)
+        const armGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.6, 8);
+        
+        this.lArm = new THREE.Group();
+        const lArmMesh = new THREE.Mesh(armGeo, matDark);
+        lArmMesh.position.y = -0.3;
+        this.lArm.add(lArmMesh);
+        this.lArm.position.set(-0.9, 0.3, 0);
+        this.lArm.rotation.z = 0.5;
+        this.robot.add(this.lArm);
+
+        this.rArm = new THREE.Group();
+        const rArmMesh = new THREE.Mesh(armGeo, matDark);
+        rArmMesh.position.y = -0.3;
+        this.rArm.add(rArmMesh);
+        this.rArm.position.set(0.9, 0.3, 0);
+        this.rArm.rotation.z = -0.5;
+        this.robot.add(this.rArm);
+
+        this.robot.position.y = -0.5;
+        this.scene.add(this.robot);
+    },
+
+    animate(time) {
+        if(!this.robot) return;
+        
+        this.robot.position.y = -0.5 + Math.sin(time * 2) * 0.05;
+
+        if (STATE.isWon) {
+            this.lArm.rotation.z = Math.sin(time * 10) * 0.5 + 2.5; 
+            this.rArm.rotation.z = Math.cos(time * 10) * 0.5 - 2.5;
+            this.head.rotation.y = Math.sin(time * 5) * 0.2;
+        } else if (STATE.handVisible) {
+            const targetX = STATE.handPos.x * 0.5;
+            const targetY = STATE.handPos.y * 0.5;
+            this.head.rotation.y += (targetX - this.head.rotation.y) * 0.1;
+            this.head.rotation.x += (-targetY - this.head.rotation.x) * 0.1;
+
+            if (STATE.gesture === 'PINCH') {
+                this.lArm.rotation.z = 1.5; 
+            } else {
+                this.lArm.rotation.z = 0.5;
+            }
+        } else {
+            this.head.rotation.y = Math.sin(time) * 0.1;
+            this.lArm.rotation.z = 0.5;
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+};
+
+// --- 4. SAYYORALAR FABRIKASI ---
+const PlanetFactory = {
+    create(type, color) {
+        const group = new THREE.Group();
+        let mesh;
+
+        if (type === 'SATURN') {
+            const geo = new THREE.SphereGeometry(2.2, 32, 32);
+            const mat = new THREE.MeshStandardMaterial({ color: 0xffcc00, roughness: 0.5 });
+            mesh = new THREE.Mesh(geo, mat);
+            group.add(mesh);
+            const ringGeo = new THREE.RingGeometry(3, 5, 64);
+            const ringMat = new THREE.MeshStandardMaterial({ 
+                color: 0xaa8800, side: THREE.DoubleSide, transparent: true, opacity: 0.8 
             });
-
-            hands.setOptions(CONFIG.HAND_DETECTION);
-            hands.onResults(this.onResults.bind(this));
-
-            // Get camera stream
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: CONFIG.CAMERA.WIDTH,
-                    height: CONFIG.CAMERA.HEIGHT,
-                    facingMode: 'user'
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2.5;
+            group.add(ring);
+        } else if (type === 'EARTH') {
+            const geo = new THREE.SphereGeometry(2.5, 32, 32);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x1144cc, roughness: 0.6 });
+            mesh = new THREE.Mesh(geo, mat);
+            for(let i=0; i<8; i++) {
+                const blob = new THREE.Mesh(
+                    new THREE.SphereGeometry(Math.random()*0.8 + 0.3, 16, 16),
+                    new THREE.MeshStandardMaterial({ color: 0x228822 })
+                );
+                blob.position.setFromSphericalCoords(2.4, Math.random()*Math.PI, Math.random()*Math.PI*2);
+                mesh.add(blob);
+            }
+            group.add(mesh);
+        } else {
+            const geo = new THREE.SphereGeometry(2.5, 32, 32);
+            const mat = new THREE.MeshStandardMaterial({ 
+                color: color, 
+                roughness: 0.8,
+                emissive: type === 'SUN' ? color : 0x000000,
+                emissiveIntensity: 0.4
+            });
+            mesh = new THREE.Mesh(geo, mat);
+            if (type === 'MOON' || type === 'MARS') {
+                for(let i=0; i<5; i++) {
+                    const crater = new THREE.Mesh(
+                        new THREE.RingGeometry(0.2, 0.3, 16),
+                        new THREE.MeshStandardMaterial({ color: 0x000000, opacity: 0.3, transparent: true })
+                    );
+                    const phi = Math.random() * Math.PI;
+                    const theta = Math.random() * Math.PI * 2;
+                    crater.position.setFromSphericalCoords(2.51, phi, theta);
+                    crater.lookAt(0,0,0);
+                    mesh.add(crater);
                 }
+            }
+            group.add(mesh);
+        }
+
+        return group;
+    }
+};
+
+// --- 5. O'YIN MANTIQI ---
+const GameManager = {
+    init() {
+        SceneManager.init();
+        AvatarManager.init();
+        this.initAI();
+        this.addListeners();
+        this.loop();
+    },
+
+    initAI() {
+        const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+        hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 0,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+        hands.onResults(this.onHandResults.bind(this));
+        
+        hands.initialize().then(() => {
+            UI.status.innerText = "Tizim tayyor!";
+            UI.startBtn.disabled = false;
+        });
+        
+        this.hands = hands;
+    },
+
+    addListeners() {
+        UI.startBtn.addEventListener('click', () => this.startCamera());
+        UI.nextBtn.addEventListener('click', () => this.nextLevel());
+    },
+
+    async startCamera() {
+        UI.startBtn.innerText = "Ulanmoqda...";
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } } 
             });
-
-            videoElement.srcObject = stream;
-            videoElement.style.display = 'block';
-
-            // Initialize camera feed
-            cameraFeed = new Camera(videoElement, {
-                onFrame: async () => {
-                    await hands.send({ image: videoElement });
-                },
-                width: CONFIG.CAMERA.WIDTH,
-                height: CONFIG.CAMERA.HEIGHT
-            });
-
-            await cameraFeed.start();
-
-            Utils.showToast('Kamera muvaffaqiyatli ulandi!', 'success');
-            
-            // Show gesture status
-            document.getElementById('gestureStatus').classList.add('active');
-            document.getElementById('handCursor').style.display = 'block';
-
-        } catch (error) {
-            console.error('Camera error:', error);
-            Utils.showToast('Kamera ulanmadi. Tugmalar bilan o\'ynang.', 'error');
-            
-            // Fallback to touch/mouse controls
-            this.initFallbackControls();
+            UI.video.srcObject = stream;
+            UI.video.onloadedmetadata = () => {
+                UI.video.play();
+                UI.loading.style.display = 'none';
+                STATE.isPlaying = true;
+                this.loadLevel(0);
+                this.processVideo();
+                this.showRobotMessage("Salom! Keling o'ynaymiz!", 3000);
+            };
+        } catch (e) {
+            alert("Kamera xatosi: " + e.message);
+            UI.startBtn.innerText = "Qayta urinish";
         }
     },
 
-    onResults(results) {
+    async processVideo() {
+        if (STATE.isPlaying) {
+            await this.hands.send({image: UI.video});
+            requestAnimationFrame(this.processVideo.bind(this));
+        }
+    },
+
+    onHandResults(results) {
+        UI.previewCtx.clearRect(0, 0, UI.preview.width, UI.preview.height);
+        UI.previewCtx.drawImage(results.image, 0, 0, UI.preview.width, UI.preview.height);
+
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
             const landmarks = results.multiHandLandmarks[0];
-            isHandDetected = true;
-
-            // Detect gesture
-            const gesture = this.detectGesture(landmarks);
+            drawConnectors(UI.previewCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 2});
             
-            // Update hand position
-            const palm = landmarks[9];
-            handPosition.x = palm.x * window.innerWidth;
-            handPosition.y = palm.y * window.innerHeight;
-
-            // Update cursor
-            this.updateCursor();
-
-            // Update gesture status
-            this.updateGestureStatus(gesture);
-
-            // Handle gesture
-            this.handleGesture(gesture, landmarks);
-
-            previousGesture = gesture;
-        } else {
-            isHandDetected = false;
-            this.resetGesture();
-        }
-    },
-
-    detectGesture(landmarks) {
-        const thumb = landmarks[4];
-        const index = landmarks[8];
-        const middle = landmarks[12];
-        const ring = landmarks[16];
-        const pinky = landmarks[20];
-        const wrist = landmarks[0];
-
-        // Calculate distances
-        const thumbIndexDist = Utils.distance(thumb, index);
-        const indexWristDist = Utils.distance(index, wrist);
-
-        // Pinch gesture
-        if (thumbIndexDist < 0.05) {
-            gestureConfidence = 0.9;
-            return 'pinch';
-        }
-
-        // Thumbs up
-        if (thumb.y < index.y && index.y > wrist.y && middle.y > wrist.y) {
-            gestureConfidence = 0.85;
-            return 'thumbsup';
-        }
-
-        // Fist
-        if (indexWristDist < 0.2 && Utils.distance(middle, wrist) < 0.2) {
-            gestureConfidence = 0.8;
-            return 'fist';
-        }
-
-        // Open palm (default)
-        gestureConfidence = 0.7;
-        return 'open';
-    },
-
-    updateCursor() {
-        const cursor = document.getElementById('handCursor');
-        cursor.style.left = handPosition.x + 'px';
-        cursor.style.top = handPosition.y + 'px';
-
-        if (currentGesture === 'pinch') {
-            cursor.classList.add('grabbing');
-        } else {
-            cursor.classList.remove('grabbing');
-        }
-    },
-
-    updateGestureStatus(gesture) {
-        const icons = {
-            open: '👋',
-            pinch: '🤏',
-            thumbsup: '👍',
-            fist: '✊'
-        };
-
-        const names = {
-            open: 'Ochiq kaft',
-            pinch: 'Qisish',
-            thumbsup: 'Tasdiqlash',
-            fist: 'Mushtlash'
-        };
-
-        document.getElementById('gestureIcon').textContent = icons[gesture] || '👋';
-        document.getElementById('gestureName').textContent = names[gesture] || 'Noma\'lum';
-        document.getElementById('confidenceBar').style.width = (gestureConfidence * 100) + '%';
-
-        currentGesture = gesture;
-    },
-
-    resetGesture() {
-        currentGesture = null;
-        selectedPlanet = null;
-        
-        if (draggedPlanet) {
-            draggedPlanet.userData.isDragging = false;
-            draggedPlanet = null;
-        }
-    },
-
-    handleGesture(gesture, landmarks) {
-        const palm = landmarks[9];
-        const x = (palm.x - 0.5) * 20;
-        const y = -(palm.y - 0.5) * 15;
-
-        // Handle based on current mission
-        switch (gameState.mission) {
-            case 'drag':
-                this.handleDragGesture(gesture, x, y);
-                break;
-            case 'movement':
-                this.handleMovementGesture();
-                break;
-        }
-    },
-
-    handleDragGesture(gesture, x, y) {
-        // Select planet with open palm
-        if (gesture === 'open' && previousGesture !== 'open' && !draggedPlanet) {
-            ThreeJS.selectNearestPlanet(x, y);
-        }
-        
-        // Drag with pinch
-        else if (gesture === 'pinch' && selectedPlanet) {
-            selectedPlanet.userData.isDragging = true;
-            selectedPlanet.position.x = x;
-            selectedPlanet.position.y = y;
-            draggedPlanet = selectedPlanet;
-
-            // Check drop zones
-            GameModes.DragDrop.checkProximity();
-        }
-        
-        // Release
-        else if (gesture !== 'pinch' && draggedPlanet) {
-            GameModes.DragDrop.handleDrop();
-        }
-    },
-
-    handleMovementGesture() {
-        const targets = document.querySelectorAll('.movement-target');
-        
-        targets.forEach(target => {
-            const rect = target.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+            const x = (1 - landmarks[9].x - 0.5) * CONFIG.sensitivity * 5;
+            const y = -(landmarks[9].y - 0.5) * CONFIG.sensitivity * 4;
             
-            const dist = Utils.distance(
-                { x: handPosition.x, y: handPosition.y },
-                { x: centerX, y: centerY }
+            STATE.handPos.x += (x - STATE.handPos.x) * 0.3;
+            STATE.handPos.y += (y - STATE.handPos.y) * 0.3;
+            STATE.handVisible = true;
+
+            const thumb = landmarks[4];
+            const index = landmarks[8];
+            const dist = Math.sqrt(Math.pow(thumb.x - index.x, 2) + Math.pow(thumb.y - index.y, 2));
+            STATE.gesture = dist < 0.08 ? 'PINCH' : 'OPEN';
+        } else {
+            STATE.handVisible = false;
+        }
+    },
+
+    loadLevel(index) {
+        SceneManager.clearLevel();
+        STATE.levelIndex = index;
+        STATE.lockedCount = 0;
+        STATE.isWon = false;
+        
+        const level = LEVELS[index];
+        
+        UI.levelName.innerText = `${index + 1}-SAYYORA: ${level.name}`;
+        UI.targetCode.innerText = level.code.join("");
+        UI.progressBar.style.width = '0%';
+        UI.winModal.style.display = 'none';
+        UI.unlockedText.innerText = `${level.name} OCHILDI`;
+
+        const planet = PlanetFactory.create(level.type, level.color);
+        planet.scale.set(0.1, 0.1, 0.1);
+        SceneManager.groups.planet.add(planet);
+        STATE.currentPlanet = planet;
+
+        const radius = 3.5;
+        const total = level.code.length;
+        
+        level.code.forEach((char, i) => {
+            const angle = (i / total) * Math.PI * 2;
+            const tx = Math.cos(angle) * radius;
+            const ty = Math.sin(angle) * radius;
+            const targetPos = new THREE.Vector3(tx, ty, 0);
+
+            const slot = this.createCard(char, true, level.color);
+            slot.position.copy(targetPos);
+            SceneManager.groups.slots.add(slot);
+
+            const piece = this.createCard(char, false, level.color);
+            piece.position.set(
+                (Math.random() - 0.5) * 8,
+                (Math.random() - 0.5) * 6,
+                3 + Math.random()
             );
-            
-            if (dist < 80) {
-                target.classList.add('highlight');
-                
-                if (currentGesture === 'pinch' && previousGesture !== 'pinch') {
-                    GameModes.Movement.checkAnswer(target.dataset.option);
-                }
-            } else {
-                target.classList.remove('highlight');
-            }
+            piece.userData = { id: i, targetPos: targetPos, isLocked: false };
+            SceneManager.groups.pieces.add(piece);
         });
-    },
-
-    initFallbackControls() {
-        // Mouse/Touch controls for non-camera users
-        document.addEventListener('click', (e) => {
-            handPosition.x = e.clientX;
-            handPosition.y = e.clientY;
-        });
-    },
-
-    stop() {
-        if (cameraFeed) {
-            cameraFeed.stop();
-        }
         
-        if (videoElement && videoElement.srcObject) {
-            videoElement.srcObject.getTracks().forEach(track => track.stop());
-        }
-
-        document.getElementById('video').style.display = 'none';
-        document.getElementById('gestureStatus').classList.remove('active');
-        document.getElementById('handCursor').style.display = 'none';
-    }
-};
-
-// ==================== GAME MODES ====================
-const GameModes = {
-    Quiz: {
-        start() {
-            gameState.totalQuestions = CONFIG.GAME.QUIZ_QUESTIONS;
-            document.getElementById('questionPanel').classList.add('active');
-            this.showNextQuestion();
-        },
-
-        showNextQuestion() {
-            if (gameState.currentQuestion >= gameState.totalQuestions) {
-                Game.endGame();
-                return;
-            }
-
-            const question = quizData[gameState.currentQuestion];
-            
-            document.getElementById('questionNumber').textContent = 
-                `Savol ${gameState.currentQuestion + 1}/${gameState.totalQuestions}`;
-            document.getElementById('questionText').textContent = question.question;
-
-            const answersGrid = document.getElementById('answersGrid');
-            answersGrid.innerHTML = '';
-
-            question.answers.forEach((answer, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'answer-button';
-                btn.textContent = answer;
-                btn.onclick = () => this.checkAnswer(index);
-                answersGrid.appendChild(btn);
-            });
-
-            // Start timer (optional)
-            this.startTimer();
-        },
-
-        checkAnswer(selectedIndex) {
-            const question = quizData[gameState.currentQuestion];
-            const buttons = document.querySelectorAll('.answer-button');
-            
-            // Disable all buttons
-            buttons.forEach(btn => btn.style.pointerEvents = 'none');
-            
-            const isCorrect = selectedIndex === question.correct;
-            
-            // Visual feedback
-            buttons[selectedIndex].classList.add(isCorrect ? 'correct' : 'wrong');
-            if (!isCorrect) {
-                buttons[question.correct].classList.add('correct');
-            }
-
-            // Update game state
-            if (isCorrect) {
-                gameState.score += CONFIG.SCORES.QUIZ_CORRECT;
-                gameState.correctAnswers++;
-                Utils.showToast('To\'g\'ri! +100 ball', 'success');
-                Utils.playSound('correct');
-                Utils.vibrate([50, 50, 50]);
-            } else {
-                gameState.lives--;
-                Utils.showToast('Noto\'g\'ri javob!', 'error');
-                Utils.playSound('wrong');
-                Utils.vibrate(200);
-            }
-
-            UI.updateGameStats();
-
-            // Next question or end game
-            if (gameState.lives <= 0) {
-                setTimeout(() => Game.endGame(), 1500);
-            } else {
-                setTimeout(() => {
-                    gameState.currentQuestion++;
-                    this.showNextQuestion();
-                }, 1500);
-            }
-        },
-
-        startTimer() {
-            let timeLeft = 30;
-            document.getElementById('timerText').textContent = `${timeLeft}s`;
-
-            questionTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timerText').textContent = `${timeLeft}s`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(questionTimer);
-                    this.checkAnswer(-1); // Wrong answer
-                }
-            }, 1000);
-        }
+        this.showRobotMessage("Harflarni joyiga qo'ying!", 3000);
     },
 
-    DragDrop: {
-        start() {
-            gameState.totalQuestions = CONFIG.GAME.DRAG_DROP_TARGETS;
-            const targetsEl = document.getElementById('dragTargets');
-            targetsEl.classList.add('active');
-            dropZones = Array.from(document.querySelectorAll('.drop-zone'));
-        },
+    createCard(text, isSlot, colorHex) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128; canvas.height = 128;
+        const ctx = canvas.getContext('2d');
 
-        checkProximity() {
-            dropZones.forEach(zone => {
-                const rect = zone.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
+        ctx.fillStyle = isSlot ? 'rgba(255,255,255,0.1)' : '#' + colorHex.toString(16).padStart(6,'0');
+        if(!isSlot) ctx.shadowBlur = 10; ctx.shadowColor = "white";
+        
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.font = 'bold 80px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 64, 68);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
+        if (!isSlot) mat.opacity = 0.9;
+        
+        return new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.2), mat);
+    },
+
+    checkInteraction() {
+        if (!STATE.handVisible || STATE.isWon) return;
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2(STATE.handPos.x / 5, STATE.handPos.y / 4);
+        
+        raycaster.setFromCamera(mouse, SceneManager.camera);
+        const dist = -SceneManager.camera.position.z / raycaster.ray.direction.z;
+        const cursorPos = raycaster.ray.origin.clone().add(raycaster.ray.direction.clone().multiplyScalar(dist));
+        
+        SceneManager.cursor.position.lerp(cursorPos, 0.2);
+
+        const intersects = raycaster.intersectObjects(SceneManager.groups.pieces.children);
+
+        SceneManager.groups.pieces.children.forEach(p => {
+            if(!p.userData.isLocked && p !== STATE.grabbedObj) p.scale.setScalar(1);
+        });
+
+        if (STATE.gesture === 'PINCH') {
+            if (!STATE.grabbedObj && intersects.length > 0) {
+                const obj = intersects[0].object;
+                if (!obj.userData.isLocked) STATE.grabbedObj = obj;
+            }
+
+            if (STATE.grabbedObj) {
+                STATE.grabbedObj.position.lerp(cursorPos, 0.2);
+                STATE.grabbedObj.scale.setScalar(1.2);
                 
-                const dist = Utils.distance(
-                    { x: handPosition.x, y: handPosition.y },
-                    { x: centerX, y: centerY }
-                );
-                
-                if (dist < 100 && !zone.classList.contains('filled')) {
-                    zone.classList.add('active');
+                if (STATE.grabbedObj.position.distanceTo(STATE.grabbedObj.userData.targetPos) < CONFIG.snapDistance) {
+                    STATE.grabbedObj.material.color.setHex(0x00ff00);
                 } else {
-                    zone.classList.remove('active');
+                    STATE.grabbedObj.material.color.setHex(0xffffff);
                 }
-            });
-        },
-
-        handleDrop() {
-            let dropped = false;
-
-            dropZones.forEach(zone => {
-                if (zone.classList.contains('active')) {
-                    if (this.checkMatch(draggedPlanet, zone)) {
-                        dropped = true;
-                    }
-                    zone.classList.remove('active');
-                }
-            });
-
-            if (!dropped && draggedPlanet) {
-                // Return to original position
-                draggedPlanet.position.copy(draggedPlanet.userData.originalPosition);
             }
-
-            draggedPlanet.userData.isDragging = false;
-            draggedPlanet = null;
-            selectedPlanet = null;
-        },
-
-        checkMatch(planet, zone) {
-            if (planet.userData.name === zone.dataset.planet) {
-                zone.classList.add('filled');
-                zone.style.pointerEvents = 'none';
+        } else {
+            if (STATE.grabbedObj) {
+                const obj = STATE.grabbedObj;
+                const distToTarget = obj.position.distanceTo(obj.userData.targetPos);
                 
-                gameState.score += CONFIG.SCORES.DRAG_DROP_CORRECT;
-                gameState.correctAnswers++;
-                gameState.currentQuestion++;
-                
-                Utils.showToast(`To'g'ri! ${planet.userData.emoji} +150 ball`, 'success');
-                Utils.playSound('drop');
-                Utils.vibrate([50, 50, 100]);
-                
-                UI.updateGameStats();
-                
-                if (gameState.currentQuestion >= gameState.totalQuestions) {
-                    setTimeout(() => Game.endGame(), 1000);
-                }
-                
-                return true;
-            } else {
-                gameState.lives--;
-                Utils.showToast('Noto\'g\'ri joy!', 'error');
-                Utils.playSound('wrong');
-                Utils.vibrate(200);
-                
-                UI.updateGameStats();
-                
-                if (gameState.lives <= 0) {
-                    setTimeout(() => Game.endGame(), 1000);
-                }
-                
-                return false;
-            }
-        }
-    },
-
-    Movement: {
-        start() {
-            gameState.totalQuestions = CONFIG.GAME.MOVEMENT_QUESTIONS;
-            currentMovementQuestion = 0;
-            document.getElementById('movementGame').classList.add('active');
-            this.showNextQuestion();
-        },
-
-        showNextQuestion() {
-            if (currentMovementQuestion >= movementData.length) {
-                Game.endGame();
-                return;
-            }
-
-            const question = movementData[currentMovementQuestion];
-            document.getElementById('movementInstruction').textContent = question.question;
-            
-            const optionsDiv = document.getElementById('movementOptions');
-            optionsDiv.innerHTML = '';
-            
-            question.options.forEach(option => {
-                const target = document.createElement('div');
-                target.className = 'movement-target';
-                target.textContent = option;
-                target.dataset.option = option;
-                optionsDiv.appendChild(target);
-            });
-        },
-
-        checkAnswer(option) {
-            const question = movementData[currentMovementQuestion];
-            
-            if (option === question.correct) {
-                gameState.score += CONFIG.SCORES.MOVEMENT_CORRECT;
-                gameState.correctAnswers++;
-                currentMovementQuestion++;
-                gameState.currentQuestion++;
-                
-                Utils.showToast(`To'g'ri! ${option} +120 ball`, 'success');
-                Utils.playSound('correct');
-                Utils.vibrate([50, 50, 50]);
-                
-                if (currentMovementQuestion >= movementData.length) {
-                    setTimeout(() => Game.endGame(), 1000);
+                if (distToTarget < CONFIG.snapDistance) {
+                    obj.userData.isLocked = true;
+                    obj.position.copy(obj.userData.targetPos);
+                    obj.material.color.setHex(0x00ff00);
+                    obj.scale.setScalar(1);
+                    
+                    this.spawnParticles(obj.position, 0x00ff00);
+                    
+                    STATE.lockedCount++;
+                    this.updateProgress();
                 } else {
-                    setTimeout(() => this.showNextQuestion(), 1000);
+                     obj.material.color.setHex(0xffffff);
                 }
-            } else {
-                gameState.lives--;
-                Utils.showToast('Noto\'g\'ri!', 'error');
-                Utils.playSound('wrong');
-                Utils.vibrate(200);
-                
-                if (gameState.lives <= 0) {
-                    setTimeout(() => Game.endGame(), 1000);
-                }
+                STATE.grabbedObj = null;
             }
-            
-            UI.updateGameStats();
         }
+    },
+
+    updateProgress() {
+        const total = LEVELS[STATE.levelIndex].code.length;
+        const percent = (STATE.lockedCount / total) * 100;
+        UI.progressBar.style.width = `${percent}%`;
+
+        if (STATE.lockedCount === total) {
+            this.winLevel();
+        }
+    },
+
+    winLevel() {
+        STATE.isWon = true;
+        SceneManager.groups.slots.visible = false;
+        SceneManager.groups.pieces.visible = false;
+        
+        this.showRobotMessage("Ura! Barakalla!", 5000);
+        UI.winModal.style.display = 'flex';
+    },
+
+    spawnParticles(pos, color) {
+        for(let i=0; i<10; i++) {
+            const geo = new THREE.PlaneGeometry(0.2, 0.2);
+            const mat = new THREE.MeshBasicMaterial({ color: color });
+            const p = new THREE.Mesh(geo, mat);
+            p.position.copy(pos);
+            p.userData.vel = new THREE.Vector3((Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2, Math.random()*0.2);
+            p.userData.life = 1.0;
+            SceneManager.groups.effects.add(p);
+        }
+    },
+
+    nextLevel() {
+        let nextIdx = STATE.levelIndex + 1;
+        if (nextIdx >= LEVELS.length) nextIdx = 0;
+        this.loadLevel(nextIdx);
+    },
+
+    showRobotMessage(text, duration) {
+        UI.robotMsg.innerText = text;
+        UI.robotMsg.style.opacity = 1;
+        setTimeout(() => { UI.robotMsg.style.opacity = 0; }, duration);
+    },
+
+    loop() {
+        requestAnimationFrame(this.loop.bind(this));
+        
+        const time = Date.now() * 0.001;
+        
+        this.checkInteraction();
+        AvatarManager.animate(time);
+        
+        if (STATE.currentPlanet) {
+            STATE.currentPlanet.rotation.y += 0.005;
+            
+            if (STATE.isWon) {
+                STATE.currentPlanet.scale.lerp(new THREE.Vector3(1,1,1), 0.05);
+                STATE.currentPlanet.rotation.y += 0.02;
+            }
+        }
+
+        SceneManager.groups.effects.children.forEach(p => {
+            p.position.add(p.userData.vel);
+            p.userData.life -= 0.02;
+            p.scale.setScalar(p.userData.life);
+            if (p.userData.life <= 0) SceneManager.groups.effects.remove(p);
+        });
+
+        SceneManager.renderer.render(SceneManager.scene, SceneManager.camera);
     }
 };
 
-// ==================== UI CONTROLLER ====================
-const UI = {
-    updateGameStats() {
-        document.getElementById('scoreDisplay').textContent = gameState.score;
-        document.getElementById('levelDisplay').textContent = gameState.level;
-        document.getElementById('livesDisplay').textContent = gameState.lives;
-        
-        const progress = gameState.currentQuestion;
-        const total = gameState.totalQuestions;
-        const percent = (progress / total) * 100;
-        
-        document.getElementById('progressBar').style.width = percent + '%';
-        document.querySelector('.progress-text').textContent = `${progress}/${total}`;
-    },
-
-    showScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
-        
-        if (screenId) {
-            const screen = document.getElementById(screenId);
-            if (screen) {
-                screen.classList.add('active');
-                gameState.currentScreen = screenId.replace('Screen', '');
-            }
-        }
-    },
-
-    hideGameUI() {
-        document.getElementById('gameUI').classList.remove('active');
-        document.getElementById('questionPanel').classList.remove('active');
-        document.getElementById('dragTargets').classList.remove('active');
-        document.getElementById('movementGame').classList.remove('active');
-    }
-};
-
-// ==================== GAME CONTROLLER ====================
-const Game = {
-     init() {
-        // Initialize Three.js
-        ThreeJS.init();
-        
-        // Simulate loading
-        this.simulateLoading();
-        
-        // Add window resize handler
-        window.addEventListener('resize', this.handleResize);
-        
-        // Add keyboard shortcuts
-        this.addKeyboardShortcuts();
-    },
-
-    simulateLoading() {
-        let progress = 0;
-        const progressBar = document.getElementById('loadingProgress');
-        
-        const loadingInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(loadingInterval);
-                
-                setTimeout(() => {
-                    UI.showScreen('startScreen');
-                }, 500);
-            }
-            
-            progressBar.style.width = progress + '%';
-        }, 200);
-    },
-
-    handleResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    },
-
-    addKeyboardShortcuts() {
-        document.addEventListener('keydown', (e) => {
-            // ESC - Go back
-            if (e.key === 'Escape') {
-                if (gameState.isPlaying) {
-                    this.exitGame();
-                }
-            }
-            
-            // Space - Pause (if playing)
-            if (e.key === ' ' && gameState.isPlaying) {
-                this.togglePause();
-            }
-        });
-    },
-
-    showStartScreen() {
-        UI.showScreen('startScreen');
-        UI.hideGameUI();
-        HandTracking.stop();
-        gameState.isPlaying = false;
-    },
-
-    showTutorial() {
-        UI.showScreen('tutorialScreen');
-        Utils.playSound('click');
-    },
-
-    showSettings() {
-        Utils.showToast('Sozlamalar tez orada qo\'shiladi!', 'warning');
-    },
-
-    showCharacterSelect() {
-        UI.showScreen('characterScreen');
-        Utils.playSound('click');
-    },
-
-    selectCharacter(character) {
-        gameState.character = character;
-        
-        // Update UI
-        document.querySelectorAll('.character-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        
-        event.target.closest('.character-card').classList.add('selected');
-        
-        // Show continue button
-        document.getElementById('continueButton').style.display = 'block';
-        
-        Utils.showToast(`${character === 'boy' ? 'Astronaut Bola' : character === 'girl' ? 'Astronaut Qiz' : character === 'robot' ? 'Robot Do\'st' : 'Do\'st Alien'} tanlandi!`, 'success');
-        Utils.playSound('select');
-        Utils.vibrate(50);
-    },
-
-    showMissionSelect() {
-        if (!gameState.character) {
-            Utils.showToast('Iltimos, avval qahramonni tanlang!', 'warning');
-            this.showCharacterSelect();
-            return;
-        }
-        
-        UI.showScreen('missionScreen');
-        Utils.playSound('click');
-    },
-
-    async startMission(missionType) {
-        // Reset game state
-        gameState.mission = missionType;
-        gameState.score = 0;
-        gameState.lives = CONFIG.GAME.INITIAL_LIVES;
-        gameState.currentQuestion = 0;
-        gameState.correctAnswers = 0;
-        gameState.isPlaying = true;
-        gameState.isPaused = false;
-        currentMovementQuestion = 0;
-
-        // Clear any existing timers
-        if (questionTimer) {
-            clearInterval(questionTimer);
-        }
-
-        // Reset planets
-        planets.forEach(planet => {
-            planet.position.copy(planet.userData.originalPosition);
-            planet.userData.isDragging = false;
-        });
-        selectedPlanet = null;
-        draggedPlanet = null;
-
-        // Reset drop zones
-        document.querySelectorAll('.drop-zone').forEach(zone => {
-            zone.classList.remove('filled', 'active');
-            zone.style.pointerEvents = 'auto';
-        });
-
-        // Show game UI
-        UI.showScreen('');
-        document.getElementById('gameUI').classList.add('active');
-        UI.updateGameStats();
-
-        // Initialize hand tracking
-        await HandTracking.init();
-
-        // Start specific game mode
-        Utils.playSound('start');
-        Utils.vibrate([100, 50, 100]);
-        
-        setTimeout(() => {
-            switch (missionType) {
-                case 'quiz':
-                    GameModes.Quiz.start();
-                    break;
-                case 'drag':
-                    GameModes.DragDrop.start();
-                    break;
-                case 'movement':
-                    GameModes.Movement.start();
-                    break;
-            }
-        }, 500);
-    },
-
-    togglePause() {
-        gameState.isPaused = !gameState.isPaused;
-        
-        if (gameState.isPaused) {
-            Utils.showToast('O\'yin to\'xtatildi', 'warning');
-            if (questionTimer) clearInterval(questionTimer);
-        } else {
-            Utils.showToast('O\'yin davom ettirildi', 'success');
-        }
-    },
-
-    exitGame() {
-        const confirmed = confirm('O\'yindan chiqmoqchimisiz?');
-        
-        if (confirmed) {
-            // Clear timers
-            if (questionTimer) {
-                clearInterval(questionTimer);
-            }
-
-            // Reset state
-            gameState.isPlaying = false;
-            gameState.isPaused = false;
-
-            // Hide game elements
-            UI.hideGameUI();
-            document.getElementById('resultScreen').classList.remove('active');
-
-            // Stop hand tracking
-            HandTracking.stop();
-
-            // Show mission select
-            this.showMissionSelect();
-            
-            Utils.playSound('click');
-        }
-    },
-
-    endGame() {
-        gameState.isPlaying = false;
-        
-        // Clear timer
-        if (questionTimer) {
-            clearInterval(questionTimer);
-        }
-
-        // Hide game panels
-        document.getElementById('questionPanel').classList.remove('active');
-        document.getElementById('dragTargets').classList.remove('active');
-        document.getElementById('movementGame').classList.remove('active');
-
-        // Calculate results
-        const accuracy = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100);
-        let stars = 1;
-        let title = 'Yaxshi harakat!';
-        let icon = '👍';
-
-        if (accuracy >= 90) {
-            stars = 3;
-            title = 'Mukammal!';
-            icon = '🏆';
-        } else if (accuracy >= 70) {
-            stars = 2;
-            title = 'Juda yaxshi!';
-            icon = '🎉';
-        } else if (accuracy >= 50) {
-            stars = 1;
-            title = 'Yaxshi!';
-            icon = '😊';
-        } else {
-            stars = 0;
-            title = 'Yana urinib ko\'ring!';
-            icon = '💪';
-        }
-
-        // Update result screen
-        document.getElementById('resultIcon').textContent = icon;
-        document.getElementById('resultTitle').textContent = title;
-        document.getElementById('resultStars').textContent = '⭐'.repeat(stars);
-        document.getElementById('finalScore').textContent = gameState.score;
-        document.getElementById('correctAnswers').textContent = 
-            `${gameState.correctAnswers}/${gameState.totalQuestions}`;
-        document.getElementById('accuracyPercent').textContent = accuracy + '%';
-
-        // Show result screen
-        document.getElementById('resultScreen').classList.add('active');
-
-        // Play sound and vibrate
-        Utils.playSound(stars >= 2 ? 'victory' : 'complete');
-        Utils.vibrate(stars >= 2 ? [100, 50, 100, 50, 200] : [100, 100]);
-
-        // Show appropriate toast
-        if (stars >= 2) {
-            Utils.showToast('Ajoyib natija! 🎉', 'success');
-        }
-    },
-
-    restartMission() {
-        document.getElementById('resultScreen').classList.remove('active');
-        
-        if (gameState.mission) {
-            this.startMission(gameState.mission);
-        }
-        
-        Utils.playSound('click');
-    }
-};
-
-// ==================== INITIALIZE APPLICATION ====================
-window.addEventListener('load', () => {
-    Game.init();
-});
-
-// ==================== GLOBAL GAME OBJECT ====================
-// Make game functions accessible from HTML
-window.game = {
-    showStartScreen: () => Game.showStartScreen(),
-    showTutorial: () => Game.showTutorial(),
-    showSettings: () => Game.showSettings(),
-    showCharacterSelect: () => Game.showCharacterSelect(),
-    selectCharacter: (char) => Game.selectCharacter(char),
-    showMissionSelect: () => Game.showMissionSelect(),
-    startMission: (type) => Game.startMission(type),
-    exitGame: () => Game.exitGame(),
-    restartMission: () => Game.restartMission()
-};
-
-// ==================== ERROR HANDLING ====================
-window.addEventListener('error', (event) => {
-    console.error('Global error:', event.error);
-    Utils.showToast('Xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.', 'error');
-});
-
-// ==================== PERFORMANCE MONITORING ====================
-if ('performance' in window) {
-    window.addEventListener('load', () => {
-        const perfData = performance.timing;
-        const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-        console.log(`📊 Sahifa yuklash vaqti: ${pageLoadTime}ms`);
-    });
-}
-
-// ==================== SERVICE WORKER (PWA Support) ====================
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // Service worker can be added here for offline support
-        console.log('✅ Service Worker qo\'llab-quvvatlanadi');
-    });
-}
-
-// ==================== VISIBILITY CHANGE ====================
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden && gameState.isPlaying) {
-        Game.togglePause();
-    }
-});
-
-// ==================== CONSOLE STYLING ====================
-console.log('%c🚀 Galaktika Qahramoni', 'color: #FFD700; font-size: 24px; font-weight: bold;');
-console.log('%cVersion 2.0 - Clean Code Edition', 'color: #87CEEB; font-size: 14px;');
-console.log('%cCreated with ❤️ by AI Assistant', 'color: #4CAF50; font-size: 12px;');
-
-// ==================== DEBUG MODE ====================
-const DEBUG = false;
-
-if (DEBUG) {
-    window.gameState = gameState;
-    window.ThreeJS = ThreeJS;
-    window.HandTracking = HandTracking;
-    window.GameModes = GameModes;
-    
-    console.log('🔧 Debug mode enabled');
-}
-
-// ==================== HELPER FUNCTIONS FOR HTML ====================
-function showScreen(screenId) {
-    UI.showScreen(screenId);
-}
-
-function selectCharacter(character) {
-    Game.selectCharacter(character);
-}
-
-function startMission(missionType) {
-    Game.startMission(missionType);
-}
-
-// ==================== ANALYTICS (Optional) ====================
-function trackEvent(eventName, eventData = {}) {
-    // Analytics implementation can be added here
-    if (DEBUG) {
-        console.log('📈 Event tracked:', eventName, eventData);
-    }
-}
-
-// Track game events
-const originalStartMission = Game.startMission;
-Game.startMission = function(type) {
-    trackEvent('mission_started', { mission: type });
-    return originalStartMission.call(this, type);
-};
-
-const originalEndGame = Game.endGame;
-Game.endGame = function() {
-    trackEvent('game_completed', {
-        score: gameState.score,
-        accuracy: Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100),
-        mission: gameState.mission
-    });
-    return originalEndGame.call(this);
-};
-
-// ==================== EXPORT FOR TESTING ====================
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        Game,
-        GameModes,
-        ThreeJS,
-        HandTracking,
-        Utils,
-        UI
-    };
-}
-
-console.log('✅ O\'yin muvaffaqiyatli yuklandi!');
+// O'yinni boshlash
+GameManager.init();
