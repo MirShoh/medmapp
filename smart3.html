@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaktika Qahramoni - 3D Interaktiv O'yin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%);
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #canvas3d {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #video {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            border: 3px solid #4CAF50;
+            border-radius: 15px;
+            transform: scaleX(-1);
+            z-index: 10;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            display: none;
+        }
+
+        /* Menu Styles */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: radial-gradient(circle at center, rgba(10, 14, 39, 0.95) 0%, rgba(13, 17, 45, 0.98) 100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .screen h1 {
+            font-size: 48px;
+            color: #FFD700;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4); }
+            50% { text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 80px rgba(255, 215, 0, 0.6); }
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .menu-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid #FFD700;
+            border-radius: 20px;
+            padding: 25px 40px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .menu-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .menu-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .menu-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Character Selection */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .character-card {
+            background: rgba(30, 30, 60, 0.8);
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover {
+            border-color: #FFD700;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .character-card.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .character-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+
+        .character-name {
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Mission Selection */
+        .mission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .mission-card {
+            background: rgba(30, 30, 60, 0.9);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mission-card:hover {
+            border-color: #FFD700;
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .mission-icon {
+            font-size: 40px;
+            min-width: 60px;
+        }
+
+        .mission-info h3 {
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .mission-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Game UI */
+        #gameUI {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            display: none;
+        }
+
+        #gameUI.active {
+            display: block;
+        }
+
+        .game-header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 30px;
+            background: rgba(20, 20, 40, 0.9);
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 2px solid #FFD700;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        .question-panel {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 40, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            border: 3px solid #9C27B0;
+            max-width: 600px;
+            width: 90%;
+            pointer-events: all;
+        }
+
+        .question-text {
+            color: white;
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .answer-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-button:hover {
+            border-color: #FFD700;
+            transform: scale(1.05);
+        }
+
+        .answer-button.correct {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            animation: pulse 0.5s;
+        }
+
+        .answer-button.wrong {
+            background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
+            animation: shake 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .gesture-hint {
+            position: absolute;
+            top: 200px;
+            left: 20px;
+            background: rgba(20, 20, 40, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #4CAF50;
+            max-width: 250px;
+        }
+
+        .gesture-hint h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .gesture-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            color: white;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 30px;
+            background: rgba(20, 20, 40, 0.9);
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .result-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 40, 0.98);
+            padding: 40px;
+            border-radius: 25px;
+            border: 3px solid #FFD700;
+            text-align: center;
+            min-width: 400px;
+            display: none;
+            pointer-events: all;
+        }
+
+        .result-screen.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .result-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 36px;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .result-stats {
+            background: rgba(30, 30, 60, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .result-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            color: white;
+            font-size: 18px;
+        }
+
+        .stars {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(30, 30, 60, 0.9);
+            border: 2px solid #FFD700;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            pointer-events: all;
+            z-index: 200;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #FFD700;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <canvas id="canvas3d"></canvas>
+        <video id="video" autoplay playsinline></video>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen active">
+            <h1>🚀 GALAKTIKA QAHRAMONI 🌟</h1>
+            <p style="color: white; font-size: 20px; margin-bottom: 30px;">Bolajonlar uchun 3D Sarguzasht</p>
+            <div class="menu-container">
+                <button class="menu-button" onclick="showCharacterSelect()">
+                    <span>🎮 Boshlash</span>
+                </button>
+                <button class="menu-button" onclick="showSettings()">
+                    <span>⚙️ Sozlamalar</span>
+                </button>
+                <button class="menu-button" onclick="showHelp()">
+                    <span>❓ Yordam</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Character Selection -->
+        <div id="characterScreen" class="screen">
+            <button class="back-button" onclick="showStartScreen()">⬅️</button>
+            <h1>👨‍🚀 Qahramonni Tanlang</h1>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('boy')">
+                    <div class="character-icon">👦</div>
+                    <div class="character-name">Astronaut Bola</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('girl')">
+                    <div class="character-icon">👧</div>
+                    <div class="character-name">Astronaut Qiz</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('robot')">
+                    <div class="character-icon">🤖</div>
+                    <div class="character-name">Robot Do'st</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('alien')">
+                    <div class="character-icon">👽</div>
+                    <div class="character-name">Do'st Alien</div>
+                </div>
+            </div>
+            <button class="menu-button" onclick="showMissionSelect()" style="margin-top: 30px;">
+                <span>Davom etish ➡️</span>
+            </button>
+        </div>
+
+        <!-- Mission Selection -->
+        <div id="missionScreen" class="screen">
+            <button class="back-button" onclick="showCharacterSelect()">⬅️</button>
+            <h1>🎯 Missiyani Tanlang</h1>
+            <div class="mission-list">
+                <div class="mission-card" onclick="startMission('drag')">
+                    <div class="mission-icon">🎨</div>
+                    <div class="mission-info">
+                        <h3>Drag & Drop - Sayyoralarni Joylashtir</h3>
+                        <p>Qo'lingiz bilan sayyoralarni to'g'ri joyiga qo'ying</p>
+                    </div>
+                </div>
+                <div class="mission-card" onclick="startMission('quiz')">
+                    <div class="mission-icon">🧠</div>
+                    <div class="mission-info">
+                        <h3>Tanlash Quiz - Bilimingizni Sinang</h3>
+                        <p>Sayyoralar haqida savollarga javob bering</p>
+                    </div>
+                </div>
+                <div class="mission-card" onclick="startMission('movement')">
+                    <div class="mission-icon">🎮</div>
+                    <div class="mission-info">
+                        <h3>Harakatli Javob - Aktiv O'yin</h3>
+                        <p>Harakat qilib to'g'ri javobni toping</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game UI -->
+        <div id="gameUI">
+            <div class="game-header">
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span id="scoreDisplay">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">💎</span>
+                    <span id="levelDisplay">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">❤️</span>
+                    <span id="livesDisplay">3</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">0/10</div>
+            </div>
+
+            <div class="gesture-hint">
+                <h3>🤚 Qo'l Ishoralari</h3>
+                <div class="gesture-item">
+                    <span>👋</span>
+                    <span>Ochiq - Tanlash</span>
+                </div>
+                <div class="gesture-item">
+                    <span>🤏</span>
+                    <span>Qisish - Sudrab borish</span>
+                </div>
+                <div class="gesture-item">
+                    <span>👍</span>
+                    <span>Thumbs up - Tasdiqlash</span>
+                </div>
+            </div>
+
+            <div class="question-panel" id="questionPanel" style="display: none;">
+                <div class="question-text" id="questionText"></div>
+                <div class="answers-grid" id="answersGrid"></div>
+            </div>
+
+            <div class="result-screen" id="resultScreen">
+                <div class="result-icon" id="resultIcon">🏆</div>
+                <div class="result-title" id="resultTitle">Ajoyib!</div>
+                <div class="stars" id="resultStars">⭐⭐⭐</div>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span>Yig'ilgan ballar:</span>
+                        <span id="finalScore">0</span>
+                    </div>
+                    <div class="result-stat">
+                        <span>To'g'ri javoblar:</span>
+                        <span id="correctAnswers">0/10</span>
+                    </div>
+                    <div class="result-stat">
+                        <span>Animatiya:</span>
+                        <span id="animationUnlocked">🎬 Ochildi!</span>
+                    </div>
+                </div>
+                <button class="menu-button" onclick="showMissionSelect()">
+                    <span>Yana o'ynash 🔄</span>
+                </button>
+                <button class="menu-button" onclick="showStartScreen()">
+                    <span>Bosh menyu 🏠</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    
+    <script>
+        // Game State
+        let gameState = {
+            screen: 'start',
+            character: null,
+            mission: null,
+            score: 0,
+            level: 1,
+            lives: 3,
+            currentQuestion: 0,
+            correctAnswers: 0,
+            totalQuestions: 10
+        };
+
+        // Three.js Scene
+        let scene, camera, renderer, blocks = [];
+        let selectedBlock = null;
+        let hands, cameraFeed;
+        let currentGesture = null;
+
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "Quyoshga eng yaqin sayyora qaysi?",
+                answers: ["Merkuriy", "Venera", "Yer", "Mars"],
+                correct: 0,
+                planet: "☿️"
+            },
+            {
+                question: "Eng katta sayyora qaysi?",
+                answers: ["Saturn", "Yupiter", "Neptun", "Uran"],
+                correct: 1,
+                planet: "🪐"
+            },
+            {
+                question: "Qizil sayyora deb qaysi sayyorani ataladi?",
+                answers: ["Venera", "Mars", "Yupiter", "Saturn"],
+                correct: 1,
+                planet: "🔴"
+            },
+            {
+                question: "Halqalari bor sayyora?",
+                answers: ["Mars", "Yer", "Saturn", "Merkuriy"],
+                correct: 2,
+                planet: "💍"
+            },
+            {
+                question: "Biz qaysi sayyorada yashaymiz?",
+                answers: ["Mars", "Venera", "Yer", "Yupiter"],
+                correct: 2,
+                planet: "🌍"
+            },
+            {
+                question: "Quyoshdan eng uzoq sayyora?",
+                answers: ["Uran", "Neptun", "Pluton", "Saturn"],
+                correct: 1,
+                planet: "🔵"
+            },
+            {
+                question: "Eng issiq sayyora qaysi?",
+                answers: ["Merkuriy", "Venera", "Mars", "Yer"],
+                correct: 1,
+                planet: "🔥"
+            },
+            {
+                question: "Oy qaysi sayyoraning yo'ldoshi?",
+                answers: ["Mars", "Yer", "Yupiter", "Saturn"],
+                correct: 1,
+                planet: "🌙"
+            },
+            {
+                question: "Qaysi sayyora yonib turadi?",
+                answers: ["Quyosh", "Oy", "Yer", "Mars"],
+                correct: 0,
+                planet: "☀️"
+            },
+            {
+                question: "Qancha sayyora bor (Quyosh sistemasida)?",
+                answers: ["6 ta", "7 ta", "8 ta", "9 ta"],
+                correct: 2,
+                planet: "🌌"
+            }
+        ];
+
+        // Initialize Three.js
+        function initScene() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 15;
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('canvas3d'),
+                antialias: true,
+                alpha: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Add stars
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
+            const starsVertices = [];
+            for (let i = 0; i < 1000; i++) {
+                starsVertices.push(
+                    (Math.random() - 0.5) * 200,
+                    (Math.random() - 0.5) * 200,
+                    (Math.random() - 0.5) * 200
+                );
+            }
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+            scene.add(new THREE.Points(starsGeometry, starsMaterial));
+
+            // Lighting
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+            const light1 = new THREE.PointLight(0x00ffff, 1, 100);
+            light1.position.set(10, 10, 10);
+            scene.add(light1);
+
+            createPlanets();
+            animate();
+        }
+
+        // Create planets
+        function createPlanets() {
+            const planetData = [
+                { color: 0xFFD700, size: 0.8, emoji: '☀️' }, // Sun
+                { color: 0x87CEEB, size: 0.5, emoji: '🌍' }, // Earth
+                { color: 0xFF6347, size: 0.4, emoji: '🔴' }, // Mars
+                { color: 0xFFA500, size: 1.2, emoji: '🪐' }, // Jupiter
+                { color: 0xF0E68C, size: 1.0, emoji: '💍' }, // Saturn
+            ];
+
+            planetData.forEach((data, i) => {
+                const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+                const material = new THREE.MeshPhongMaterial({
+                    color: data.color,
+                    transparent: true,
+                    opacity: 0.8,
+                    shininess: 100
+                });
+
+                const planet = new THREE.Mesh(geometry, material);
+                planet.position.x = (i - 2) * 4;
+                planet.position.y = Math.sin(i) * 3;
+                planet.position.z = -5;
+                
+                planet.userData = {
+                    rotationSpeed: 0.01 + Math.random() * 0.02,
+                    floatSpeed: 0.001 + Math.random() * 0.002,
+                    emoji: data.emoji,
+                    isDragging: false
+                };
+
+                scene.add(planet);
+                blocks.push(planet);
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            blocks.forEach(planet => {
+                if (!planet.userData.isDragging) {
+                    planet.rotation.y += planet.userData.rotationSpeed;
+                    planet.position.y += Math.sin(Date.now() * planet.userData.floatSpeed) * 0.01;
+                }
+
+                if (planet === selectedBlock) {
+                    planet.scale.set(1.3, 1.3, 1.3);
+                    planet.material.emissive = new THREE.Color(0xffff00);
+                } else {
+                    planet.scale.set(1, 1, 1);
+                    planet.material.emissive = new THREE.Color(0x000000);
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showStartScreen() {
+            showScreen('startScreen');
+            document.getElementById('gameUI').classList.remove('active');
+        }
+
+        function showCharacterSelect() {
+            showScreen('characterScreen');
+        }
+
+        function showMissionSelect() {
+            if (!gameState.character) {
+                alert('Iltimos, avval qahramonni tanlang!');
+                return;
+            }
+            showScreen('missionScreen');
+        }
+
+        function showSettings() {
+            alert('Sozlamalar tez orada qo\'shiladi! 🔧');
+        }
+
+        function showHelp() {
+            alert('Qo\'l ishoralari bilan o\'ynang:\n👋 Ochiq kaft - Tanlash\n🤏 Qisish - Sudrab borish\n👍 Thumbs up - Tasdiqlash\n✊ Mushtlash - Portlatish');
+        }
+
+        // Character Selection
+        function selectCharacter(char) {
+            document.querySelectorAll('.character-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.character-card').classList.add('selected');
+            gameState.character = char;
+        }
+
+        // Start Mission
+        async function startMission(missionType) {
+            gameState.mission = missionType;
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.currentQuestion = 0;
+            gameState.correctAnswers = 0;
+
+            showScreen('');
+            document.getElementById('gameUI').classList.add('active');
+            document.getElementById('video').style.display = 'block';
+
+            updateGameUI();
+            await setupHandTracking();
+
+            if (missionType === 'quiz') {
+                startQuiz();
+            }
+        }
+
+        // Update Game UI
+        function updateGameUI() {
+            document.getElementById('scoreDisplay').textContent = gameState.score;
+            document.getElementById('levelDisplay').textContent = gameState.level;
+            document.getElementById('livesDisplay').textContent = gameState.lives;
+            
+            const progress = `${gameState.currentQuestion}/${gameState.totalQuestions}`;
+            const percent = (gameState.currentQuestion / gameState.totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressBar').textContent = progress;
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            if (gameState.currentQuestion >= gameState.totalQuestions) {
+                endGame();
+                return;
+            }
+
+            const question = quizQuestions[gameState.currentQuestion];
+            document.getElementById('questionPanel').style.display = 'block';
+            document.getElementById('questionText').textContent = question.planet + ' ' + question.question;
+
+            const answersGrid = document.getElementById('answersGrid');
+            answersGrid.innerHTML = '';
+
+            question.answers.forEach((answer, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-button';
+                btn.textContent = answer;
+                btn.onclick = () => checkAnswer(index);
+                answersGrid.appendChild(btn);
+            });
+        }
+
+        // Check Answer
+        function checkAnswer(selectedIndex) {
+            const question = quizQuestions[gameState.currentQuestion];
+            const buttons = document.querySelectorAll('.answer-button');
+            
+            if (selectedIndex === question.correct) {
+                buttons[selectedIndex].classList.add('correct');
+                gameState.score += 100;
+                gameState.correctAnswers++;
+                
+                setTimeout(() => {
+                    gameState.currentQuestion++;
+                    updateGameUI();
+                    startQuiz();
+                }, 1500);
+            } else {
+                buttons[selectedIndex].classList.add('wrong');
+                buttons[question.correct].classList.add('correct');
+                gameState.lives--;
+                
+                if (gameState.lives <= 0) {
+                    setTimeout(endGame, 1500);
+                } else {
+                    setTimeout(() => {
+                        gameState.currentQuestion++;
+                        updateGameUI();
+                        startQuiz();
+                    }, 1500);
+                }
+            }
+            
+            updateGameUI();
+        }
+
+        // End Game
+        function endGame() {
+            document.getElementById('questionPanel').style.display = 'none';
+            const resultScreen = document.getElementById('resultScreen');
+            
+            const percent = (gameState.correctAnswers / gameState.totalQuestions) * 100;
+            let stars = '⭐';
+            let title = 'Yaxshi harakat!';
+            let icon = '👍';
+            
+            if (percent >= 90) {
+                stars = '⭐⭐⭐';
+                title = 'Ajoyib! Mukammal!';
+                icon = '🏆';
+            } else if (percent >= 70) {
+                stars = '⭐⭐';
+                title = 'Juda yaxshi!';
+                icon = '🎉';
+            }
+            
+            document.getElementById('resultIcon').textContent = icon;
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultStars').textContent = stars;
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('correctAnswers').textContent = 
+                `${gameState.correctAnswers}/${gameState.totalQuestions}`;
+            
+            resultScreen.classList.add('active');
+        }
+
+        // Hand Tracking
+        async function setupHandTracking() {
+            try {
+                const video = document.getElementById('video');
+                
+                hands = new Hands({
+                    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+                });
+
+                hands.setOptions({
+                    maxNumHands: 1,
+                    modelComplexity: 1,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5
+                });
+
+                hands.onResults(onHandResults);
+
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 } 
+                });
+                video.srcObject = stream;
+
+                cameraFeed = new Camera(video, {
+                    onFrame: async () => {
+                        await hands.send({ image: video });
+                    },
+                    width: 640,
+                    height: 480
+                });
+
+                cameraFeed.start();
+            } catch (error) {
+                console.error('Camera error:', error);
+                alert('Kamera ishga tushmadi. Savollarni sichqoncha bilan javob bering.');
+            }
+        }
+
+        // Hand Results
+        function onHandResults(results) {
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+                const gesture = detectGesture(landmarks);
+                handleGesture(gesture, landmarks);
+            } else {
+                if (selectedBlock) {
+                    selectedBlock.userData.isDragging = false;
+                    selectedBlock = null;
+                }
+            }
+        }
+
+        // Detect Gesture
+        function detectGesture(landmarks) {
+            const thumb = landmarks[4];
+            const index = landmarks[8];
+            const middle = landmarks[12];
+            const wrist = landmarks[0];
+
+            const distance = (p1, p2) => 
+                Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
+            if (distance(thumb, index) < 0.05) return 'pinch';
+            if (thumb.y < index.y && index.y > wrist.y) return 'thumbsup';
+            return 'open';
+        }
+
+        // Handle Gesture
+        function handleGesture(gesture, landmarks) {
+            const palm = landmarks[9];
+            const x = (palm.x - 0.5) * 20;
+            const y = -(palm.y - 0.5) * 15;
+
+            if (gesture === 'open' && currentGesture !== 'open') {
+                selectNearestPlanet(x, y);
+            } else if (gesture === 'pinch' && selectedBlock) {
+                selectedBlock.userData.isDragging = true;
+                selectedBlock.position.x = x;
+                selectedBlock.position.y = y;
+            } else if (gesture === 'thumbsup' && currentGesture !== 'thumbsup') {
+                if (selectedBlock) {
+                    gameState.score += 50;
+                    updateGameUI();
+                }
+            }
+
+            currentGesture = gesture;
+        }
+
+        // Select Nearest Planet
+        function selectNearestPlanet(x, y) {
+            let nearest = null;
+            let minDist = Infinity;
+
+            blocks.forEach(planet => {
+                const dist = Math.sqrt(
+                    Math.pow(planet.position.x - x, 2) + 
+                    Math.pow(planet.position.y - y, 2)
+                );
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = planet;
+                }
+            });
+
+            selectedBlock = nearest;
+        }
+
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize
+        window.addEventListener('load', initScene);
+    </script>
+</body>
+</html>
